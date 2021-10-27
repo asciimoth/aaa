@@ -120,7 +120,7 @@ pub fn get_title(title: Option<String>, author: Option<String>) -> Option<String
     Some(ret)
 }
 
-pub fn play(art: rs3a::Art) -> crossterm::Result<()>{
+pub fn play(art: rs3a::Art, lx: u16, ly: u16) -> crossterm::Result<()>{
     let mut stdout = stdout();
     stdout.execute(cursor::Hide)?;
     terminal::enable_raw_mode()?;
@@ -132,6 +132,7 @@ pub fn play(art: rs3a::Art) -> crossterm::Result<()>{
     }
     let (_, mut sy) = cursor::position()?;
     sy -= art.header.height;
+    sy += ly;
     let frames = render_raw_mod(art.body.frames);
     let d = Duration::from_millis(art.header.delay as u64);
     let l = frames.len()-1;
@@ -139,7 +140,7 @@ pub fn play(art: rs3a::Art) -> crossterm::Result<()>{
         for (i, frame) in (&frames).iter().enumerate() {
             for (i, row) in (&frame).iter().enumerate() {
                 stdout
-                    .queue(cursor::MoveTo(0,sy+i as u16))?
+                    .queue(cursor::MoveTo(lx,sy+i as u16))?
                     .queue(style::Print(row))?;
             }
             stdout.flush()?;

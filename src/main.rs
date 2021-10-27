@@ -24,6 +24,10 @@ use std::convert::TryFrom;
 #[derive(Parser, Debug)]
 #[clap(version=crate_version!(), author=crate_authors!(), about=env!("CARGO_PKG_DESCRIPTION"))]
 struct Opts {
+    #[clap(short, about="Left up corner x position")]
+    x: Option<u16>,
+    #[clap(short, about="Left up corner y position")]
+    y: Option<u16>,
     #[clap(long, about="Show table of available art colors")]
     colortable: bool,
     #[clap(long, about="Show demo animation")]
@@ -201,7 +205,11 @@ fn main() {
         print!("{}", s);
         return;
     }
-    if let Err(e) = drawer::play(art){
+    let mut x: u16 = 0;
+    let mut y: u16 = 0;
+    if let Some(lx) = opts.x {x = lx}
+    if let Some(ly) = opts.y {y = ly}
+    if let Err(e) = drawer::play(art, x, y){
         eprintln!("Error {}", e);
         std::process::exit(exitcode::UNAVAILABLE);
     }
