@@ -6,7 +6,7 @@ Example of render:
 ![DNA](https://i.imgur.com/OWN9yQW.gif)
 ## Usage
 ```
-aaa 1.0.0
+aaa 1.0.1
 
 DomesticMoth
 
@@ -49,7 +49,6 @@ OPTIONS:
     -V, --version                Print version information
     -x <X>                       Left up corner x position
     -y <Y>                       Left up corner y position
-
 ```
 ## Instalation
 ### With cargo
