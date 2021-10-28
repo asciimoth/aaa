@@ -51,7 +51,9 @@ OPTIONS:
     -y <Y>                       Left up corner y position
 ```
 ## Instalation
-### With cargo
+### Download binaries
+You can download binaries from the [github releases page](https://github.com/DomesticMoth/aaa/releases)
+### With "cargo install"
 ```
 $ cargo install aaa
 ```
@@ -61,8 +63,6 @@ $ git clone https://github.com/DomesticMoth/aaa.git
 $ cd aaa
 $ cargo build --release
 ```
-### Download binaries
-You can download binaries from the [github releases page](https://github.com/DomesticMoth/aaa/releases)
 ## TODO
 - More human readable errors
 - Printitg only frames delta to save CPU load
