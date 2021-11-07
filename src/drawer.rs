@@ -61,14 +61,16 @@ fn to_color(color: rs3a::Color) -> style::Color {
 
 pub fn render_fragment(fragment: rs3a::RowFragment) -> String {
     let mut ret = fragment.text;
-    if let Some(fg) = fragment.fg_color {
-        ret = format!("{}", ret.with(to_color(fg)));
-        if is_bold(fg){
-            ret = format!("{}", ret.bold());
+    if ret.len() > 0 {
+        if let Some(fg) = fragment.fg_color {
+            ret = format!("{}", ret.with(to_color(fg)));
+            if is_bold(fg){
+                ret = format!("{}", ret.bold());
+            }
         }
-    }
-    if let Some(bg) = fragment.bg_color {
-        ret = format!("{}", ret.on(to_color(bg)));
+        if let Some(bg) = fragment.bg_color {
+            ret = format!("{}", ret.on(to_color(bg)));
+        }
     }
     ret
 }
@@ -120,7 +122,33 @@ pub fn get_title(title: Option<String>, author: Option<String>) -> Option<String
     Some(ret)
 }
 
+pub fn optimize(mut art: rs3a::Art) -> rs3a::Art{
+    if art.body.frames.len() > 0 {
+        let mut new_frames: Vec<rs3a::Frame> = Vec::new();
+        let mut last_frame = art.body.frames[0].clone();
+        let mut first = true;
+        for frame in art.body.frames{
+            if first {
+                new_frames.push(frame.clone());
+                first = false;
+            }else{
+                let mut new_frame = frame.clone();
+                for i in 0..new_frame.len() {
+                    if last_frame[i] == new_frame[i] {
+                        new_frame[i] = Vec::new();
+                    }
+                }
+                new_frames.push(new_frame);
+            }
+            last_frame = frame;
+        }
+        art.body.frames = new_frames;
+    }
+    art
+}
+
 pub fn play(art: rs3a::Art, lx: u16, ly: u16) -> crossterm::Result<()>{
+    let art = optimize(art);
     let mut stdout = stdout();
     stdout.execute(cursor::Hide)?;
     terminal::enable_raw_mode()?;
@@ -139,9 +167,11 @@ pub fn play(art: rs3a::Art, lx: u16, ly: u16) -> crossterm::Result<()>{
     'outer: loop {
         for (i, frame) in (&frames).iter().enumerate() {
             for (i, row) in (&frame).iter().enumerate() {
-                stdout
-                    .queue(cursor::MoveTo(lx,sy+i as u16))?
-                    .queue(style::Print(row))?;
+                if row.len() > 0 {
+                    stdout
+                        .queue(cursor::MoveTo(lx,sy+i as u16))?
+                        .queue(style::Print(row))?;
+                }
             }
             stdout.flush()?;
             if i >= l {

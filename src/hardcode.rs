@@ -20,7 +20,7 @@ height 19
 loop false
 colors full
 title colortable demo
-author Moth
+author DomesticMoth
 
 in ' ab '                       ffffffffffffffffffffffffffffffff00000000000000000000000000000000
 a-foreground, b-background      ffffffffffffffffffffffffffffffff00000000000000000000000000000000
@@ -51,7 +51,7 @@ loop true
 colors full	Colors are specified for both text and background
 delay 300
 title 3a demo
-author Moth
+author DomesticMoth
 @ In header comments also may starts with @ char
 
 
