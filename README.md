@@ -65,5 +65,5 @@ $ cargo build --release
 ```
 ## TODO
 - More human readable errors
-- Printitg only frames delta to save CPU load
+- ~~Printitg only frames delta to save CPU load~~
 - Add to distro packages repos
