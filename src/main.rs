@@ -99,7 +99,8 @@ fn main() {
             }
         };
     }else{
-        panic!("No content! Use --colortable or --demo or give a file to read");
+        eprintln!("Error: No content! Use --colortable or --demo or give a file to read");
+        std::process::exit(exitcode::DATAERR);
     }
     if opts.print {
         print!("{}", content);
@@ -112,7 +113,7 @@ fn main() {
     let mut art = match rs3a::load(content){
         Ok(v) => v,
         Err(e) => {
-            eprintln!("Error {}", e);
+            eprintln!("Error: {}", e);
             std::process::exit(exitcode::DATAERR);
         }
     };
@@ -126,7 +127,7 @@ fn main() {
         art.header.color_mod = match rs3a::ColorMod::try_from(value.as_str()){
             Ok(v) => v,
             Err(e) => {
-                eprintln!("Error {}", e);
+                eprintln!("Error: {}", e);
                 std::process::exit(exitcode::DATAERR);
             }
         };
@@ -210,7 +211,7 @@ fn main() {
     if let Some(lx) = opts.x {x = lx}
     if let Some(ly) = opts.y {y = ly}
     if let Err(e) = drawer::play(art, x, y){
-        eprintln!("Error {}", e);
+        eprintln!("Error: {}", e);
         std::process::exit(exitcode::UNAVAILABLE);
     }
 }

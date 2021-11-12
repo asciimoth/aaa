@@ -1,6 +1,6 @@
 [package]
 name = "aaa"
-version = "1.1.0"
+version = "1.1.1"
 edition = "2018"
 authors = ["DomesticMoth"]
 description = "CLI tool for work with 3a files"
