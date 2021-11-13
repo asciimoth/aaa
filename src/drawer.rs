@@ -148,6 +148,7 @@ pub fn optimize(mut art: rs3a::Art) -> rs3a::Art{
 }
 
 pub fn play(art: rs3a::Art, lx: u16, ly: u16) -> crossterm::Result<()>{
+    let rows_count = art.header.height;
     let art = optimize(art);
     let mut stdout = stdout();
     stdout.execute(cursor::Hide)?;
@@ -155,7 +156,7 @@ pub fn play(art: rs3a::Art, lx: u16, ly: u16) -> crossterm::Result<()>{
     if let Some(title) = get_title(art.header.title, art.header.author) {
         stdout.execute(terminal::SetTitle(title))?;
     }
-    for _ in 0..art.header.height {
+    for _ in 0..rows_count {
         print!("\n");
     }
     let (_, mut sy) = cursor::position()?;
@@ -186,6 +187,7 @@ pub fn play(art: rs3a::Art, lx: u16, ly: u16) -> crossterm::Result<()>{
         }
     }
     terminal::disable_raw_mode()?;
+    print!("\n\n");
     stdout.execute(cursor::Show)?;
     Ok(())
 }
