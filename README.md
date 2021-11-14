@@ -6,7 +6,7 @@ Example of render:
 ![DNA](https://i.imgur.com/OWN9yQW.gif)
 ## Usage
 ```
-aaa 1.0.1
+aaa 1.1.1
 
 DomesticMoth
 
