@@ -17,65 +17,91 @@
 mod drawer;
 mod hardcode;
 use rs3a;
-use clap::{Parser, crate_version, crate_authors};
-use std::{fs, env};
+use clap::Parser;
+use std::fs;
 use std::convert::TryFrom;
 
 #[derive(Parser, Debug)]
-#[clap(version=crate_version!(), author=crate_authors!(), about=env!("CARGO_PKG_DESCRIPTION"))]
+#[clap(author, version, about, long_about = None)]
 struct Opts {
-    #[clap(short, about="Left up corner x position")]
+    /// Left up corner x position
+    #[clap(short)]
     x: Option<u16>,
-    #[clap(short, about="Left up corner y position")]
+    /// Left up corner y position
+    #[clap(short)]
     y: Option<u16>,
-    #[clap(long, about="Show table of available art colors")]
+    /// Show table of available art colors
+    #[clap(long)]
     colortable: bool,
-    #[clap(long, about="Show demo animation")]
+    /// Show demo animation
+    #[clap(long)]
     demo: bool,
     file: Option<String>,
-    #[clap(short, long, about="Print source code instead of rendering it")]
+    /// Print source code instead of rendering it
+    #[clap(short, long)]
     print: bool,
-    #[clap(short, long, about="Override delay param")]
+    /// Override delay param
+    #[clap(short, long)]
     delay: Option<u16>,
-    #[clap(short, long, about="Override loop param")]
+    /// Override loop param
+    #[clap(short, long)]
     looped: Option<bool>,
-    #[clap(short, long, about="Override colors param")]
+    /// Override colors param
+    #[clap(short, long)]
     colors: Option<String>,
-    #[clap(long, about="Override datacols param")]
+    /// Override datacols param
+    #[clap(long)]
     datacols: Option<u16>,
-    #[clap(long, about="Override preview param")]
+    /// Override preview param
+    #[clap(long)]
     preview: Option<u16>,
-    #[clap(long, about="Render to plain text instead of animation (render only preview frame)")]
+    /// Render to plain text instead of animation (render only preview frame)
+    #[clap(long)]
     to_plain_text: bool,
-    #[clap(long, about="Get parameter width value")]
+    /// Get parameter width value
+    #[clap(long)]
     get_param_width: bool,
-    #[clap(long, about="Get parameter height value")]
+    /// Get parameter height value
+    #[clap(long)]
     get_param_height: bool,
-    #[clap(long, about="Get parameter delay value")]
+    /// Get parameter delay value
+    #[clap(long)]
     get_param_delay: bool,
-    #[clap(long, about="Get parameter loop value")]
+    /// Get parameter loop value
+    #[clap(long)]
     get_param_loop: bool,
-    #[clap(long, about="Get parameter colors value")]
+    /// Get parameter colors value
+    #[clap(long)]
     get_param_colors: bool,
-    #[clap(long, about="Get parameter utf8 value")]
+    /// Get parameter utf8 value
+    #[clap(long)]
     get_param_utf8: bool,
-    #[clap(long, about="Get parameter watacols value")]
+    /// Get parameter watacols value
+    #[clap(long)]
     get_param_datacols: bool,
-    #[clap(long, about="Get parameter preview value")]
+    /// Get parameter preview value
+    #[clap(long)]
     get_param_preview: bool,
-    #[clap(long, about="Get parameter audio value")]
+    /// Get parameter audio value
+    #[clap(long)]
     get_param_audio: bool,
-    #[clap(long, about="Get parameter title value")]
+    /// Get parameter title value
+    #[clap(long)]
     get_param_title: bool,
-    #[clap(long, about="Get parameter author value")]
+    /// Get parameter author value
+    #[clap(long)]
     get_param_author: bool,
-    #[clap(long, about="Return source code header")]
+    /// Return source code header
+    #[clap(long)]
     get_header: bool,
-    #[clap(long, about="Return source code body, stripped of comments and no display characters")]
+    /// Return source code body, stripped of comments and no display characters
+    #[clap(long)]
     get_clear_body: bool,
-    #[clap(long, about="Return pretifyed source code body")]
+    /// Return pretifyed source code body
+    #[clap(long)]
     get_pretify_body: bool,
-    #[clap(long, about="Return source code without comments")]
+    /// Return source code without comments
+    #[clap(long)]
     get_escape_comments: bool,
 }
 

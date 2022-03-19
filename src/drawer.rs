@@ -186,8 +186,8 @@ pub fn play(art: rs3a::Art, lx: u16, ly: u16) -> crossterm::Result<()>{
             }
         }
     }
+    stdout.queue(cursor::MoveTo(0,sy+rows_count as u16))?;
     terminal::disable_raw_mode()?;
-    print!("\n\n");
     stdout.execute(cursor::Show)?;
     Ok(())
 }
