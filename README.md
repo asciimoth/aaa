@@ -3,7 +3,7 @@ Tui tool for 3a files rendering
 [Here is 3a format specification.](https://github.com/DomesticMoth/3a)  
 [Here is a collection of 3a animations.](https://github.com/DomesticMoth/3a_storage)  
 Example:  
-[![asciicast](https://asciinema.org/a/NrdStIdTkaZfkKC027jdRAEkC.svg)](https://asciinema.org/a/NrdStIdTkaZfkKC027jdRAEkC)
+<a href="https://asciinema.org/a/NrdStIdTkaZfkKC027jdRAEkC" target="_blank"><img src="https://asciinema.org/a/NrdStIdTkaZfkKC027jdRAEkC.svg" /></a>
 ## Usage
 ```
 aaa 1.1.1
