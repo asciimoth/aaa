@@ -64,6 +64,7 @@ $ cd aaa
 $ cargo build --release
 ```
 ## TODO
+- Add the ability to render 3a files from the Internet by URL
 - More human readable errors
 - ~~Printitg only frames delta to save CPU load~~
-- Add to distro packages repos
+- ~~Add to distro packages repos~~ (currently only nixpkgs but nevertheless)
