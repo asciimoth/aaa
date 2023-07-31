@@ -2,8 +2,8 @@
 Tui tool for 3a files rendering  
 [Here is 3a format specification.](https://github.com/DomesticMoth/3a)  
 [Here is a collection of 3a animations.](https://github.com/DomesticMoth/3a_storage)  
-Example of render:  
-![DNA](https://i.imgur.com/OWN9yQW.gif)
+Example:  
+[![asciicast](https://asciinema.org/a/NrdStIdTkaZfkKC027jdRAEkC.svg)](https://asciinema.org/a/NrdStIdTkaZfkKC027jdRAEkC)
 ## Usage
 ```
 aaa 1.1.1
