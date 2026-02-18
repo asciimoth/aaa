@@ -1,0 +1,191 @@
+@3a
+;; This work is licensed under the Creative Commons Attribution 4.0 International License. To view a copy of this license, visit
+;; http://creativecommons.org/licenses/by/4.0/.
+title Flask
+author ASCIIMoth
+license CC0-1.0
+loop yes
+colors yes
+
+@color-pin
+eeeeeeeeeeeeeeee
+eeeeeeeeeeeeeeee
+eeeeeeeeeeeeeeee
+00000ffffff00000
+00000feeeef00000
+00000feeeef00000
+00000feeeef00000
+00000feeeef00000
+0000feeeeeef0000
+000feeeeeeeef000
+00feeeeeeeeeef00
+0feeeeeeeeeeeef0
+feeeeeeeeeeeeeef
+ffffffffffffffff
+
+@body
+  +   *         
+           +    
+    *   *       
+     ______     
+     |    |     
+     |0   |     
+     |   0|     
+     |    |     
+    /  0   \    
+   /________\   
+  /        o \  
+ /   o  o     \ 
+/  O         O \
+'--------------'
+
+           +    
+   *    *       
+                
+     ______     
+     |0   |     
+     |   0|     
+     |    |     
+     | 0  |     
+    /      \    
+   /_______0\   
+  /  o  o    \  
+ / O        O \ 
+/        o     \
+'--------------'
+
+   *    *       
+                
+      +         
+     ______     
+     |   0|     
+     |    |     
+     | 0  |     
+     |    |     
+    /     0\    
+   /_0__0___\   
+  / O      O \  
+ /       o    \ 
+/  o        O  \
+'--------------'
+
+                
+      +         
+           +    
+     ______     
+     |    |     
+     | 0  |     
+     |    |     
+     |   0|     
+    / 0 0  \    
+   /_0____0_\   
+  /      o   \  
+ /  o      O  \ 
+/       o      \
+'--------------'
+
+      +         
+           +    
+                
+     ______     
+     | 0  |     
+     |    |     
+     |   0|     
+     |0 0 |     
+    / 0  0 \    
+   /_____0__\   
+  /  o     O \  
+ /      o     \ 
+/   O          \
+'--------------'
+
+           +    
+                
+      *         
+     ______     
+     |    |     
+     |   0|     
+     |0 0 |     
+     |0  0|     
+    /    0 \    
+   /_0_____0\   
+  /     o    \  
+ /  O         \ 
+/   o     O    \
+'--------------'
+
+                
+      *         
+                
+     ______     
+     |   0|     
+     |0 0 |     
+     |0  0|     
+     |   0|     
+    / 0   0\    
+   /____o___\   
+  / O        \  
+ /  o     O   \ 
+/       o    o \
+'--------------'
+
+     *          
+                
+          +     
+     ______     
+     |0 0 |     
+     |0  0|     
+     |   0|     
+     |0  0|     
+    /   0  \    
+   /_0______\   
+  / o     O  \  
+ /      o   o \ 
+/    o    o    \
+'--------------'
+
+                
+          +     
+   +   +        
+     ______     
+     |0  0|     
+     |   0|     
+     |0  0|     
+     |  0 |     
+    / 0    \    
+   /_0____0_\   
+  /     o  o \  
+ /   o    o   \ 
+/ o     o      \
+'--------------'
+
+          +     
+  +   +         
+    *     +     
+     ______     
+     |   0|     
+     |0  0|     
+     |  0 |     
+     |0   |     
+    / 0   0\    
+   /____0_0_\   
+  /  o    o  \  
+ / o    o     \ 
+/     o     o  \
+'--------------'
+
+  +   +         
+    *      +    
+         *      
+     ______     
+     |0  0|     
+     |  0 |     
+     |0   |     
+     |0  0|     
+    /   0 0\    
+   /_0____0_\   
+  / o   o    \  
+ /    o    o  \ 
+/  o        o  \
+'--------------'
+
