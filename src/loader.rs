@@ -1,0 +1,51 @@
+use anyhow::Result;
+use atty::Stream;
+use rs3a;
+use rust_embed::Embed;
+use std::{collections::HashMap, io, str::FromStr};
+
+const APPLE: &str = include_str!("../art/apple.3a");
+
+#[derive(Embed)]
+#[folder = "art"]
+pub struct BuiltIn;
+
+fn get_embed_literal(name: &str) -> Option<String> {
+    if let Some(file) = BuiltIn::get(name) {
+        String::from_utf8(file.data.to_vec()).ok()
+    } else {
+        None
+    }
+}
+
+pub fn get_embed(name: &str) -> Option<String> {
+    if let Some(file) = get_embed_literal(name) {
+        return Some(file);
+    }
+    match name.strip_prefix(".3a") {
+        Some(name) => get_embed_literal(name),
+        None => get_embed_literal(&(String::from(name) + ".3a")),
+    }
+}
+
+fn looks_like_path(name: &str) -> bool {
+    name.contains("\\") || name.contains("/")
+}
+
+pub fn load(file: &Option<String>) -> Result<rs3a::Art> {
+    if let Some(file) = file {
+        if !looks_like_path(&file) {
+            if let Some(text) = get_embed(&file) {
+                return Ok(rs3a::Art::from_str(&text)?);
+            }
+        }
+        return Ok(rs3a::Art::from_file(file)?);
+    }
+    if atty::isnt(Stream::Stdin) {
+        Ok(rs3a::Art::from_reader(io::stdin())?)
+    } else {
+        Err(anyhow::Error::msg(
+            "ether <file> argument must be provided or data must be piped to stdin",
+        ))
+    }
+}
