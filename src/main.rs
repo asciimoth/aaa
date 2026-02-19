@@ -16,9 +16,10 @@
 */
 mod frames;
 mod loader;
-mod play_cmd;
+mod play;
+mod preview;
 
-use crate::play_cmd::CmdPlay;
+use crate::{play::CmdPlay, preview::CmdPreview};
 use anyhow::Result;
 use argh::FromArgs;
 
@@ -33,12 +34,14 @@ pub struct Cmd {
 #[argh(subcommand)]
 pub enum SubCmds {
     Play(CmdPlay),
+    Preview(CmdPreview),
 }
 
 impl SubCmds {
     pub fn run(&self) -> Result<()> {
         match self {
             SubCmds::Play(cmd) => cmd.run(),
+            SubCmds::Preview(cmd) => cmd.run(),
         }
     }
 }
