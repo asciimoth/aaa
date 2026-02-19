@@ -18,8 +18,9 @@ mod frames;
 mod loader;
 mod play;
 mod preview;
+mod to_frames;
 
-use crate::{play::CmdPlay, preview::CmdPreview};
+use crate::{play::CmdPlay, preview::CmdPreview, to_frames::CmdToFrames};
 use anyhow::Result;
 use argh::FromArgs;
 
@@ -35,6 +36,7 @@ pub struct Cmd {
 pub enum SubCmds {
     Play(CmdPlay),
     Preview(CmdPreview),
+    ToFrames(CmdToFrames),
 }
 
 impl SubCmds {
@@ -42,6 +44,7 @@ impl SubCmds {
         match self {
             SubCmds::Play(cmd) => cmd.run(),
             SubCmds::Preview(cmd) => cmd.run(),
+            SubCmds::ToFrames(cmd) => cmd.run(),
         }
     }
 }
