@@ -3,10 +3,10 @@ use argh::FromArgs;
 
 use crate::loader::load;
 
-/// Print art as a blank line separated sequence of frames
+/// Convert art to asciicast v2 format
 #[derive(FromArgs, PartialEq, Debug)]
-#[argh(subcommand, name = "to-frames")]
-pub struct CmdToFrames {
+#[argh(subcommand, name = "to-cast")]
+pub struct CmdToCast {
     /// art file path (alternatively pipe art to stdin)
     #[argh(positional)]
     file: Option<String>,
@@ -16,17 +16,14 @@ pub struct CmdToFrames {
     no_colors: bool,
 }
 
-impl CmdToFrames {
-    // TODO: frames range option
+impl CmdToCast {
     pub fn run(&self) -> Result<()> {
         let mut art = load(&self.file)?;
         if self.no_colors {
             art.set_colors_key(Some(false));
         }
 
-        for frame in art.to_ansi_frames() {
-            println!("{}\n", frame)
-        }
+        println!("{}", art.to_asciicast2());
         Ok(())
     }
 }

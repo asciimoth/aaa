@@ -18,9 +18,10 @@ mod frames;
 mod loader;
 mod play;
 mod preview;
+mod to_cast;
 mod to_frames;
 
-use crate::{play::CmdPlay, preview::CmdPreview, to_frames::CmdToFrames};
+use crate::{play::CmdPlay, preview::CmdPreview, to_cast::CmdToCast, to_frames::CmdToFrames};
 use anyhow::Result;
 use argh::FromArgs;
 
@@ -37,6 +38,7 @@ pub enum SubCmds {
     Play(CmdPlay),
     Preview(CmdPreview),
     ToFrames(CmdToFrames),
+    ToCast(CmdToCast),
 }
 
 impl SubCmds {
@@ -45,6 +47,7 @@ impl SubCmds {
             SubCmds::Play(cmd) => cmd.run(),
             SubCmds::Preview(cmd) => cmd.run(),
             SubCmds::ToFrames(cmd) => cmd.run(),
+            SubCmds::ToCast(cmd) => cmd.run(),
         }
     }
 }
