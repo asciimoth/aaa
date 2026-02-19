@@ -21,9 +21,11 @@ mod preview;
 mod to_3a;
 mod to_cast;
 mod to_frames;
+mod to_svg;
 
 use crate::{
     play::CmdPlay, preview::CmdPreview, to_3a::CmdTo3a, to_cast::CmdToCast, to_frames::CmdToFrames,
+    to_svg::CmdToSvg,
 };
 use anyhow::Result;
 use argh::FromArgs;
@@ -43,6 +45,7 @@ pub enum SubCmds {
     ToFrames(CmdToFrames),
     ToCast(CmdToCast),
     To3a(CmdTo3a),
+    ToSvg(CmdToSvg),
 }
 
 impl SubCmds {
@@ -53,6 +56,7 @@ impl SubCmds {
             SubCmds::ToFrames(cmd) => cmd.run(),
             SubCmds::ToCast(cmd) => cmd.run(),
             SubCmds::To3a(cmd) => cmd.run(),
+            SubCmds::ToSvg(cmd) => cmd.run(),
         }
     }
 }

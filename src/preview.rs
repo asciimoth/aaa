@@ -38,7 +38,7 @@ impl CmdPreview {
                     .min(frames.len() - 1)]
             );
         } else {
-            println!("There is no frames in art")
+            eprintln!("There is no frames in art")
         };
         Ok(())
     }
