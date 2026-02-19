@@ -1,0 +1,99 @@
+---
+commitizen:
+  major_version_zero: true
+  tag_format: v$version
+  update_changelog_on_bump: true
+  version: 0.2.0
+  version_scheme: semver2
+  name: cz_customize
+  customize:
+    schema: "<type>(<scope>)?: <message>"
+    schema_pattern: "^(?:bump|feat|fix|perf|refactor|docs|style|test|chore|build|ci|revert|other)(?:\\([A-Za-z0-9_\\-\\/\\.]+\\))?(!)?:\\s.+$"
+    message_template: >
+      {{ change_type }}{% if scope %}({{ scope }}){% endif %}{% if is_breaking %}!{% endif %}: {{ message }}
+      {% if body %}
+
+      {{ body }}{% endif %}
+      {% if is_breaking %}
+      {% if footer %}
+
+      BREAKING CHANGE: {{ footer }}{% else %}
+
+      BREAKING CHANGE{% endif %}
+      {% elif footer %}
+
+      {{ footer }}{% endif %}
+
+    # ordering / labels
+    change_type_order:
+      - feat
+      - fix
+      - perf
+      - refactor
+      - docs
+      - style
+      - test
+      - chore
+      - build
+      - ci
+    change_type_map:
+      chore: "Chore"
+
+    # which commit types influence semver bumping
+    bump_pattern: "^(breaking|feat|fix|perf)"
+    bump_map:
+      breaking: MAJOR
+      feat: MINOR
+      fix: PATCH
+      perf: PATCH
+
+    questions:
+      - type: list
+        name: change_type
+        message: "Select the type of change you're committing"
+        choices:
+          - value: feat
+            name: "feat:     A new feature"
+          - value: fix
+            name: "fix:      A bug fix"
+          - value: perf
+            name: "perf:     Performance improvement"
+          - value: refactor
+            name: "refactor: Code change that neither fixes a bug nor adds a feature"
+          - value: docs
+            name: "docs:     Documentation only changes"
+          - value: style
+            name: "style:    Formatting, missing semi-colons, etc (no code change)"
+          - value: test
+            name: "test:     Adding or fixing tests"
+          - value: chore
+            name: "chore:    Chores/maintenance (build scripts, tooling, etc)"
+          - value: build
+            name: "build:    Build system / dependencies"
+          - value: ci
+            name: "ci:       CI configuration and scripts"
+      - type: input
+        name: scope
+        message: "What is the scope of this change? (class or file name): (press [enter] to skip)"
+        default: ""
+
+      - type: input
+        name: message
+        message: "Write a short and imperative summary of the code changes: (lower case and no period)"
+        default: ""
+
+      - type: input
+        name: body
+        message: "Provide additional contextual information about the code changes: (press [enter] to skip)"
+        default: ""
+
+      - type: confirm
+        name: is_breaking
+        message: "Is this a BREAKING CHANGE? Correlates with MAJOR in SemVer"
+        default: false
+
+      - type: input
+        name: footer
+        message: "Footer (e.g. issues) (optional)"
+        default: ""
+
