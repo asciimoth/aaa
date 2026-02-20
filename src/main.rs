@@ -15,6 +15,7 @@
     along with aaa.  If not, see <https://www.gnu.org/licenses/>.
 */
 mod frames;
+mod list;
 mod loader;
 mod play;
 mod preview;
@@ -25,8 +26,8 @@ mod to_json;
 mod to_svg;
 
 use crate::{
-    play::CmdPlay, preview::CmdPreview, to_3a::CmdTo3a, to_cast::CmdToCast, to_frames::CmdToFrames,
-    to_json::CmdToJson, to_svg::CmdToSvg,
+    list::CmdList, play::CmdPlay, preview::CmdPreview, to_3a::CmdTo3a, to_cast::CmdToCast,
+    to_frames::CmdToFrames, to_json::CmdToJson, to_svg::CmdToSvg,
 };
 use anyhow::Result;
 use argh::FromArgs;
@@ -43,6 +44,7 @@ pub struct Cmd {
 pub enum SubCmds {
     Play(CmdPlay),
     Preview(CmdPreview),
+    List(CmdList),
     ToFrames(CmdToFrames),
     ToCast(CmdToCast),
     To3a(CmdTo3a),
@@ -60,6 +62,7 @@ impl SubCmds {
             SubCmds::To3a(cmd) => cmd.run(),
             SubCmds::ToSvg(cmd) => cmd.run(),
             SubCmds::ToJson(cmd) => cmd.run(),
+            SubCmds::List(cmd) => cmd.run(),
         }
     }
 }
