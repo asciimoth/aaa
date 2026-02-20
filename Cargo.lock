@@ -489,9 +489,9 @@ dependencies = [
 
 [[package]]
 name = "rs3a"
-version = "2.1.0"
+version = "2.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "cbac4ad3f110442ff017d73c80b78e3f019d01e177fb05691757bd8f99c1b5dd"
+checksum = "c0795d2d5c91ac5af200515965c057c0ac73ed9df9a6e9cdd8360ee9bf600cc2"
 dependencies = [
  "ordermap",
 ]
