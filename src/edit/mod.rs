@@ -1,4 +1,5 @@
 mod color;
+mod crop;
 mod frame;
 mod pin;
 mod set;
@@ -9,6 +10,7 @@ use argh::FromArgs;
 use crate::{
     edit::{
         color::{CmdColorForce, CmdColorMap, CmdColorUnMap, CmdPaletteRest},
+        crop::CmdCrop,
         frame::{
             CmdFrameDedup, CmdFrameDup, CmdFrameRemove, CmdFrameRev, CmdFrameRotBack,
             CmdFrameRotForth, CmdFrameSlice, CmdFrameSure, CmdFrameSwap,
@@ -50,6 +52,7 @@ pub enum SubCmds {
     FrameRotB(CmdFrameRotBack),
     PinText(CmdPinText),
     PinColor(CmdPinColor),
+    Crop(CmdCrop),
 }
 
 impl CmdEdit {
@@ -72,6 +75,7 @@ impl CmdEdit {
             SubCmds::FrameRotB(cmd) => cmd.run(&mut art),
             SubCmds::PinText(cmd) => cmd.run(&mut art),
             SubCmds::PinColor(cmd) => cmd.run(&mut art),
+            SubCmds::Crop(cmd) => cmd.run(&mut art),
         }?;
         println!("{}", art.to_string());
         Ok(())

@@ -96,10 +96,11 @@ $ cargo build --release
     - pinning
         - [X] text
         - [X] colors
-    - [ ] crop (shift + resize)
+    - [X] crop (shift + resize)
     - [ ] fill (whole art / single frame)
     - [ ] clean (whole art / single frame)
     - [ ] fill area (whole art / single frame)
+    - [ ] print text
     - [ ] filters
     - [ ] masks
     - tags
