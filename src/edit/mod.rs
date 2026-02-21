@@ -3,6 +3,7 @@ mod crop;
 mod fill;
 mod frame;
 mod pin;
+mod print;
 mod set;
 
 use anyhow::Result;
@@ -18,6 +19,7 @@ use crate::{
             CmdFrameRotForth, CmdFrameSlice, CmdFrameSure, CmdFrameSwap,
         },
         pin::{CmdPinColor, CmdPinText},
+        print::CmdPrint,
         set::CmdSet,
     },
     loader::load,
@@ -58,6 +60,7 @@ pub enum SubCmds {
     Fill(CmdFill),
     FillArea(CmdFillArea),
     Clean(CmdClean),
+    Print(CmdPrint),
 }
 
 impl CmdEdit {
@@ -84,6 +87,7 @@ impl CmdEdit {
             SubCmds::Fill(cmd) => cmd.run(&mut art),
             SubCmds::FillArea(cmd) => cmd.run(&mut art),
             SubCmds::Clean(cmd) => cmd.run(&mut art),
+            SubCmds::Print(cmd) => cmd.run(&mut art),
         }?;
         println!("{}", art.to_string());
         Ok(())
