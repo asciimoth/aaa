@@ -97,9 +97,9 @@ $ cargo build --release
         - [X] text
         - [X] colors
     - [X] crop (shift + resize)
-    - [ ] fill (whole art / single frame)
-    - [ ] clean (whole art / single frame)
-    - [ ] fill area (whole art / single frame)
+    - [X] fill (whole art / single frame)
+    - [X] fill area (whole art / single frame)
+    - [X] clean (whole art / single frame)
     - [ ] print text
     - [ ] filters
     - [ ] masks
