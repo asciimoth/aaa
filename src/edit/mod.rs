@@ -1,5 +1,6 @@
 mod color;
 mod frame;
+mod pin;
 mod set;
 
 use anyhow::Result;
@@ -12,6 +13,7 @@ use crate::{
             CmdFrameDedup, CmdFrameDup, CmdFrameRemove, CmdFrameRev, CmdFrameRotBack,
             CmdFrameRotForth, CmdFrameSlice, CmdFrameSure, CmdFrameSwap,
         },
+        pin::{CmdPinColor, CmdPinText},
         set::CmdSet,
     },
     loader::load,
@@ -46,6 +48,8 @@ pub enum SubCmds {
     FrameDedup(CmdFrameDedup),
     FrameRotF(CmdFrameRotForth),
     FrameRotB(CmdFrameRotBack),
+    PinText(CmdPinText),
+    PinColor(CmdPinColor),
 }
 
 impl CmdEdit {
@@ -66,6 +70,8 @@ impl CmdEdit {
             SubCmds::FrameDedup(cmd) => cmd.run(&mut art),
             SubCmds::FrameRotF(cmd) => cmd.run(&mut art),
             SubCmds::FrameRotB(cmd) => cmd.run(&mut art),
+            SubCmds::PinText(cmd) => cmd.run(&mut art),
+            SubCmds::PinColor(cmd) => cmd.run(&mut art),
         }?;
         println!("{}", art.to_string());
         Ok(())

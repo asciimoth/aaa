@@ -94,13 +94,14 @@ $ cargo build --release
         - [X] dedup frames
         - [X] rotate back / forth
     - pinning
-        - [ ] text
-        - [ ] colors
+        - [X] text
+        - [X] colors
     - [ ] crop (shift + resize)
     - [ ] fill (whole art / single frame)
     - [ ] clean (whole art / single frame)
     - [ ] fill area (whole art / single frame)
     - [ ] filters
+    - [ ] masks
     - tags
         - [ ] check for tag
         - [ ] add tag
