@@ -101,7 +101,7 @@ $ cargo build --release
     - [X] fill area (whole art / single frame)
     - [X] clean (whole art / single frame)
     - [X] print text
-    - [ ] filters
+    - [X] filters
     - tags
         - [ ] check for tag
         - [ ] add tag

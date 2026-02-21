@@ -48,6 +48,7 @@
         buildInputs = with pkgs; [
           cargo
           # clippy
+          lolcat
 
           typos
           commitizen

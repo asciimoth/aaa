@@ -1,6 +1,7 @@
 mod color;
 mod crop;
 mod fill;
+mod filter;
 mod frame;
 mod pin;
 mod print;
@@ -14,6 +15,7 @@ use crate::{
         color::{CmdColorForce, CmdColorMap, CmdColorUnMap, CmdPaletteRest},
         crop::CmdCrop,
         fill::{CmdClean, CmdFill, CmdFillArea},
+        filter::CmdFilter,
         frame::{
             CmdFrameDedup, CmdFrameDup, CmdFrameRemove, CmdFrameRev, CmdFrameRotBack,
             CmdFrameRotForth, CmdFrameSlice, CmdFrameSure, CmdFrameSwap,
@@ -61,6 +63,7 @@ pub enum SubCmds {
     FillArea(CmdFillArea),
     Clean(CmdClean),
     Print(CmdPrint),
+    Filter(CmdFilter),
 }
 
 impl CmdEdit {
@@ -88,6 +91,7 @@ impl CmdEdit {
             SubCmds::FillArea(cmd) => cmd.run(&mut art),
             SubCmds::Clean(cmd) => cmd.run(&mut art),
             SubCmds::Print(cmd) => cmd.run(&mut art),
+            SubCmds::Filter(cmd) => cmd.run(&mut art),
         }?;
         println!("{}", art.to_string());
         Ok(())
