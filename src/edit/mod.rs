@@ -5,7 +5,10 @@ use anyhow::Result;
 use argh::FromArgs;
 
 use crate::{
-    edit::{color::CmdColor, set::CmdSet},
+    edit::{
+        color::{CmdColorForce, CmdColorMap, CmdColorUnMap, CmdPaletteRest},
+        set::CmdSet,
+    },
     loader::load,
 };
 
@@ -25,7 +28,10 @@ pub struct CmdEdit {
 #[argh(subcommand)]
 pub enum SubCmds {
     Set(CmdSet),
-    Color(CmdColor),
+    ColorMap(CmdColorMap),
+    ColorUnMap(CmdColorUnMap),
+    ColorForce(CmdColorForce),
+    Palette(CmdPaletteRest),
 }
 
 impl CmdEdit {
@@ -33,7 +39,10 @@ impl CmdEdit {
         let mut art = load(&self.file)?;
         match &self.cmds {
             SubCmds::Set(cmd) => cmd.run(&mut art),
-            SubCmds::Color(cmd) => cmd.run(&mut art),
+            SubCmds::ColorMap(cmd) => cmd.run(&mut art),
+            SubCmds::ColorUnMap(cmd) => cmd.run(&mut art),
+            SubCmds::ColorForce(cmd) => cmd.run(&mut art),
+            SubCmds::Palette(cmd) => cmd.run(&mut art),
         }?;
         println!("{}", art.to_string());
         Ok(())

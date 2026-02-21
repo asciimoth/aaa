@@ -81,17 +81,17 @@ $ cargo build --release
     - [X] set cell
     - colors
         - [X] search or add color mapping
-        - [ ] remove color mapping
+        - [X] remove color mapping
             - replace unmapped color in art with `_`
-        - [ ] remove whole palette
-        - [ ] force disable/enable colors
+        - [X] remove whole palette
+        - [X] force disable/enable colors
     - frames
         - [ ] remove frame
         - [ ] dup frame
         - [ ] make sure frame exists
         - [ ] remove all frames except one specific
         - [ ] swap two frames
-        - [ ] revers oreder of frames range
+        - [ ] revers order of frames range
     - pinning
         - [ ] text
         - [ ] colors
@@ -131,7 +131,7 @@ $ cargo build --release
 - [ ] ability to get 3a files by URL
 - [X] comments stripping
 - [ ] art optimisation
-- usage exaples
+- usage examples
     - [ ] complex jq queries
     - [ ] editing
 
