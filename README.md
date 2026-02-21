@@ -65,13 +65,73 @@ $ cargo build --release
 ```
 ## TODO
 - [X] playing
+    - [ ] setting terminal title to art's title line
+    - [ ] show art metadata under animation
 - conversion
     - [X] ansi frames
+        - [ ] select only subrange of frames
     - [X] svg
     - [X] asciicast
     - [X] json
+    - [ ] to png/jpg/bmp/etc
+    - [ ] to gif
+    - [ ] to video?
+    - [ ] to webp??
 - editing 
     - [X] set cell
-    - [X] color mapping
-- [ ] ability to fetch 3a files from the Internet by URL
-- [ ] optimisation command
+    - colors
+        - [X] search or add color mapping
+        - [ ] remove color mapping
+            - replace unmapped color in art with `_`
+        - [ ] remove whole palette
+        - [ ] force disable/enable colors
+    - frames
+        - [ ] remove frame
+        - [ ] dup frame
+        - [ ] make sure frame exists
+        - [ ] remove all frames except one specific
+        - [ ] swap two frames
+        - [ ] revers oreder of frames range
+    - pinning
+        - [ ] text
+        - [ ] colors
+    - [ ] shift
+        - left, right, up, down
+        - whole art / single frame
+    - [ ] resize, adjust
+    - [ ] crop (shift + resize)
+    - [ ] fill (whole art / single frame)
+    - [ ] clean (whole art / single frame)
+    - [ ] fill area (whole art / single frame)
+    - [ ] filters
+    - tags
+        - [ ] check for tag
+        - [ ] add tag
+        - [ ] remove tag
+        - [ ] remove all tags
+    - delay
+        - [ ] set global delay
+        - [ ] set per-frame delay
+        - [ ] unset delays to default
+    - header
+        - [ ] set title
+        - [ ] add author
+        - [ ] remove author
+        - [ ] remove all authors
+        - [ ] add orig author
+        - [ ] remove orig author
+        - [ ] remove all orig authors
+        - [ ] set src
+        - [ ] set editor
+        - [ ] set license
+        - [ ] set loop
+        - [ ] set preview
+- [ ] art generation
+- [ ] fetch
+- [ ] ability to get 3a files by URL
+- [X] comments stripping
+- [ ] art optimisation
+- usage exaples
+    - [ ] complex jq queries
+    - [ ] editing
+

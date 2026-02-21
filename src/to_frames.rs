@@ -17,7 +17,6 @@ pub struct CmdToFrames {
 }
 
 impl CmdToFrames {
-    // TODO: frames range option
     pub fn run(&self) -> Result<()> {
         let mut art = load(&self.file)?;
         if self.no_colors {

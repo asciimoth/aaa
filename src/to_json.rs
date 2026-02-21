@@ -2,7 +2,6 @@ use anyhow::Result;
 use argh::FromArgs;
 
 use crate::loader::load;
-// TODO: Example with jq
 
 /// Convert art to json document
 #[derive(FromArgs, PartialEq, Debug)]

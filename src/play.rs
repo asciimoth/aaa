@@ -30,8 +30,6 @@ pub struct CmdPlay {
 }
 
 impl CmdPlay {
-    // TODO: Set terminal title to art.title_line
-    // TODO: Show art metadata under animation
     pub fn run(&self) -> Result<()> {
         let mut art = load(&self.file)?;
         if self.no_colors {

@@ -2,7 +2,7 @@ use std::str::FromStr;
 
 use anyhow::Result;
 use argh::FromArgs;
-use rs3a::{chars::Char, Cell, Color, ColorPair};
+use rs3a::{Color, ColorPair};
 
 /// Search or add new color mapping.
 /// Mapped color prints to stderr.
