@@ -1,4 +1,5 @@
 mod color;
+mod frame;
 mod set;
 
 use anyhow::Result;
@@ -7,6 +8,10 @@ use argh::FromArgs;
 use crate::{
     edit::{
         color::{CmdColorForce, CmdColorMap, CmdColorUnMap, CmdPaletteRest},
+        frame::{
+            CmdFrameDedup, CmdFrameDup, CmdFrameRemove, CmdFrameRev, CmdFrameRotBack,
+            CmdFrameRotForth, CmdFrameSlice, CmdFrameSure, CmdFrameSwap,
+        },
         set::CmdSet,
     },
     loader::load,
@@ -32,6 +37,15 @@ pub enum SubCmds {
     ColorUnMap(CmdColorUnMap),
     ColorForce(CmdColorForce),
     Palette(CmdPaletteRest),
+    FrameRemove(CmdFrameRemove),
+    FrameDup(CmdFrameDup),
+    FrameSure(CmdFrameSure),
+    FrameSlice(CmdFrameSlice),
+    FrameSwap(CmdFrameSwap),
+    FrameRev(CmdFrameRev),
+    FrameDedup(CmdFrameDedup),
+    FrameRotF(CmdFrameRotForth),
+    FrameRotB(CmdFrameRotBack),
 }
 
 impl CmdEdit {
@@ -43,6 +57,15 @@ impl CmdEdit {
             SubCmds::ColorUnMap(cmd) => cmd.run(&mut art),
             SubCmds::ColorForce(cmd) => cmd.run(&mut art),
             SubCmds::Palette(cmd) => cmd.run(&mut art),
+            SubCmds::FrameRemove(cmd) => cmd.run(&mut art),
+            SubCmds::FrameDup(cmd) => cmd.run(&mut art),
+            SubCmds::FrameSure(cmd) => cmd.run(&mut art),
+            SubCmds::FrameSlice(cmd) => cmd.run(&mut art),
+            SubCmds::FrameSwap(cmd) => cmd.run(&mut art),
+            SubCmds::FrameRev(cmd) => cmd.run(&mut art),
+            SubCmds::FrameDedup(cmd) => cmd.run(&mut art),
+            SubCmds::FrameRotF(cmd) => cmd.run(&mut art),
+            SubCmds::FrameRotB(cmd) => cmd.run(&mut art),
         }?;
         println!("{}", art.to_string());
         Ok(())

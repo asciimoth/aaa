@@ -69,7 +69,6 @@ $ cargo build --release
     - [ ] show art metadata under animation
 - conversion
     - [X] ansi frames
-        - [ ] select only subrange of frames
     - [X] svg
     - [X] asciicast
     - [X] json
@@ -86,19 +85,17 @@ $ cargo build --release
         - [X] remove whole palette
         - [X] force disable/enable colors
     - frames
-        - [ ] remove frame
-        - [ ] dup frame
-        - [ ] make sure frame exists
-        - [ ] remove all frames except one specific
-        - [ ] swap two frames
-        - [ ] revers order of frames range
+        - [X] remove frame
+        - [X] dup frame
+        - [X] make sure frame exists
+        - [X] slice
+        - [X] swap two frames
+        - [X] reverse frames
+        - [X] dedup frames
+        - [X] rotate back / forth
     - pinning
         - [ ] text
         - [ ] colors
-    - [ ] shift
-        - left, right, up, down
-        - whole art / single frame
-    - [ ] resize, adjust
     - [ ] crop (shift + resize)
     - [ ] fill (whole art / single frame)
     - [ ] clean (whole art / single frame)
@@ -131,6 +128,9 @@ $ cargo build --release
 - [ ] ability to get 3a files by URL
 - [X] comments stripping
 - [ ] art optimisation
+- [ ] shell autocompletion
+- [ ] MIME DB files
+- [ ] Man pages
 - usage examples
     - [ ] complex jq queries
     - [ ] editing
