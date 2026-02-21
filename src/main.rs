@@ -14,7 +14,7 @@
     You should have received a copy of the GNU General Public License
     along with aaa.  If not, see <https://www.gnu.org/licenses/>.
 */
-mod attach;
+mod edit;
 mod frames;
 mod list;
 mod loader;
@@ -28,8 +28,9 @@ mod to_json;
 mod to_svg;
 
 use crate::{
-    list::CmdList, play::CmdPlay, preview::CmdPreview, strip::CmdStrip, to_3a::CmdTo3a,
-    to_cast::CmdToCast, to_frames::CmdToFrames, to_json::CmdToJson, to_svg::CmdToSvg,
+    edit::CmdEdit, list::CmdList, play::CmdPlay, preview::CmdPreview, strip::CmdStrip,
+    to_3a::CmdTo3a, to_cast::CmdToCast, to_frames::CmdToFrames, to_json::CmdToJson,
+    to_svg::CmdToSvg,
 };
 use anyhow::Result;
 use argh::FromArgs;
@@ -48,6 +49,7 @@ pub enum SubCmds {
     Preview(CmdPreview),
     List(CmdList),
     Strip(CmdStrip),
+    Edit(CmdEdit),
     ToFrames(CmdToFrames),
     ToCast(CmdToCast),
     To3a(CmdTo3a),
@@ -67,6 +69,7 @@ impl SubCmds {
             SubCmds::ToJson(cmd) => cmd.run(),
             SubCmds::List(cmd) => cmd.run(),
             SubCmds::Strip(cmd) => cmd.run(),
+            SubCmds::Edit(cmd) => cmd.run(),
         }
     }
 }
