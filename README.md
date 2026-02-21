@@ -50,7 +50,7 @@ OPTIONS:
     -x <X>                       Left up corner x position
     -y <Y>                       Left up corner y position
 ```
-## Instalation
+## Installation
 ### Download binaries
 You can download binaries from the [github releases page](https://github.com/DomesticMoth/aaa/releases)
 ### With "cargo install"
@@ -64,7 +64,14 @@ $ cd aaa
 $ cargo build --release
 ```
 ## TODO
-- Add the ability to render 3a files from the Internet by URL
-- More human readable errors
-- ~~Printitg only frames delta to save CPU load~~
-- ~~Add to distro packages repos~~ (currently only nixpkgs but nevertheless)
+- [X] playing
+- conversion
+    - [X] ansi frames
+    - [X] svg
+    - [X] asciicast
+    - [X] json
+- editing 
+    - [X] set cell
+    - [X] color mapping
+- [ ] ability to fetch 3a files from the Internet by URL
+- [ ] optimisation command
