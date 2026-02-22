@@ -16,6 +16,7 @@
 */
 mod edit;
 mod frames;
+mod generate;
 mod list;
 mod loader;
 mod play;
@@ -28,9 +29,9 @@ mod to_json;
 mod to_svg;
 
 use crate::{
-    edit::CmdEdit, list::CmdList, play::CmdPlay, preview::CmdPreview, strip::CmdStrip,
-    to_3a::CmdTo3a, to_cast::CmdToCast, to_frames::CmdToFrames, to_json::CmdToJson,
-    to_svg::CmdToSvg,
+    edit::CmdEdit, generate::CmdGen, list::CmdList, play::CmdPlay, preview::CmdPreview,
+    strip::CmdStrip, to_3a::CmdTo3a, to_cast::CmdToCast, to_frames::CmdToFrames,
+    to_json::CmdToJson, to_svg::CmdToSvg,
 };
 use anyhow::Result;
 use argh::FromArgs;
@@ -50,6 +51,7 @@ pub enum SubCmds {
     List(CmdList),
     Strip(CmdStrip),
     Edit(CmdEdit),
+    Gen(CmdGen),
     ToFrames(CmdToFrames),
     ToCast(CmdToCast),
     To3a(CmdTo3a),
@@ -70,6 +72,7 @@ impl SubCmds {
             SubCmds::List(cmd) => cmd.run(),
             SubCmds::Strip(cmd) => cmd.run(),
             SubCmds::Edit(cmd) => cmd.run(),
+            SubCmds::Gen(cmd) => cmd.run(),
         }
     }
 }

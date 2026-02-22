@@ -118,7 +118,7 @@ $ cargo build --release
         - [X] set license
         - [X] set loop
         - [X] set preview
-- [ ] art generation
+- [X] art generation
 - [ ] fetch
 - [ ] ability to get 3a files by URL
 - [X] comments stripping
