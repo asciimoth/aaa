@@ -1,5 +1,6 @@
 mod color;
 mod crop;
+mod delay;
 mod fill;
 mod filter;
 mod frame;
@@ -15,6 +16,7 @@ use crate::{
     edit::{
         color::{CmdColorForce, CmdColorMap, CmdColorUnMap, CmdPaletteRest},
         crop::CmdCrop,
+        delay::{CmdDelayReSet, CmdDelaySet},
         fill::{CmdClean, CmdFill, CmdFillArea},
         filter::CmdFilter,
         frame::{
@@ -69,6 +71,8 @@ pub enum SubCmds {
     TagAdd(CmdTagAdd),
     TagRm(CmdTagRm),
     TagsDrop(CmdTagsDrop),
+    DelaySet(CmdDelaySet),
+    DelayReSet(CmdDelayReSet),
 }
 
 impl CmdEdit {
@@ -100,6 +104,8 @@ impl CmdEdit {
             SubCmds::TagAdd(cmd) => cmd.run(&mut art),
             SubCmds::TagRm(cmd) => cmd.run(&mut art),
             SubCmds::TagsDrop(cmd) => cmd.run(&mut art),
+            SubCmds::DelaySet(cmd) => cmd.run(&mut art),
+            SubCmds::DelayReSet(cmd) => cmd.run(&mut art),
         }?;
         println!("{}", art.to_string());
         Ok(())

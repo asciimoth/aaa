@@ -107,9 +107,8 @@ $ cargo build --release
         - [X] remove tag
         - [X] remove all tags
     - delay
-        - [ ] set global delay
-        - [ ] set per-frame delay
-        - [ ] unset delays to default
+        - [X] set global/per-frame delay
+        - [X] unset delays to default
     - header
         - [ ] set title
         - [ ] add author
