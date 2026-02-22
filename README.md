@@ -110,18 +110,14 @@ $ cargo build --release
         - [X] set global/per-frame delay
         - [X] unset delays to default
     - header
-        - [ ] set title
-        - [ ] add author
-        - [ ] remove author
-        - [ ] remove all authors
-        - [ ] add orig author
-        - [ ] remove orig author
-        - [ ] remove all orig authors
-        - [ ] set src
-        - [ ] set editor
-        - [ ] set license
-        - [ ] set loop
-        - [ ] set preview
+        - [X] set title
+        - [X] set authors
+        - [X] set orig authors
+        - [X] set src
+        - [X] set editor
+        - [X] set license
+        - [X] set loop
+        - [X] set preview
 - [ ] art generation
 - [ ] fetch
 - [ ] ability to get 3a files by URL
