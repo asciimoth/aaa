@@ -6,6 +6,7 @@ mod frame;
 mod pin;
 mod print;
 mod set;
+mod tag;
 
 use anyhow::Result;
 use argh::FromArgs;
@@ -23,6 +24,7 @@ use crate::{
         pin::{CmdPinColor, CmdPinText},
         print::CmdPrint,
         set::CmdSet,
+        tag::{CmdTagAdd, CmdTagRm, CmdTagsDrop},
     },
     loader::load,
 };
@@ -64,6 +66,9 @@ pub enum SubCmds {
     Clean(CmdClean),
     Print(CmdPrint),
     Filter(CmdFilter),
+    TagAdd(CmdTagAdd),
+    TagRm(CmdTagRm),
+    TagsDrop(CmdTagsDrop),
 }
 
 impl CmdEdit {
@@ -92,6 +97,9 @@ impl CmdEdit {
             SubCmds::Clean(cmd) => cmd.run(&mut art),
             SubCmds::Print(cmd) => cmd.run(&mut art),
             SubCmds::Filter(cmd) => cmd.run(&mut art),
+            SubCmds::TagAdd(cmd) => cmd.run(&mut art),
+            SubCmds::TagRm(cmd) => cmd.run(&mut art),
+            SubCmds::TagsDrop(cmd) => cmd.run(&mut art),
         }?;
         println!("{}", art.to_string());
         Ok(())

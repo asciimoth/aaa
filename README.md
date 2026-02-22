@@ -103,10 +103,9 @@ $ cargo build --release
     - [X] print text
     - [X] filters
     - tags
-        - [ ] check for tag
-        - [ ] add tag
-        - [ ] remove tag
-        - [ ] remove all tags
+        - [X] add tag
+        - [X] remove tag
+        - [X] remove all tags
     - delay
         - [ ] set global delay
         - [ ] set per-frame delay
