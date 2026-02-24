@@ -121,7 +121,7 @@ impl CmdToPng {
             map.set_default_fg(fg);
         }
         if let Some(bg) = &self.bg {
-            map.set_default_fg(bg);
+            map.set_default_bg(bg);
         }
         map
     }

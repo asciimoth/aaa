@@ -14,10 +14,6 @@ pub struct CmdToMp4 {
     #[argh(positional)]
     file: Option<String>,
 
-    /// whether loop aniamtion
-    #[argh(option, long = "loop")]
-    loop_flag: Option<bool>,
-
     /// disable colors
     #[argh(switch, short = 'n')]
     no_colors: bool,
@@ -73,10 +69,6 @@ impl CmdToMp4 {
         if self.no_colors {
             art.set_colors_key(Some(false));
         }
-        if let Some(loop_flag) = self.loop_flag {
-            art.set_loop_key(loop_flag);
-        }
-
         render_mp4(
             &art,
             &self.to_font()?,
@@ -117,7 +109,7 @@ impl CmdToMp4 {
             map.set_default_fg(fg);
         }
         if let Some(bg) = &self.bg {
-            map.set_default_fg(bg);
+            map.set_default_bg(bg);
         }
         map
     }
