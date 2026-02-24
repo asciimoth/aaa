@@ -2,9 +2,7 @@ use anyhow::Result;
 use atty::Stream;
 use rs3a;
 use rust_embed::Embed;
-use std::{collections::HashMap, io, str::FromStr};
-
-const APPLE: &str = include_str!("../art/apple.3a");
+use std::{io, str::FromStr};
 
 #[derive(Embed)]
 #[folder = "art"]

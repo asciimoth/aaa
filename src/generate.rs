@@ -1,6 +1,6 @@
 use anyhow::Result;
 use argh::FromArgs;
-use rs3a::{chars::Char, Cell};
+use rs3a::{Cell, chars::Char};
 
 /// Generate new art
 #[derive(FromArgs, PartialEq, Debug)]

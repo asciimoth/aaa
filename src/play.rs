@@ -1,16 +1,13 @@
 use std::{
     io::{self, Write},
-    sync::mpsc::{channel, Receiver},
+    sync::mpsc::channel,
     thread,
 };
 
 use anyhow::Result;
 use argh::FromArgs;
 
-use crate::{
-    frames::{art2frames, FrameWithDelay},
-    loader::load,
-};
+use crate::{frames::art2frames, loader::load};
 
 /// Play art in terminal
 #[derive(FromArgs, PartialEq, Debug)]

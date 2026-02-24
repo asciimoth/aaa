@@ -72,10 +72,10 @@ $ cargo build --release
     - [X] svg
     - [X] asciicast
     - [X] json
-    - [ ] to png/jpg/bmp/etc
-    - [ ] to gif
-    - [ ] to video?
-    - [ ] to webp??
+    - [X] png
+    - [X] gif
+    - [X] mp4
+    - [X] webp
 - editing 
     - [X] set cell
     - colors
@@ -120,7 +120,6 @@ $ cargo build --release
         - [X] set preview
 - [X] art generation
 - [ ] fetch
-- [ ] ability to get 3a files by URL
 - [X] comments stripping
 - [ ] art optimisation
 - [ ] shell autocompletion

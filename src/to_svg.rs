@@ -1,19 +1,9 @@
-use std::{
-    fmt::format,
-    io::{self, Write},
-    str::FromStr,
-    sync::mpsc::{channel, Receiver},
-    thread,
-};
+use std::str::FromStr;
 
 use anyhow::Result;
 use argh::FromArgs;
-use rs3a::header;
 
-use crate::{
-    frames::{art2frames, FrameWithDelay},
-    loader::load,
-};
+use crate::loader::load;
 
 /// Convert art to svg
 #[derive(FromArgs, PartialEq, Debug)]

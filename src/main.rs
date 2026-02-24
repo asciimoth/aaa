@@ -17,6 +17,7 @@
 mod edit;
 mod frames;
 mod generate;
+mod img;
 mod list;
 mod loader;
 mod play;
@@ -25,9 +26,17 @@ mod strip;
 mod to_3a;
 mod to_cast;
 mod to_frames;
+mod to_gif;
 mod to_json;
+mod to_mp4;
+mod to_png;
 mod to_svg;
+mod to_webp;
 
+use crate::to_gif::CmdToGif;
+use crate::to_mp4::CmdToMp4;
+use crate::to_png::CmdToPng;
+use crate::to_webp::CmdToWebp;
 use crate::{
     edit::CmdEdit, generate::CmdGen, list::CmdList, play::CmdPlay, preview::CmdPreview,
     strip::CmdStrip, to_3a::CmdTo3a, to_cast::CmdToCast, to_frames::CmdToFrames,
@@ -57,6 +66,10 @@ pub enum SubCmds {
     To3a(CmdTo3a),
     ToSvg(CmdToSvg),
     ToJson(CmdToJson),
+    ToPng(CmdToPng),
+    ToGif(CmdToGif),
+    ToWebp(CmdToWebp),
+    ToMp4(CmdToMp4),
 }
 
 impl SubCmds {
@@ -69,6 +82,10 @@ impl SubCmds {
             SubCmds::To3a(cmd) => cmd.run(),
             SubCmds::ToSvg(cmd) => cmd.run(),
             SubCmds::ToJson(cmd) => cmd.run(),
+            SubCmds::ToPng(cmd) => cmd.run(),
+            SubCmds::ToGif(cmd) => cmd.run(),
+            SubCmds::ToWebp(cmd) => cmd.run(),
+            SubCmds::ToMp4(cmd) => cmd.run(),
             SubCmds::List(cmd) => cmd.run(),
             SubCmds::Strip(cmd) => cmd.run(),
             SubCmds::Edit(cmd) => cmd.run(),
