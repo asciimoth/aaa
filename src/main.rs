@@ -25,6 +25,7 @@ mod preview;
 mod strip;
 mod to_3a;
 mod to_cast;
+mod to_dur;
 mod to_frames;
 mod to_gif;
 mod to_json;
@@ -33,6 +34,7 @@ mod to_png;
 mod to_svg;
 mod to_webp;
 
+use crate::to_dur::CmdToDur;
 use crate::to_gif::CmdToGif;
 use crate::to_mp4::CmdToMp4;
 use crate::to_png::CmdToPng;
@@ -66,6 +68,7 @@ pub enum SubCmds {
     To3a(CmdTo3a),
     ToSvg(CmdToSvg),
     ToJson(CmdToJson),
+    ToDur(CmdToDur),
     ToPng(CmdToPng),
     ToGif(CmdToGif),
     ToWebp(CmdToWebp),
@@ -82,6 +85,7 @@ impl SubCmds {
             SubCmds::To3a(cmd) => cmd.run(),
             SubCmds::ToSvg(cmd) => cmd.run(),
             SubCmds::ToJson(cmd) => cmd.run(),
+            SubCmds::ToDur(cmd) => cmd.run(),
             SubCmds::ToPng(cmd) => cmd.run(),
             SubCmds::ToGif(cmd) => cmd.run(),
             SubCmds::ToWebp(cmd) => cmd.run(),

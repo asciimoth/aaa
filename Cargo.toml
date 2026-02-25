@@ -10,7 +10,7 @@ license = "GPL-3.0"
 
 [dependencies]
 crossterm = "0.22"
-rs3a = "2.2.8"
+rs3a = "2.3.8"
 clap = { version = "3.1.6", features = ["derive"] }
 exitcode = "1.1.2"
 argh = "0.1.14"
