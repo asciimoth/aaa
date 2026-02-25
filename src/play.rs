@@ -33,7 +33,7 @@ impl CmdPlay {
             art.set_colors_key(Some(false));
         }
         let frames = art2frames(&art);
-        print!("\x1B[?25l"); // Disable curesor
+        print!("\x1B[?25l"); // Disable cursor
         io::stdout().flush().unwrap();
         let loop_flag = match self.loop_flag {
             Some(flag) => flag,
@@ -41,10 +41,12 @@ impl CmdPlay {
         };
         let (tx, rx) = channel();
         ctrlc::set_handler(move || tx.send(()).expect("Could not send signal on channel."))?;
+        let mut last_frame = 0;
         'outer: loop {
-            for frame in &frames {
+            for (i, frame) in frames.iter().enumerate() {
                 println!("{}", frame.frame);
                 io::stdout().flush().unwrap();
+                last_frame = i;
                 thread::sleep(frame.delay);
                 if let Ok(_) = rx.recv_timeout(frame.delay) {
                     break 'outer;
@@ -54,6 +56,10 @@ impl CmdPlay {
                 break;
             }
         }
+        if frames.len() > 0 {
+            println!("\r{}", frames[last_frame].frame);
+        }
+        io::stdout().flush().unwrap();
         for _ in 0..art.height() + 1 {
             println!("");
         }
