@@ -65,7 +65,7 @@ $ cargo build --release
 ```
 ## TODO
 - [X] playing
-    - [ ] setting terminal title to art's title line
+    - [X] setting terminal title to art's title line
     - [ ] show art metadata under animation
 - conversion
     - [X] ansi frames

@@ -32,6 +32,7 @@ impl CmdPlay {
         if self.no_colors {
             art.set_colors_key(Some(false));
         }
+        print!("\x1b]0;{}\x07", art.title_line());
         let frames = art2frames(&art);
         print!("\x1B[?25l"); // Disable cursor
         io::stdout().flush().unwrap();
