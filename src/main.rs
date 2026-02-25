@@ -16,6 +16,7 @@
 */
 mod edit;
 mod frames;
+mod from_text;
 mod generate;
 mod img;
 mod list;
@@ -35,6 +36,7 @@ mod to_svg;
 mod to_ttyrec;
 mod to_webp;
 
+use crate::from_text::CmdFromText;
 use crate::to_dur::CmdToDur;
 use crate::to_gif::CmdToGif;
 use crate::to_mp4::CmdToMp4;
@@ -65,6 +67,7 @@ pub enum SubCmds {
     Strip(CmdStrip),
     Edit(CmdEdit),
     Gen(CmdGen),
+    FromTxt(CmdFromText),
     ToFrames(CmdToFrames),
     ToCast(CmdToCast),
     To3a(CmdTo3a),
@@ -98,6 +101,7 @@ impl SubCmds {
             SubCmds::Strip(cmd) => cmd.run(),
             SubCmds::Edit(cmd) => cmd.run(),
             SubCmds::Gen(cmd) => cmd.run(),
+            SubCmds::FromTxt(cmd) => cmd.run(),
         }
     }
 }
