@@ -32,12 +32,14 @@ mod to_json;
 mod to_mp4;
 mod to_png;
 mod to_svg;
+mod to_ttyrec;
 mod to_webp;
 
 use crate::to_dur::CmdToDur;
 use crate::to_gif::CmdToGif;
 use crate::to_mp4::CmdToMp4;
 use crate::to_png::CmdToPng;
+use crate::to_ttyrec::CmdToTtyrec;
 use crate::to_webp::CmdToWebp;
 use crate::{
     edit::CmdEdit, generate::CmdGen, list::CmdList, play::CmdPlay, preview::CmdPreview,
@@ -69,6 +71,7 @@ pub enum SubCmds {
     ToSvg(CmdToSvg),
     ToJson(CmdToJson),
     ToDur(CmdToDur),
+    ToTtyrec(CmdToTtyrec),
     ToPng(CmdToPng),
     ToGif(CmdToGif),
     ToWebp(CmdToWebp),
@@ -86,6 +89,7 @@ impl SubCmds {
             SubCmds::ToSvg(cmd) => cmd.run(),
             SubCmds::ToJson(cmd) => cmd.run(),
             SubCmds::ToDur(cmd) => cmd.run(),
+            SubCmds::ToTtyrec(cmd) => cmd.run(),
             SubCmds::ToPng(cmd) => cmd.run(),
             SubCmds::ToGif(cmd) => cmd.run(),
             SubCmds::ToWebp(cmd) => cmd.run(),

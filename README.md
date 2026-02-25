@@ -71,6 +71,8 @@ $ cargo build --release
     - [X] svg
     - [X] asciicast
     - [X] json
+    - [X] durformat
+    - [X] ttyrec
     - [X] png
     - [X] gif
     - [X] mp4
