@@ -66,7 +66,6 @@ $ cargo build --release
 ## TODO
 - [X] playing
     - [X] setting terminal title to art's title line
-    - [ ] show art metadata under animation
 - conversion
     - [X] ansi frames
     - [X] svg
@@ -119,6 +118,7 @@ $ cargo build --release
         - [X] set loop
         - [X] set preview
 - [X] art generation
+- [ ] split
 - [ ] fetch
 - [X] comments stripping
 - [ ] art optimisation

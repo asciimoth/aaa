@@ -29,12 +29,25 @@ pub struct CmdFilter {
     cmd: Vec<String>,
 }
 
+fn env(art: &rs3a::Art) -> HashMap<String, String> {
+    let mut env = HashMap::new();
+    env.insert(String::from("AAA_FRAMES"), format!("{}", art.frames()));
+    env.insert(String::from("AAA_WIDTH"), format!("{}", art.width()));
+    env.insert(String::from("AAA_HEIGHT"), format!("{}", art.height()));
+    env.insert(String::from("AAA_COLOR"), format!("{}", art.color()));
+    env
+}
+
 impl CmdFilter {
     fn run_text(&self, art: &mut rs3a::Art) -> Result<()> {
-        let mut env = HashMap::new();
-        env.insert(String::from("AAA_FRAMES"), format!("{}", art.frames()));
+        let mut env = env(art);
+        env.insert(String::from("AAA_INPUT"), String::from("text"));
         for f in 0..art.frames() {
             env.insert(String::from("AAA_FRAME"), format!("{}", f));
+            env.insert(
+                String::from("AAA_DELAY"),
+                format!("{}", art.get_frame_delay(f)),
+            );
             eprintln!("  {}/{}", f, art.frames());
             let frame = art.frame(f).unwrap();
             let input = format!("{}", ColorlessFramePrinter { frame });
@@ -47,10 +60,14 @@ impl CmdFilter {
         Ok(())
     }
     fn run_frame(&self, art: &mut rs3a::Art) -> Result<()> {
-        let mut env = HashMap::new();
-        env.insert(String::from("AAA_FRAMES"), format!("{}", art.frames()));
+        let mut env = env(art);
+        env.insert(String::from("AAA_INPUT"), String::from("frame"));
         for f in 0..art.frames() {
             env.insert(String::from("AAA_FRAME"), format!("{}", f));
+            env.insert(
+                String::from("AAA_DELAY"),
+                format!("{}", art.get_frame_delay(f)),
+            );
             eprintln!("  {}/{}", f, art.frames());
             let frame = art.frame(f).unwrap();
             let input = format!("{}", frame);
@@ -63,10 +80,14 @@ impl CmdFilter {
         Ok(())
     }
     fn run_ansi(&self, art: &mut rs3a::Art) -> Result<()> {
-        let mut env = HashMap::new();
-        env.insert(String::from("AAA_FRAMES"), format!("{}", art.frames()));
+        let mut env = env(art);
+        env.insert(String::from("AAA_INPUT"), String::from("ansi"));
         for (f, input) in art.to_ansi_frames().iter().enumerate() {
             env.insert(String::from("AAA_FRAME"), format!("{}", f));
+            env.insert(
+                String::from("AAA_DELAY"),
+                format!("{}", art.get_frame_delay(f)),
+            );
             eprintln!("  {}/{}", f, art.frames());
             let filtered = run_cmd_with_input(&self.cmd, &input, &env)?;
             let lines: Vec<_> = filtered.lines().collect();
