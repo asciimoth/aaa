@@ -1,33 +1,88 @@
 use std::{
     collections::HashMap,
+    fmt,
     io::Write,
     process::{Command, Stdio},
 };
 
-use anyhow::{anyhow, Result};
-use argh::FromArgs;
+use anyhow::{Result, anyhow};
+use argh::{FromArgValue, FromArgs};
+use rs3a::Frame;
+
+#[derive(FromArgValue, PartialEq, Debug)]
+enum FilterInput {
+    Text,
+    Ansi,
+    Frame,
+}
 
 /// Filter art with arbitrary program
 #[derive(FromArgs, PartialEq, Debug)]
 #[argh(subcommand, name = "filter")]
 pub struct CmdFilter {
+    /// filter input type: text | ansi | frame
+    #[argh(positional)]
+    input: FilterInput,
+
     /// command
     #[argh(positional)]
     cmd: Vec<String>,
 }
 
 impl CmdFilter {
-    pub fn run(&self, art: &mut rs3a::Art) -> Result<()> {
-        let env = HashMap::new();
+    fn run_text(&self, art: &mut rs3a::Art) -> Result<()> {
+        let mut env = HashMap::new();
+        env.insert(String::from("AAA_FRAMES"), format!("{}", art.frames()));
         for f in 0..art.frames() {
-            let filtered =
-                run_cmd_with_input(&self.cmd, &format!("{}", art.frame(f).unwrap()), &env)?;
+            env.insert(String::from("AAA_FRAME"), format!("{}", f));
+            eprintln!("  {}/{}", f, art.frames());
+            let frame = art.frame(f).unwrap();
+            let input = format!("{}", ColorlessFramePrinter { frame });
+            let filtered = run_cmd_with_input(&self.cmd, &input, &env)?;
             let lines: Vec<_> = filtered.lines().collect();
             for r in 0..art.height() {
                 art.print_ansi(f, 0, r, lines[r]);
             }
         }
         Ok(())
+    }
+    fn run_frame(&self, art: &mut rs3a::Art) -> Result<()> {
+        let mut env = HashMap::new();
+        env.insert(String::from("AAA_FRAMES"), format!("{}", art.frames()));
+        for f in 0..art.frames() {
+            env.insert(String::from("AAA_FRAME"), format!("{}", f));
+            eprintln!("  {}/{}", f, art.frames());
+            let frame = art.frame(f).unwrap();
+            let input = format!("{}", frame);
+            let filtered = run_cmd_with_input(&self.cmd, &input, &env)?;
+            let lines: Vec<_> = filtered.lines().collect();
+            for r in 0..art.height() {
+                art.print_ansi(f, 0, r, lines[r]);
+            }
+        }
+        Ok(())
+    }
+    fn run_ansi(&self, art: &mut rs3a::Art) -> Result<()> {
+        let mut env = HashMap::new();
+        env.insert(String::from("AAA_FRAMES"), format!("{}", art.frames()));
+        for (f, input) in art.to_ansi_frames().iter().enumerate() {
+            env.insert(String::from("AAA_FRAME"), format!("{}", f));
+            eprintln!("  {}/{}", f, art.frames());
+            let filtered = run_cmd_with_input(&self.cmd, &input, &env)?;
+            let lines: Vec<_> = filtered.lines().collect();
+            for r in 0..art.height() {
+                art.print_ansi(f, 0, r, lines[r]);
+            }
+        }
+        Ok(())
+    }
+    pub fn run(&self, art: &mut rs3a::Art) -> Result<()> {
+        eprintln!("filtering:");
+        match self.input {
+            FilterInput::Text => self.run_text(art),
+            FilterInput::Ansi => self.run_ansi(art),
+            FilterInput::Frame => self.run_frame(art),
+        }
     }
 }
 
@@ -47,7 +102,7 @@ fn run_cmd_with_input(
         .args(args)
         .stdin(Stdio::piped())
         .stdout(Stdio::piped())
-        .stderr(Stdio::piped());
+        .stderr(Stdio::inherit());
 
     // Set environment variables (inherits the parent’s environment by default)
     command.envs(env_vars);
@@ -64,7 +119,7 @@ fn run_cmd_with_input(
     let write_handle = std::thread::spawn(move || -> std::io::Result<()> {
         stdin.write_all(input_owned.as_bytes())?;
         stdin.flush()?; // ensure all data is written
-                        // Dropping `stdin` here closes the pipe, signaling EOF to the child.
+        // Dropping `stdin` here closes the pipe, signaling EOF to the child.
         Ok(())
     });
 
@@ -87,5 +142,15 @@ fn run_cmd_with_input(
             "Command failed with exit code {}: {}",
             exit_code, stderr
         )))
+    }
+}
+
+struct ColorlessFramePrinter {
+    frame: Frame,
+}
+
+impl fmt::Display for ColorlessFramePrinter {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        self.frame.fmt_with_colors(f, Some(false))
     }
 }
