@@ -1,13 +1,7 @@
-use std::{
-    io::{self, Write},
-    sync::mpsc::channel,
-    thread,
-};
-
 use anyhow::Result;
 use argh::FromArgs;
 
-use crate::{frames::art2frames, loader::load};
+use crate::{loader::load, player::play};
 
 /// Play art in terminal
 #[derive(FromArgs, PartialEq, Debug)]
@@ -17,6 +11,10 @@ pub struct CmdPlay {
     #[argh(positional)]
     file: Option<String>,
 
+    /// secondary art file path
+    #[argh(option)]
+    secondary: Option<String>,
+
     /// disable colors
     #[argh(switch, short = 'n')]
     no_colors: bool,
@@ -24,48 +22,48 @@ pub struct CmdPlay {
     /// whether loop aniamtion
     #[argh(option, long = "loop")]
     loop_flag: Option<bool>,
+
+    /// horisontal offset
+    #[argh(option, short = 'o', default = "0")]
+    offset: usize,
+
+    /// secondary art horisontal offset
+    #[argh(option, default = "0")]
+    secondary_offset: usize,
 }
 
 impl CmdPlay {
     pub fn run(&self) -> Result<()> {
-        let mut art = load(&self.file)?;
-        if self.no_colors {
-            art.set_colors_key(Some(false));
-        }
-        print!("\x1b]0;{}\x07", art.title_line());
-        let frames = art2frames(&art);
-        print!("\x1B[?25l"); // Disable cursor
-        io::stdout().flush().unwrap();
-        let loop_flag = match self.loop_flag {
-            Some(flag) => flag,
-            None => art.get_loop_key(),
+        let primary = {
+            let mut art = load(&self.file)?;
+            if self.no_colors {
+                art.set_colors_key(Some(false));
+            }
+            if let Some(flag) = self.loop_flag {
+                art.set_loop_key(flag);
+            }
+            art
         };
-        let (tx, rx) = channel();
-        ctrlc::set_handler(move || tx.send(()).expect("Could not send signal on channel."))?;
-        let mut last_frame = 0;
-        'outer: loop {
-            for (i, frame) in frames.iter().enumerate() {
-                println!("{}", frame.frame);
-                io::stdout().flush().unwrap();
-                last_frame = i;
-                thread::sleep(frame.delay);
-                if let Ok(_) = rx.recv_timeout(frame.delay) {
-                    break 'outer;
+        let secondary = match &self.secondary {
+            Some(file) => {
+                let mut art = load(&Some(file.clone()))?;
+                if self.no_colors {
+                    art.set_colors_key(Some(false));
                 }
+                if let Some(flag) = self.loop_flag {
+                    art.set_loop_key(flag);
+                }
+                Some(art)
             }
-            if !loop_flag {
-                break;
-            }
-        }
-        if frames.len() > 0 {
-            println!("\r{}", frames[last_frame].frame);
-        }
-        io::stdout().flush().unwrap();
-        for _ in 0..art.height() + 1 {
-            println!("");
-        }
-        print!("\x1B[?25h"); // Enable cursor
-        io::stdout().flush().unwrap();
+            None => None,
+        };
+
+        play(
+            &primary,
+            secondary.as_ref(),
+            self.offset,
+            self.secondary_offset,
+        )?;
         Ok(())
     }
 }

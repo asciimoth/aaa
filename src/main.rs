@@ -15,13 +15,13 @@
     along with aaa.  If not, see <https://www.gnu.org/licenses/>.
 */
 mod edit;
-mod frames;
 mod from_text;
 mod generate;
 mod img;
 mod list;
 mod loader;
 mod play;
+mod player;
 mod preview;
 mod strip;
 mod to_3a;
