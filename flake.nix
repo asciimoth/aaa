@@ -53,6 +53,7 @@
           commitizen
 
           lolcat
+          leaf
           fastfetch
         ];
       };

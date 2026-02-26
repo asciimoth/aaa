@@ -122,8 +122,14 @@ $ cargo build --release
         - [X] set preview
 - [X] art generation
     - [X] from text
-- [ ] more animation effects
-- [ ] fetch
+- animation effects
+    - [X] integration with from-text 
+    - [ ] effect command
+    - [X] roller
+    - [ ] falling sand
+    - [ ] random appear
+- [X] fetch
+- [ ] builtin distros logos
 - [X] comments stripping
 - [ ] art optimisation
 - [ ] shell autocompletion

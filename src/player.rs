@@ -141,7 +141,7 @@ fn play_two(primary: &Art, secondary: &Art, off: usize, s_off: usize) -> Result<
 
 pub fn play(primary: &Art, secondary: Option<&Art>, off: usize, s_off: usize) -> Result<()> {
     if let Some(secondary) = secondary {
-        play_two(primary, secondary, off, s_off)
+        play_two(primary, secondary, off, s_off + 1)
     } else {
         play_one(primary, off)
     }
