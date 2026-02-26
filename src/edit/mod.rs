@@ -1,6 +1,7 @@
 mod color;
 mod crop;
 mod delay;
+pub mod effects;
 mod fill;
 mod filter;
 mod frame;

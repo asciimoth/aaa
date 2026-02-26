@@ -7,6 +7,8 @@ use anyhow::Result;
 use argh::FromArgs;
 use rs3a::Art;
 
+use crate::edit::effects::Effect;
+
 /// Constructs art from plain text with ANSI color escape codes
 #[derive(FromArgs, PartialEq, Debug)]
 #[argh(subcommand, name = "from-text")]
@@ -46,14 +48,11 @@ pub struct CmdFromText {
     /// art tags
     #[argh(option)]
     tag: Vec<String>,
-}
 
-// TODO: animation
-//       - ruller
-//       - line by line
-//       - line by line from side
-//       - random appear
-//       - sand
+    /// animation effect: roller_up | roller_down | roller_left | roller_right
+    #[argh(option, default = "Effect::None")]
+    effect: Effect,
+}
 
 impl CmdFromText {
     pub fn run(&self) -> Result<()> {
@@ -66,6 +65,7 @@ impl CmdFromText {
             }
         };
         let mut art = Art::from_ansi_text(&txt);
+        self.effect.apply(&mut art, 0);
         if let Some(flag) = self.loop_flag {
             art.set_loop_key(flag);
         }

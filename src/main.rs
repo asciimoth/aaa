@@ -15,6 +15,7 @@
     along with aaa.  If not, see <https://www.gnu.org/licenses/>.
 */
 mod edit;
+mod fetch;
 mod from_text;
 mod generate;
 mod img;
@@ -36,6 +37,7 @@ mod to_svg;
 mod to_ttyrec;
 mod to_webp;
 
+use crate::fetch::CmdFetch;
 use crate::from_text::CmdFromText;
 use crate::to_dur::CmdToDur;
 use crate::to_gif::CmdToGif;
@@ -62,6 +64,7 @@ pub struct Cmd {
 #[argh(subcommand)]
 pub enum SubCmds {
     Play(CmdPlay),
+    Fetch(CmdFetch),
     Preview(CmdPreview),
     List(CmdList),
     Strip(CmdStrip),
@@ -85,6 +88,7 @@ impl SubCmds {
     pub fn run(&self) -> Result<()> {
         match self {
             SubCmds::Play(cmd) => cmd.run(),
+            SubCmds::Fetch(cmd) => cmd.run(),
             SubCmds::Preview(cmd) => cmd.run(),
             SubCmds::ToFrames(cmd) => cmd.run(),
             SubCmds::ToCast(cmd) => cmd.run(),

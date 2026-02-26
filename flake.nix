@@ -48,10 +48,12 @@
         buildInputs = with pkgs; [
           cargo
           # clippy
-          lolcat
 
           typos
           commitizen
+
+          lolcat
+          fastfetch
         ];
       };
     });
