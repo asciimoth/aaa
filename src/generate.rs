@@ -46,7 +46,7 @@ pub struct CmdGen {
     #[argh(option)]
     license: Option<String>,
 
-    /// art loop
+    /// should art be looped
     #[argh(option, short = 'l', long = "loop")]
     loop_flag: Option<bool>,
 
