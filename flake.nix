@@ -53,8 +53,14 @@
           commitizen
 
           lolcat
-          leaf
+
+          neofetch
           fastfetch
+          screenfetch
+          nitch
+          profetch
+          leaf
+          fetch-scm
         ];
       };
     });

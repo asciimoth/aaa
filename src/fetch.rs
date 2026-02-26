@@ -90,12 +90,16 @@ fn run_cmd(cmd: &[String]) -> Result<String> {
 
 fn run_fetches() -> Result<String> {
     let fetches: [Vec<String>; _] = [
-        vec!["leaf".into()],
+        vec!["neofetch".into(), "--off".into()],
         "fastfetch --logo none --pipe false"
             .split(" ")
             .map(|s| s.into())
             .collect(),
-        // TODO: More commands
+        vec!["screenfetch".into(), "-n".into()],
+        vec!["nitch".into()],
+        vec!["profetch".into()],
+        vec!["leaf".into()],
+        vec!["fetch-scm".into()],
     ];
     for fetch in fetches {
         if let Ok(out) = run_cmd(&fetch) {
