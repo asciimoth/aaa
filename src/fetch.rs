@@ -33,11 +33,11 @@ pub struct CmdFetch {
     #[argh(option, long = "loop", short = 'l')]
     loop_flag: Option<bool>,
 
-    /// horisontal art offset
+    /// horizontal art offset
     #[argh(option, short = 'o', default = "0")]
     art_offset: usize,
 
-    /// info block horisontal offset
+    /// info block horizontal offset
     #[argh(option, default = "0")]
     info_offset: usize,
 

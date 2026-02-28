@@ -23,11 +23,11 @@ pub struct CmdPlay {
     #[argh(option, long = "loop")]
     loop_flag: Option<bool>,
 
-    /// horisontal offset
+    /// horizontal offset
     #[argh(option, short = 'o', default = "0")]
     offset: usize,
 
-    /// secondary art horisontal offset
+    /// secondary art horizontal offset
     #[argh(option, default = "0")]
     secondary_offset: usize,
 }

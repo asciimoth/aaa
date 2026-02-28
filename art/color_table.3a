@@ -370,7 +370,7 @@ magenta: fg (5) | bg  |  fg (d) | bg  _________gggggg___hh_____iiiiii___jj__
 cyan:    fg (6) | bg  |  fg (e) | bg  _________oooooo___pp_____rrrrrr___ss__
 white:   fg (7) | bg  |  fg (f) | bg  _________tttttt___uu_____vvvvvv___ww__
                                       ______________________________________
-         [256 standart colors]        ______________________________________
+         [256 standard colors]        ______________________________________
          0  0  1  1  2  2  3  3       ________xx_yy_zz_AA_BB_CC_DD_EE_______
          4  4  5  5  6  6  7  7       ________FF_GG_HH_II_JJ_KK_LL_MM_______
          8  8  9  9 10 10 11 11       ________NN_OO_PP_RR_SS_TT_UU_VV_______
