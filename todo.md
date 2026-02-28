@@ -67,7 +67,14 @@
 - [X] builtin distros logos
 - [X] comments stripping
 - [ ] art optimisation
-- [ ] shell autocompletion
+- shell autocompletion
+    - [ ] bash
+    - [ ] fish
+    - [ ] zsh?
+    - [ ] nush?
+    - [ ] [inshellisense](https://github.com/microsoft/inshellisense)?
+    - [ ] [carapace](https://github.com/carapace-sh/carapace)?
+    - [ ] [fig](https://github.com/withfig/autocomplete)??
 - [ ] MIME DB files
 - [ ] Man pages
 - usage examples
