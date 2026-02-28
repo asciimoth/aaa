@@ -175,7 +175,8 @@ impl ImgFont {
 
 impl Default for ImgFont {
     fn default() -> Self {
-        let font_bytes = include_bytes!("../DejaVuSansMono.ttf").to_vec();
+        // let font_bytes = include_bytes!("../DejaVuSansMono.ttf").to_vec();
+        let font_bytes = include_bytes!("../AdwaitaMonoNerdFontMono-Regular.ttf").to_vec();
         let scale = PxScale::from(25.0);
 
         Self {
@@ -183,8 +184,8 @@ impl Default for ImgFont {
             glyph_x_offset: 0,
             font: FontArc::try_from_vec(font_bytes).unwrap(),
             scale: scale,
-            cell_w: (scale.x * 0.6).ceil() as i32,
-            cell_h: (scale.y * 1.2).ceil() as i32,
+            cell_w: (scale.x * 0.5).ceil() as i32,
+            cell_h: (scale.y * 1.1).ceil() as i32,
         }
     }
 }
