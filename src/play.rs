@@ -17,7 +17,10 @@
 use anyhow::Result;
 use argh::FromArgs;
 
-use crate::{loader::load, player::play};
+use crate::{
+    loader::{load, load_with_fallback},
+    player::play,
+};
 
 /// Play art (or two side by side) in terminal
 #[derive(FromArgs, PartialEq, Debug)]
@@ -26,6 +29,10 @@ pub struct CmdPlay {
     /// art file path (alternatively pipe art to stdin)
     #[argh(positional)]
     file: Option<String>,
+
+    /// alternative art path in case primary don't exist of broken.
+    #[argh(option)]
+    fallback_file: Option<String>,
 
     /// secondary art file path
     #[argh(option)]
@@ -51,7 +58,7 @@ pub struct CmdPlay {
 impl CmdPlay {
     pub fn run(&self) -> Result<()> {
         let primary = {
-            let mut art = load(&self.file)?;
+            let mut art = load_with_fallback(&self.file, &self.fallback_file)?;
             if self.no_colors {
                 art.set_colors_key(Some(false));
             }

@@ -63,3 +63,20 @@ pub fn load(file: &Option<String>) -> Result<rs3a::Art> {
         ))
     }
 }
+
+pub fn load_with_fallback(file: &Option<String>, fallback: &Option<String>) -> Result<rs3a::Art> {
+    match load(file) {
+        Ok(art) => Ok(art),
+        Err(err) => match fallback {
+            Some(file) => {
+                if !looks_like_path(&file) {
+                    if let Some(text) = get_embed(&file) {
+                        return Ok(rs3a::Art::from_str(&text)?);
+                    }
+                }
+                return Ok(rs3a::Art::from_file(file)?);
+            }
+            None => Err(err),
+        },
+    }
+}
