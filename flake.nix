@@ -1,21 +1,32 @@
+# Usage:
+#   nix profile add github:github.com/asciimoth/aaa
+#   nix profile remove aaa
+#   nix shell github:github.com/asciimoth/aaa
+# Update: nix flake update
 {
   description = "aaa";
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-25.05";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
     flake-utils.url = "github:numtide/flake-utils";
     pre-commit-hooks.url = "github:cachix/pre-commit-hooks.nix";
+    naersk = {
+      url = "github:nix-community/naersk";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
   outputs = {
     self,
     nixpkgs,
     flake-utils,
     pre-commit-hooks,
+    naersk,
     ...
   }:
     flake-utils.lib.eachDefaultSystem (system: let
       pkgs = import nixpkgs {
         inherit system;
       };
+      naersk' = pkgs.callPackage naersk {};
 
       checks = {
         pre-commit-check = pre-commit-hooks.lib.${system}.run {
@@ -42,10 +53,16 @@
           };
         };
       };
+
+      app = naersk'.buildPackage {
+        src = ./.;
+      };
     in {
       devShells.default = pkgs.mkShell {
         inherit (checks.pre-commit-check) shellHook;
         buildInputs = with pkgs; [
+          # app
+
           cargo
           # clippy
 
@@ -63,5 +80,7 @@
           fetch-scm
         ];
       };
+
+      packages.default = app;
     });
 }
