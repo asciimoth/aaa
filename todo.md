@@ -75,7 +75,7 @@
     - [ ] [inshellisense](https://github.com/microsoft/inshellisense)?
     - [ ] [carapace](https://github.com/carapace-sh/carapace)?
     - [ ] [fig](https://github.com/withfig/autocomplete)??
-- [ ] MIME DB files
+- [X] MIME DB files
 - [ ] Man pages
 - usage examples
     - [ ] complex jq queries

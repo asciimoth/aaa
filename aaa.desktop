@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Animated Ascii Art tool
+Comment=Swiss Army knife for ascii animations
+Exec=aaa play %f --fallback-file question
+Terminal=true
+MimeType=application/x-3a
+Categories=Graphics;Viewer;

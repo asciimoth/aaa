@@ -1,5 +1,5 @@
 # Usage:
-#   nix profile add github:sciimoth/aaa
+#   nix profile add github:asciimoth/aaa
 #   nix profile remove aaa
 #   nix shell github:asciimoth/aaa
 # Update: nix flake update
@@ -56,6 +56,11 @@
 
       app = naersk'.buildPackage {
         src = ./.;
+        postInstall = ''
+          mkdir -p $out/share/applications $out/share/mime/packages
+          cp ${./aaa.desktop} $out/share/applications/aaa.desktop
+          cp ${./mime.xml} $out/share/mime/packages/3a-mime.xml
+        '';
       };
     in {
       devShells.default = pkgs.mkShell {
