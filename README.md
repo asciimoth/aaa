@@ -129,7 +129,7 @@ $ cargo build --release
     - [ ] falling sand
     - [ ] random appear
 - [X] fetch
-- [ ] builtin distros logos
+- [X] builtin distros logos
 - [X] comments stripping
 - [ ] art optimisation
 - [ ] shell autocompletion

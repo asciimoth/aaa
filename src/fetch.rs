@@ -1,10 +1,19 @@
-use std::process::Command;
+use std::{
+    env,
+    fs::File,
+    io::{BufRead, BufReader},
+    process::Command,
+};
 
 use anyhow::{Result, anyhow};
 use argh::FromArgs;
 use rs3a::Art;
 
-use crate::{edit::effects::Effect, loader::load, player::play};
+use crate::{
+    edit::effects::Effect,
+    loader::{BuiltIn, load},
+    player::play,
+};
 
 /// Show system info side by side with animation logo
 #[derive(FromArgs, PartialEq, Debug)]
@@ -31,7 +40,7 @@ pub struct CmdFetch {
     info_offset: usize,
 
     /// animation effect: roller_up | roller_down | roller_left | roller_right
-    #[argh(option, default = "Effect::None")]
+    #[argh(option, default = "Effect::RollerUp")]
     effect: Effect,
 
     /// fetch command to run
@@ -48,8 +57,22 @@ impl CmdFetch {
                 load(&Some(art))
             }
         } else {
-            // TODO: Auto select art based on distro
-            todo!()
+            let os = env::consts::OS;
+            load(&Some(if os == "linux" {
+                let mut logo_name = String::from("generic_linux");
+                let distro = distro_info();
+                for art in BuiltIn::iter() {
+                    if let Some(art) = art.strip_prefix("distro_") {
+                        let art = art.strip_suffix(".3a").unwrap();
+                        if distro.contains(art) {
+                            logo_name = art.into();
+                        }
+                    }
+                }
+                format!("distro_{}", logo_name)
+            } else {
+                "question".into()
+            }))
         }
     }
     pub fn run(&self) -> Result<()> {
@@ -77,7 +100,7 @@ impl CmdFetch {
             }
             art
         };
-        play(&art, Some(&info), self.art_offset, self.info_offset)?;
+        play(&art, Some(&info), self.art_offset, self.info_offset + 1)?;
         Ok(())
     }
 }
@@ -107,4 +130,44 @@ fn run_fetches() -> Result<String> {
         }
     }
     Err(anyhow!("no supported fetches found"))
+}
+
+fn distro_info() -> String {
+    let mut info = String::new();
+    info += &load_os_release();
+    info += " ";
+    info += &load_lsb_release();
+    info.to_lowercase()
+}
+
+fn load_os_release() -> String {
+    let mut info = String::new();
+    if let Ok(file) = File::open("/etc/os-release") {
+        let reader = BufReader::new(file);
+        for line in reader.lines().flatten() {
+            if let Some((key, value)) = line.split_once('=') {
+                if key == "NAME" || key == "PRETTY_NAME" || key == "ID" {
+                    info += value;
+                    info += " ";
+                }
+            }
+        }
+    }
+    info
+}
+
+fn load_lsb_release() -> String {
+    let mut info = String::new();
+    if let Ok(file) = File::open("/etc/lsb-release") {
+        let reader = BufReader::new(file);
+        for line in reader.lines().flatten() {
+            if let Some((key, value)) = line.split_once('=') {
+                if key == "DISTRIB_ID" {
+                    info += value;
+                    info += " ";
+                }
+            }
+        }
+    }
+    info
 }
