@@ -57,6 +57,9 @@ impl CmdPlay {
             }
             None => None,
         };
+        if primary.frames() < 1 {
+            return Ok(());
+        }
 
         play(
             &primary,
