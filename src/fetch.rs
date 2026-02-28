@@ -15,7 +15,9 @@ use crate::{
     player::play,
 };
 
-/// Show system info side by side with animation logo
+/// Show system info side by side with animated logo. (by default requires one
+/// of fetch tools to be installed: neofetch | fastfetch | screenfetch | nitch | profetch | leaf |
+/// fetch-scm)
 #[derive(FromArgs, PartialEq, Debug)]
 #[argh(subcommand, name = "fetch")]
 pub struct CmdFetch {
@@ -35,7 +37,7 @@ pub struct CmdFetch {
     #[argh(option, short = 'o', default = "0")]
     art_offset: usize,
 
-    /// info horisontal offset
+    /// info block horisontal offset
     #[argh(option, default = "0")]
     info_offset: usize,
 

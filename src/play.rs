@@ -3,7 +3,7 @@ use argh::FromArgs;
 
 use crate::{loader::load, player::play};
 
-/// Play art in terminal
+/// Play art (or two side by side) in terminal
 #[derive(FromArgs, PartialEq, Debug)]
 #[argh(subcommand, name = "play")]
 pub struct CmdPlay {

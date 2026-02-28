@@ -6,7 +6,7 @@ use crate::{
     loader::load,
 };
 
-/// Convert art to webp animation
+/// Convert art to webp animation (ffmpeg cli required)
 #[derive(FromArgs, PartialEq, Debug)]
 #[argh(subcommand, name = "to-webp")]
 pub struct CmdToWebp {

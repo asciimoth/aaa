@@ -21,7 +21,7 @@ pub struct CmdToSvg {
     #[argh(option, long = "loop")]
     loop_flag: Option<bool>,
 
-    /// font family
+    /// font family like `Courier New`
     #[argh(option)]
     font_family: Option<String>,
 

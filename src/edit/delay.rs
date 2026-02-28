@@ -1,7 +1,7 @@
 use anyhow::Result;
 use argh::FromArgs;
 
-/// Set delay for whole file or for specific frame
+/// Set delay for whole art or for specific frame
 #[derive(FromArgs, PartialEq, Debug)]
 #[argh(subcommand, name = "delay-set")]
 pub struct CmdDelaySet {

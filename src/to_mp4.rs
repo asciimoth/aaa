@@ -6,7 +6,7 @@ use crate::{
     loader::load,
 };
 
-/// Convert art to mp4 video
+/// Convert art to mp4 video (ffmpeg cli required)
 #[derive(FromArgs, PartialEq, Debug)]
 #[argh(subcommand, name = "to-mp4")]
 pub struct CmdToMp4 {

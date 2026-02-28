@@ -3,7 +3,7 @@ use argh::FromArgs;
 
 use crate::loader::load;
 
-/// Print art as a blank line separated sequence of frames
+/// Print art as a blank line separated sequence of frames with ANSI colors codes.
 #[derive(FromArgs, PartialEq, Debug)]
 #[argh(subcommand, name = "to-frames")]
 pub struct CmdToFrames {

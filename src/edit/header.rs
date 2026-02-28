@@ -61,7 +61,7 @@ impl CmdSrc {
     }
 }
 
-/// Set ditor
+/// Set editor
 #[derive(FromArgs, PartialEq, Debug)]
 #[argh(subcommand, name = "editor")]
 pub struct CmdEditor {
@@ -106,7 +106,7 @@ impl CmdLoop {
     }
 }
 
-/// Set preview
+/// Set preview frame
 #[derive(FromArgs, PartialEq, Debug)]
 #[argh(subcommand, name = "preview")]
 pub struct CmdPreview {
