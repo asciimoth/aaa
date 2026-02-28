@@ -87,6 +87,7 @@ Commands:
   fill-area         Fill area in all frames or specific one with text and color
   clean             Fill all frames or specific one with default text, color
   print             Print text to art
+  print-ansi        Print text with ansi color codes to art
   filter            Filter art with arbitrary program
   tag-add           Add tag to art
   tag-rm            Remove tag from art
