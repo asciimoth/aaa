@@ -2,8 +2,6 @@
 Tui tool for 3a files rendering  
 [Here is 3a format specification.](https://github.com/DomesticMoth/3a)  
 [Here is a collection of 3a animations.](https://github.com/DomesticMoth/3a_storage)  
-Example:  
-[![example](https://raw.githubusercontent.com/asciimoth/aaa/main/exaple.svg)](https://asciinema.org/a/599989)
 ## Usage
 ```
 aaa 1.1.1
