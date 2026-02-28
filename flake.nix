@@ -1,7 +1,7 @@
 # Usage:
-#   nix profile add github:github.com/asciimoth/aaa
+#   nix profile add github:sciimoth/aaa
 #   nix profile remove aaa
-#   nix shell github:github.com/asciimoth/aaa
+#   nix shell github:asciimoth/aaa
 # Update: nix flake update
 {
   description = "aaa";
