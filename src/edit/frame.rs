@@ -1,8 +1,5 @@
-use std::str::FromStr;
-
 use anyhow::Result;
 use argh::FromArgs;
-use rs3a::{art, chars::Char, Color, ColorPair};
 
 /// Remove frame
 #[derive(FromArgs, PartialEq, Debug)]

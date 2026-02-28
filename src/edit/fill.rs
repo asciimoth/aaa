@@ -1,8 +1,6 @@
-use std::str::FromStr;
-
 use anyhow::Result;
 use argh::FromArgs;
-use rs3a::{art, chars::Char, Cell, Color, ColorPair};
+use rs3a::{Cell, chars::Char};
 
 /// Fill all frames or specific one with text and color
 #[derive(FromArgs, PartialEq, Debug)]
