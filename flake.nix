@@ -60,6 +60,13 @@
           mkdir -p $out/share/applications $out/share/mime/packages
           cp ${./aaa.desktop} $out/share/applications/aaa.desktop
           cp ${./mime.xml} $out/share/mime/packages/3a-mime.xml
+
+          mkdir -p $out/share/bash-completion/completions
+          $out/bin/aaa completions bash > $out/share/bash-completion/completions/aaa
+          mkdir -p $out/share/fish/vendor_completions.d
+          $out/bin/aaa completions fish > $out/share/fish/vendor_completions.d/aaa.fish
+          mkdir -p $out/share/zsh/site-functions/
+          $out/bin/aaa completions zsh > $out/share/zsh/site-functions/_aaa
         '';
       };
     in {
