@@ -95,7 +95,9 @@ enum EditSubcommands {
     /// Print text with ansi color codes to art
     PrintAnsi(PrintANSICmd),
     /// Filter art with arbitrary program
-    #[command(after_help = "EXAMPLES:\n  $ aaa edit apple filter text -- lolcat -f | aaa play")]
+    #[command(
+        after_help = "FILTERING:\n  Provided command will be executed for each art frame and\n  command's output will be parsed back.\nINPUT TYPES:\n  Depending on input type different forms of frame data will be passed to cmd:\n  - text - plaintext without colors\n  - ansi - plaintext with ANSI color codes\n  - frame - raw 3a frame data\nEXAMPLE:\n  $ aaa edit apple filter text -- lolcat -f | aaa play"
+    )]
     Filter(FilterCmd),
     /// Remove frame
     FrameRemove(FrameRemoveCmd),
