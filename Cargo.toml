@@ -1,10 +1,12 @@
 [package]
 name = "aaa"
-version = "1.1.1"
+version = "2.0.0"
 edition = "2024"
 authors = ["asciimoth"]
 description = "Swiss Army knife for animated ascii art"
 repository = "https://github.com/asciimoth/aaa"
+keywords = ["3a", "animated-ascii-art", "text", "ascii", "ascii-art"]
+categories = ["command-line-utilities", "graphics", "multimedia", "multimedia::encoding", "rendering"]
 readme = "README.md"
 license = "GPL-3.0"
 

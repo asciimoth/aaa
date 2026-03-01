@@ -1,9 +1,11 @@
 # aaa
-Swiss Army knife for animated ascii art
+aaa is a cli tool to read, write, edit, generate, play, and convert
+[animated ASCII art](https://github.com/DomesticMoth/3a)
+to other formats (SVG, PNG, GIF, WebP, MP4, asciinema, dur, etc).
 
 [![asciicast](https://asciinema.org/a/ZtzhhTOmVWCAmrfz.svg)](https://asciinema.org/a/ZtzhhTOmVWCAmrfz)
 
-[Collection of animated ascii art](https://github.com/DomesticMoth/3a_storage) [3a format spec](https://github.com/DomesticMoth/3a)  
+You can find more art supported by aaa [here](https://github.com/DomesticMoth/3a_storage).
 
 ## Usage
 ```help
