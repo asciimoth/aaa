@@ -15,145 +15,116 @@
     along with aaa.  If not, see <https://www.gnu.org/licenses/>.
 */
 use anyhow::Result;
-use argh::FromArgs;
 
-/// Remove frame
-#[derive(FromArgs, PartialEq, Debug)]
-#[argh(subcommand, name = "frame-rm")]
-pub struct CmdFrameRemove {
+#[derive(clap::Args, PartialEq, Debug)]
+pub struct FrameRemoveCmd {
     /// frame index
-    #[argh(positional)]
     frame: usize,
 }
 
-impl CmdFrameRemove {
+impl FrameRemoveCmd {
     pub fn run(&self, art: &mut rs3a::Art) -> Result<()> {
         art.remove_frame(self.frame);
         Ok(())
     }
 }
 
-/// Duplicate frame
-#[derive(FromArgs, PartialEq, Debug)]
-#[argh(subcommand, name = "frame-dup")]
-pub struct CmdFrameDup {
+#[derive(clap::Args, PartialEq, Debug)]
+pub struct FrameDupCmd {
     /// frame index
-    #[argh(positional)]
     frame: usize,
 }
 
-impl CmdFrameDup {
+impl FrameDupCmd {
     pub fn run(&self, art: &mut rs3a::Art) -> Result<()> {
         art.dup_frame(self.frame);
         Ok(())
     }
 }
 
-/// Ensures a frame exists at the given index,
-/// creating new frames if necessary
-#[derive(FromArgs, PartialEq, Debug)]
-#[argh(subcommand, name = "frame-ensure")]
-pub struct CmdFrameSure {
+#[derive(clap::Args, PartialEq, Debug)]
+pub struct FrameSureCmd {
     /// frame index
-    #[argh(positional)]
     frame: usize,
 }
 
-impl CmdFrameSure {
+impl FrameSureCmd {
     pub fn run(&self, art: &mut rs3a::Art) -> Result<()> {
         art.make_sure_frame_exist(self.frame);
         Ok(())
     }
 }
 
-/// Remove all frames out of inclusive subrange
-#[derive(FromArgs, PartialEq, Debug)]
-#[argh(subcommand, name = "frame-slice")]
-pub struct CmdFrameSlice {
+#[derive(clap::Args, PartialEq, Debug)]
+pub struct FrameSliceCmd {
     /// range start
-    #[argh(positional)]
     from: usize,
 
     /// range end
-    #[argh(positional)]
     to: usize,
 }
 
-impl CmdFrameSlice {
+impl FrameSliceCmd {
     pub fn run(&self, art: &mut rs3a::Art) -> Result<()> {
         art.slice(self.from, self.to);
         Ok(())
     }
 }
 
-/// Swap two frames
-#[derive(FromArgs, PartialEq, Debug)]
-#[argh(subcommand, name = "frame-swap")]
-pub struct CmdFrameSwap {
+#[derive(clap::Args, PartialEq, Debug)]
+pub struct FrameSwapCmd {
     /// first frame
-    #[argh(positional)]
     a: usize,
 
     /// second frame
-    #[argh(positional)]
     b: usize,
 }
 
-impl CmdFrameSwap {
+impl FrameSwapCmd {
     pub fn run(&self, art: &mut rs3a::Art) -> Result<()> {
         art.swap(self.a, self.b);
         Ok(())
     }
 }
 
-/// Reverse frames
-#[derive(FromArgs, PartialEq, Debug)]
-#[argh(subcommand, name = "frame-rev")]
-pub struct CmdFrameRev {}
+#[derive(clap::Args, PartialEq, Debug)]
+pub struct FrameRevCmd {}
 
-impl CmdFrameRev {
+impl FrameRevCmd {
     pub fn run(&self, art: &mut rs3a::Art) -> Result<()> {
         art.reverse();
         Ok(())
     }
 }
 
-/// Deduplicate frames
-#[derive(FromArgs, PartialEq, Debug)]
-#[argh(subcommand, name = "frame-dedup")]
-pub struct CmdFrameDedup {}
+#[derive(clap::Args, PartialEq, Debug)]
+pub struct FrameDedupCmd {}
 
-impl CmdFrameDedup {
+impl FrameDedupCmd {
     pub fn run(&self, art: &mut rs3a::Art) -> Result<()> {
         art.dedup();
         Ok(())
     }
 }
 
-/// Rotate frames forth
-#[derive(FromArgs, PartialEq, Debug)]
-#[argh(subcommand, name = "frame-r-f")]
-pub struct CmdFrameRotForth {
-    #[argh(positional)]
+#[derive(clap::Args, PartialEq, Debug)]
+pub struct FrameRotForthCmd {
     k: usize,
 }
 
-impl CmdFrameRotForth {
+impl FrameRotForthCmd {
     pub fn run(&self, art: &mut rs3a::Art) -> Result<()> {
         art.rot_forth(self.k);
         Ok(())
     }
 }
 
-/// Rotate frames back
-#[derive(FromArgs, PartialEq, Debug)]
-#[argh(subcommand, name = "frame-r-b")]
-pub struct CmdFrameRotBack {
-    #[argh(positional)]
+#[derive(clap::Args, PartialEq, Debug)]
+pub struct FrameRotBackCmd {
     k: usize,
 }
 
-impl CmdFrameRotBack {
+impl FrameRotBackCmd {
     pub fn run(&self, art: &mut rs3a::Art) -> Result<()> {
         art.rot_back(self.k);
         Ok(())

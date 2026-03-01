@@ -14,92 +14,79 @@
     You should have received a copy of the GNU General Public License
     along with aaa.  If not, see <https://www.gnu.org/licenses/>.
 */
+use std::io::{self, Cursor, Write};
+
 use anyhow::Result;
-use argh::FromArgs;
+use rs3a::Art;
 
-use crate::{
-    img::{ImgColorMap, ImgFont, render_webp},
-    loader::load,
-};
+use crate::img::{ImgColorMap, ImgFont, render_frame};
 
-/// Convert art to webp animation (ffmpeg cli required)
-#[derive(FromArgs, PartialEq, Debug)]
-#[argh(subcommand, name = "to-webp")]
-pub struct CmdToWebp {
-    /// art file path (alternatively pipe art to stdin)
-    #[argh(positional)]
-    file: Option<String>,
-
-    /// whether loop aniamtion
-    #[argh(option, long = "loop")]
-    loop_flag: Option<bool>,
-
-    /// disable colors
-    #[argh(switch, short = 'n')]
-    no_colors: bool,
-
-    /// losless encoding
-    #[argh(switch, short = 'l')]
-    losless: bool,
-
-    /// compression quality 0-100
-    #[argh(option, default = "50")]
-    quality: usize,
+#[derive(clap::Args, PartialEq, Debug)]
+pub struct PngCmd {
+    /// frame to render (preview frame by default)
+    #[arg(long, value_name = "FRAME")]
+    frame: Option<usize>,
 
     /// ttf font file
-    #[argh(option)]
+    #[arg(long, value_name = "FILE")]
     font_file: Option<String>,
 
     /// font size in pixels
-    #[argh(option)]
+    #[arg(long, value_name = "SIZE")]
     font_size: Option<f32>,
 
     /// font cell width
-    #[argh(option)]
+    #[arg(long, value_name = "WIDTH")]
     font_width: Option<i32>,
 
     /// font cell height
-    #[argh(option)]
+    #[arg(long, value_name = "HEIGHT")]
     font_height: Option<i32>,
 
     /// font glyphs x offset
-    #[argh(option)]
+    #[arg(long, value_name = "X")]
     glyph_offset_x: Option<i32>,
 
     /// font glyphs y offset
-    #[argh(option)]
+    #[arg(long, value_name = "Y")]
     glyph_offset_y: Option<i32>,
 
     /// define a color mapping like fg:red=ff0000
-    #[argh(option, short = 'm')]
+    #[arg(short = 'm', long = "color-map", value_name = "MAP")]
     color_map: Vec<String>,
 
     /// default foreground color
-    #[argh(option)]
+    #[arg(long, value_name = "COLOR")]
     fg: Option<String>,
 
     /// default background color
-    #[argh(option)]
+    #[arg(long, value_name = "COLOR")]
     bg: Option<String>,
 }
 
-impl CmdToWebp {
-    pub fn run(&self) -> Result<()> {
-        let mut art = load(&self.file)?;
-        if self.no_colors {
-            art.set_colors_key(Some(false));
-        }
-        if let Some(loop_flag) = self.loop_flag {
-            art.set_loop_key(loop_flag);
+impl PngCmd {
+    pub fn run(&self, art: &mut Art) -> Result<()> {
+        if let Some(frame) = self.frame {
+            art.set_preview_key(Some(frame));
         }
 
-        render_webp(
+        let frame = render_frame(
             &art,
+            art.get_preview_key().unwrap_or(0),
             &self.to_font()?,
             &self.to_color_map(),
-            self.losless,
-            self.quality,
-        )?;
+        );
+
+        let mut buf: Vec<u8> = Vec::new();
+        let mut cursor = Cursor::new(&mut buf);
+
+        frame.write_to(&mut cursor, image::ImageFormat::Png)?;
+
+        let stdout = io::stdout();
+        let mut handle = stdout.lock();
+        handle.write_all(&buf)?;
+        handle.flush().ok();
+
         Ok(())
     }
     fn to_font(&self) -> Result<ImgFont> {

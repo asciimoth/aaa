@@ -15,27 +15,24 @@
     along with aaa.  If not, see <https://www.gnu.org/licenses/>.
 */
 use anyhow::Result;
-use argh::FromArgs;
 use rs3a::{Cell, chars::Char};
 
-/// Fill all frames or specific one with text and color
-#[derive(FromArgs, PartialEq, Debug)]
-#[argh(subcommand, name = "fill")]
-pub struct CmdFill {
+#[derive(clap::Args, PartialEq, Debug)]
+pub struct FillCmd {
     /// text channel cell
-    #[argh(option, short = 't')]
+    #[clap(long, short = 't')]
     text: Option<char>,
 
     /// color channel cell
-    #[argh(option, short = 'c')]
+    #[clap(long, short = 'c')]
     color: Option<char>,
 
     /// frame index
-    #[argh(option, short = 'f')]
+    #[clap(long, short = 'f')]
     frame: Option<usize>,
 }
 
-impl CmdFill {
+impl FillCmd {
     pub fn run(&self, art: &mut rs3a::Art) -> Result<()> {
         if let Some(text) = self.text {
             if let Some(frame) = self.frame {
@@ -55,40 +52,34 @@ impl CmdFill {
     }
 }
 
-/// Fill area in all frames or specific one with text and color
-#[derive(FromArgs, PartialEq, Debug)]
-#[argh(subcommand, name = "fill-area")]
-pub struct CmdFillArea {
+#[derive(clap::Args, PartialEq, Debug)]
+pub struct FillAreaCmd {
     /// from row
-    #[argh(positional)]
     rf: usize,
 
     /// to row
-    #[argh(positional)]
     rt: usize,
 
     /// from column
-    #[argh(positional)]
     cf: usize,
 
     /// to columt
-    #[argh(positional)]
     ct: usize,
 
     /// text channel cell
-    #[argh(option, short = 't')]
+    #[clap(long, short = 't')]
     text: Option<char>,
 
     /// color channel cell
-    #[argh(option, short = 'c')]
+    #[clap(long, short = 'c')]
     color: Option<char>,
 
     /// frame index
-    #[argh(option, short = 'f')]
+    #[clap(long, short = 'f')]
     frame: Option<usize>,
 }
 
-impl CmdFillArea {
+impl FillAreaCmd {
     pub fn run(&self, art: &mut rs3a::Art) -> Result<()> {
         for row in self.rf..=self.rt {
             for col in self.cf..=self.ct {
@@ -119,16 +110,14 @@ impl CmdFillArea {
     }
 }
 
-/// Fill all frames or specific one with default text, color
-#[derive(FromArgs, PartialEq, Debug)]
-#[argh(subcommand, name = "clean")]
-pub struct CmdClean {
+#[derive(clap::Args, PartialEq, Debug)]
+pub struct CleanCmd {
     /// frame index
-    #[argh(option, short = 'f')]
+    #[clap(long, short = 'f')]
     frame: Option<usize>,
 }
 
-impl CmdClean {
+impl CleanCmd {
     pub fn run(&self, art: &mut rs3a::Art) -> Result<()> {
         if let Some(frame) = self.frame {
             art.clean_frame(frame);

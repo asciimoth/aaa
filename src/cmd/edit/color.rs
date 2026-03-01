@@ -17,24 +17,20 @@
 use std::str::FromStr;
 
 use anyhow::Result;
-use argh::FromArgs;
 use rs3a::{Color, ColorPair, chars::Char};
 
-/// Search or add new color mapping.
-/// Mapped color prints to stderr.
-#[derive(FromArgs, PartialEq, Debug)]
-#[argh(subcommand, name = "color-map")]
-pub struct CmdColorMap {
+#[derive(clap::Args, PartialEq, Debug)]
+pub struct ColorMapCmd {
     /// foreground
-    #[argh(option)]
+    #[clap(long)]
     fg: Option<String>,
 
     /// background
-    #[argh(option)]
+    #[clap(long)]
     bg: Option<String>,
 }
 
-impl CmdColorMap {
+impl ColorMapCmd {
     pub fn run(&self, art: &mut rs3a::Art) -> Result<()> {
         let fg = if let Some(fg_str) = &self.fg {
             Color::from_str(&fg_str)?
@@ -52,16 +48,14 @@ impl CmdColorMap {
     }
 }
 
-/// Remove color mapping.
-#[derive(FromArgs, PartialEq, Debug)]
-#[argh(subcommand, name = "color-unmap")]
-pub struct CmdColorUnMap {
+#[derive(clap::Args, PartialEq, Debug)]
+pub struct ColorUnMapCmd {
     /// mapping name
-    #[argh(positional)]
+    #[clap(long)]
     name: char,
 }
 
-impl CmdColorUnMap {
+impl ColorUnMapCmd {
     pub fn run(&self, art: &mut rs3a::Art) -> Result<()> {
         if let Ok(name) = Char::new(self.name) {
             art.remove_color_map(name);
@@ -70,28 +64,24 @@ impl CmdColorUnMap {
     }
 }
 
-/// Reset palette.
-#[derive(FromArgs, PartialEq, Debug)]
-#[argh(subcommand, name = "palette-reset")]
-pub struct CmdPaletteRest {}
+#[derive(clap::Args, PartialEq, Debug)]
+pub struct PaletteResetCmd {}
 
-impl CmdPaletteRest {
+impl PaletteResetCmd {
     pub fn run(&self, art: &mut rs3a::Art) -> Result<()> {
         art.remove_palette();
         Ok(())
     }
 }
 
-/// Force enable/disable colors
-#[derive(FromArgs, PartialEq, Debug)]
-#[argh(subcommand, name = "color-force")]
-pub struct CmdColorForce {
+#[derive(clap::Args, PartialEq, Debug)]
+pub struct ColorForceCmd {
     /// color flag
-    #[argh(positional)]
+    #[clap(long)]
     color: bool,
 }
 
-impl CmdColorForce {
+impl ColorForceCmd {
     pub fn run(&self, art: &mut rs3a::Art) -> Result<()> {
         art.set_colors_key(Some(self.color));
         Ok(())

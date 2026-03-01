@@ -14,48 +14,44 @@
     You should have received a copy of the GNU General Public License
     along with aaa.  If not, see <https://www.gnu.org/licenses/>.
 */
-use anyhow::Result;
-use argh::FromArgs;
-
 use crate::{
     loader::{load, load_with_fallback},
     player::play,
 };
+use anyhow::Result;
+use clap::Args;
 
-/// Play art (or two side by side) in terminal
-#[derive(FromArgs, PartialEq, Debug)]
-#[argh(subcommand, name = "play")]
-pub struct CmdPlay {
+#[derive(Args, PartialEq, Debug)]
+pub struct PlayCmd {
     /// art file path (alternatively pipe art to stdin)
-    #[argh(positional)]
     file: Option<String>,
 
     /// alternative art path in case primary don't exist of broken.
-    #[argh(option)]
+    #[arg(long, value_name = "FILE")]
     fallback_file: Option<String>,
 
     /// secondary art file path
-    #[argh(option)]
+    #[arg(long, value_name = "FILE")]
     secondary: Option<String>,
 
     /// disable colors
-    #[argh(switch, short = 'n')]
+    #[arg(short = 'n', long)]
     no_colors: bool,
 
-    /// whether loop aniamtion
-    #[argh(option, long = "loop")]
+    /// whether loop animation
+    #[clap(short = 'l', long = "loop")]
     loop_flag: Option<bool>,
 
     /// horizontal offset
-    #[argh(option, short = 'o', default = "0")]
+    #[arg(short = 'o', long, default_value_t = 0)]
     offset: usize,
 
     /// secondary art horizontal offset
-    #[argh(option, default = "0")]
+    #[arg(long, default_value_t = 0)]
     secondary_offset: usize,
 }
 
-impl CmdPlay {
+impl PlayCmd {
     pub fn run(&self) -> Result<()> {
         let primary = {
             let mut art = load_with_fallback(&self.file, &self.fallback_file)?;

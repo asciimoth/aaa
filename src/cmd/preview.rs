@@ -15,22 +15,44 @@
     along with aaa.  If not, see <https://www.gnu.org/licenses/>.
 */
 use anyhow::Result;
-use argh::FromArgs;
 
 use crate::loader::load;
 
-/// Convert art to json document
-#[derive(FromArgs, PartialEq, Debug)]
-#[argh(subcommand, name = "to-json")]
-pub struct CmdToJson {
+/// Show art preview
+#[derive(clap::Args, PartialEq, Debug)]
+pub struct PreviewCmd {
     /// art file path (alternatively pipe art to stdin)
-    #[argh(positional)]
     file: Option<String>,
+
+    /// disable colors
+    #[arg(long, short = 'n')]
+    no_colors: bool,
+
+    /// preview frame index
+    #[arg(short = 'f', default_value_t = 0)]
+    frame: usize,
 }
 
-impl CmdToJson {
+impl PreviewCmd {
     pub fn run(&self) -> Result<()> {
-        println!("{}", load(&self.file)?.to_json());
+        let mut art = load(&self.file)?;
+        if self.no_colors {
+            art.set_colors_key(Some(false));
+        }
+
+        let frames = art.to_ansi_frames();
+
+        if frames.len() > 0 {
+            println!(
+                "{}",
+                frames[art
+                    .get_preview_key()
+                    .unwrap_or(self.frame)
+                    .min(frames.len() - 1)]
+            );
+        } else {
+            eprintln!("There is no frames in art")
+        };
         Ok(())
     }
 }

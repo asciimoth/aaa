@@ -15,67 +15,58 @@
     along with aaa.  If not, see <https://www.gnu.org/licenses/>.
 */
 use anyhow::Result;
-use argh::FromArgs;
+use clap::Args;
 use rs3a::{Cell, chars::Char};
 
-/// Generate new art
-#[derive(FromArgs, PartialEq, Debug)]
-#[argh(subcommand, name = "generate")]
-pub struct CmdGen {
-    #[argh(positional)]
+#[derive(Args, PartialEq, Debug)]
+pub struct GenCmd {
     frames: usize,
-
-    #[argh(positional)]
     height: usize,
-
-    #[argh(positional)]
     width: usize,
-
-    #[argh(positional)]
     text: char,
 
     /// color value
-    #[argh(option, short = 'c')]
+    #[clap(short = 'c')]
     color: Option<char>,
 
     /// art title
-    #[argh(option, short = 't')]
+    #[clap(short = 't')]
     title: Option<String>,
 
     /// art author
-    #[argh(option, short = 'a')]
+    #[clap(short = 'a')]
     author: Option<String>,
 
     /// art original author
-    #[argh(option, short = 'o')]
+    #[clap(short = 'o')]
     orig: Option<String>,
 
     /// art source
-    #[argh(option, short = 's')]
+    #[clap(short = 's')]
     src: Option<String>,
 
     /// art editor
-    #[argh(option, short = 'e')]
+    #[clap(short = 'e')]
     edit: Option<String>,
 
     /// art license
-    #[argh(option)]
+    #[clap(long)]
     license: Option<String>,
 
     /// should art be looped
-    #[argh(option, short = 'l', long = "loop")]
+    #[clap(short = 'l', long = "loop")]
     loop_flag: Option<bool>,
 
-    /// art preview
-    #[argh(option, short = 'p')]
+    /// art preview frame
+    #[clap(short = 'p')]
     preview: Option<usize>,
 
     /// art tags
-    #[argh(option)]
+    #[clap(long)]
     tag: Vec<String>,
 }
 
-impl CmdGen {
+impl GenCmd {
     pub fn run(&self) -> Result<()> {
         let text = Char::new(self.text)?;
         let color = if let Some(color) = self.color {

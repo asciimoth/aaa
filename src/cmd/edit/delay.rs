@@ -15,22 +15,18 @@
     along with aaa.  If not, see <https://www.gnu.org/licenses/>.
 */
 use anyhow::Result;
-use argh::FromArgs;
 
-/// Set delay for whole art or for specific frame
-#[derive(FromArgs, PartialEq, Debug)]
-#[argh(subcommand, name = "delay-set")]
-pub struct CmdDelaySet {
+#[derive(clap::Args, PartialEq, Debug)]
+pub struct DelaySetCmd {
     /// delay in milliseconds
-    #[argh(positional)]
     delay: usize,
 
     /// frame index
-    #[argh(option, short = 'f')]
+    #[clap(long, short = 'f')]
     frame: Option<usize>,
 }
 
-impl CmdDelaySet {
+impl DelaySetCmd {
     pub fn run(&self, art: &mut rs3a::Art) -> Result<()> {
         if let Some(frame) = self.frame {
             art.set_frame_delay(frame, self.delay);
@@ -41,12 +37,10 @@ impl CmdDelaySet {
     }
 }
 
-/// Reset all art delays to default (50 milis)
-#[derive(FromArgs, PartialEq, Debug)]
-#[argh(subcommand, name = "delay-reset")]
-pub struct CmdDelayReSet {}
+#[derive(clap::Args, PartialEq, Debug)]
+pub struct DelayReSetCmd {}
 
-impl CmdDelayReSet {
+impl DelayReSetCmd {
     pub fn run(&self, art: &mut rs3a::Art) -> Result<()> {
         art.reset_delays(None);
         Ok(())

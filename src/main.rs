@@ -14,104 +14,97 @@
     You should have received a copy of the GNU General Public License
     along with aaa.  If not, see <https://www.gnu.org/licenses/>.
 */
-mod edit;
-mod fetch;
-mod from_text;
-mod generate;
+mod cmd;
+mod effects;
 mod img;
-mod list;
 mod loader;
-mod play;
 mod player;
-mod preview;
-mod strip;
-mod to_3a;
-mod to_cast;
-mod to_dur;
-mod to_frames;
-mod to_gif;
-mod to_json;
-mod to_mp4;
-mod to_png;
-mod to_svg;
-mod to_ttyrec;
-mod to_webp;
 
-use crate::fetch::CmdFetch;
-use crate::from_text::CmdFromText;
-use crate::to_dur::CmdToDur;
-use crate::to_gif::CmdToGif;
-use crate::to_mp4::CmdToMp4;
-use crate::to_png::CmdToPng;
-use crate::to_ttyrec::CmdToTtyrec;
-use crate::to_webp::CmdToWebp;
-use crate::{
-    edit::CmdEdit, generate::CmdGen, list::CmdList, play::CmdPlay, preview::CmdPreview,
-    strip::CmdStrip, to_3a::CmdTo3a, to_cast::CmdToCast, to_frames::CmdToFrames,
-    to_json::CmdToJson, to_svg::CmdToSvg,
-};
+use crate::cmd::fetch::FetchCmd;
+use crate::cmd::generate::GenCmd;
+use crate::cmd::play::PlayCmd;
+use crate::cmd::preview::PreviewCmd;
+use crate::cmd::to::ConvertCmd;
+use crate::cmd::{edit::EditCmd, from_text::FromTextCmd};
 use anyhow::Result;
-use argh::FromArgs;
+use clap::{CommandFactory, Parser, Subcommand};
+use cmd::list::ListCmd;
 
-/// Animated ASCII art tool by asciimoth
-#[derive(FromArgs, PartialEq, Debug)]
-pub struct Cmd {
-    #[argh(subcommand)]
-    cmds: SubCmds,
+#[derive(Parser, Debug)]
+#[clap(author, version, about, long_about = None)]
+struct Cli {
+    #[command(subcommand)]
+    command: Commands,
 }
 
-#[derive(FromArgs, PartialEq, Debug)]
-#[argh(subcommand)]
-pub enum SubCmds {
-    Play(CmdPlay),
-    Fetch(CmdFetch),
-    Preview(CmdPreview),
-    List(CmdList),
-    Strip(CmdStrip),
-    Edit(CmdEdit),
-    Gen(CmdGen),
-    FromTxt(CmdFromText),
-    ToFrames(CmdToFrames),
-    ToCast(CmdToCast),
-    To3a(CmdTo3a),
-    ToSvg(CmdToSvg),
-    ToJson(CmdToJson),
-    ToDur(CmdToDur),
-    ToTtyrec(CmdToTtyrec),
-    ToPng(CmdToPng),
-    ToGif(CmdToGif),
-    ToWebp(CmdToWebp),
-    ToMp4(CmdToMp4),
+#[derive(Debug, Subcommand)]
+enum Commands {
+    /// List builtin art
+    List(ListCmd),
+    /// Generate new art
+    Gen(GenCmd),
+    /// Play art (or two side by side) in terminal
+    Play(PlayCmd),
+    /// Show system info side by side with animated logo. (by default requires one
+    /// of fetch tools to be installed: neofetch | fastfetch | screenfetch | nitch | profetch | leaf |
+    /// fetch-scm)
+    Fetch(FetchCmd),
+    /// Show art preview
+    Preview(PreviewCmd),
+    /// Editing subcommands
+    Edit(EditCmd),
+    /// Format conversion subcommands
+    Convert(ConvertCmd),
+    /// Constructs art from plain text with ANSI color escape codes
+    FromText(FromTextCmd),
+
+    /// Generate shell completions to stdout (shell: bash|zsh|fish|powershell|elvish)
+    Completions {
+        /// Shell to generate completions for
+        #[arg(value_enum)]
+        shell: Shell,
+    },
 }
 
-impl SubCmds {
-    pub fn run(&self) -> Result<()> {
-        match self {
-            SubCmds::Play(cmd) => cmd.run(),
-            SubCmds::Fetch(cmd) => cmd.run(),
-            SubCmds::Preview(cmd) => cmd.run(),
-            SubCmds::ToFrames(cmd) => cmd.run(),
-            SubCmds::ToCast(cmd) => cmd.run(),
-            SubCmds::To3a(cmd) => cmd.run(),
-            SubCmds::ToSvg(cmd) => cmd.run(),
-            SubCmds::ToJson(cmd) => cmd.run(),
-            SubCmds::ToDur(cmd) => cmd.run(),
-            SubCmds::ToTtyrec(cmd) => cmd.run(),
-            SubCmds::ToPng(cmd) => cmd.run(),
-            SubCmds::ToGif(cmd) => cmd.run(),
-            SubCmds::ToWebp(cmd) => cmd.run(),
-            SubCmds::ToMp4(cmd) => cmd.run(),
-            SubCmds::List(cmd) => cmd.run(),
-            SubCmds::Strip(cmd) => cmd.run(),
-            SubCmds::Edit(cmd) => cmd.run(),
-            SubCmds::Gen(cmd) => cmd.run(),
-            SubCmds::FromTxt(cmd) => cmd.run(),
+#[derive(clap::ValueEnum, Clone, Debug)]
+enum Shell {
+    Bash,
+    Zsh,
+    Fish,
+    PowerShell,
+    Elvish,
+}
+
+fn main() -> Result<()> {
+    let cli = Cli::parse();
+
+    match cli.command {
+        Commands::List(cmd) => cmd.run(),
+        Commands::Gen(cmd) => cmd.run(),
+        Commands::Play(cmd) => cmd.run(),
+        Commands::Fetch(cmd) => cmd.run(),
+        Commands::Preview(cmd) => cmd.run(),
+        Commands::Edit(cmd) => cmd.run(),
+        Commands::Convert(cmd) => cmd.run(),
+        Commands::FromText(cmd) => cmd.run(),
+        Commands::Completions { shell } => {
+            generate_completions(shell);
+            Ok(())
         }
     }
 }
 
-fn main() -> Result<()> {
-    let cmd: Cmd = argh::from_env();
-    cmd.cmds.run()?;
-    Ok(())
+fn generate_completions(shell: Shell) {
+    use clap_complete::{generate, shells};
+
+    // Build the clap Command from our root Parser
+    let mut cmd = Cli::command();
+
+    match shell {
+        Shell::Bash => generate(shells::Bash, &mut cmd, "aaa", &mut std::io::stdout()),
+        Shell::Zsh => generate(shells::Zsh, &mut cmd, "aaa", &mut std::io::stdout()),
+        Shell::Fish => generate(shells::Fish, &mut cmd, "aaa", &mut std::io::stdout()),
+        Shell::PowerShell => generate(shells::PowerShell, &mut cmd, "aaa", &mut std::io::stdout()),
+        Shell::Elvish => generate(shells::Elvish, &mut cmd, "aaa", &mut std::io::stdout()),
+    }
 }

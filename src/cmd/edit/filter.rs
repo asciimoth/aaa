@@ -22,26 +22,22 @@ use std::{
 };
 
 use anyhow::{Result, anyhow};
-use argh::{FromArgValue, FromArgs};
 use rs3a::Frame;
 
-#[derive(FromArgValue, PartialEq, Debug)]
+#[derive(clap::ValueEnum, PartialEq, Debug, Copy, Clone)]
 enum FilterInput {
     Text,
     Ansi,
     Frame,
 }
 
-/// Filter art with arbitrary program
-#[derive(FromArgs, PartialEq, Debug)]
-#[argh(subcommand, name = "filter")]
-pub struct CmdFilter {
-    /// filter input type: text | ansi | frame
-    #[argh(positional)]
+#[derive(clap::Args, PartialEq, Debug)]
+pub struct FilterCmd {
+    /// filter input type
+    #[arg(value_enum)]
     input: FilterInput,
 
     /// command
-    #[argh(positional)]
     cmd: Vec<String>,
 }
 
@@ -54,7 +50,7 @@ fn env(art: &rs3a::Art) -> HashMap<String, String> {
     env
 }
 
-impl CmdFilter {
+impl FilterCmd {
     fn run_text(&self, art: &mut rs3a::Art) -> Result<()> {
         let mut env = env(art);
         env.insert(String::from("AAA_INPUT"), String::from("text"));

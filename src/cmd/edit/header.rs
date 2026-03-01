@@ -15,122 +15,98 @@
     along with aaa.  If not, see <https://www.gnu.org/licenses/>.
 */
 use anyhow::Result;
-use argh::FromArgs;
 
-/// Set art title
-#[derive(FromArgs, PartialEq, Debug)]
-#[argh(subcommand, name = "title")]
-pub struct CmdTitle {
-    #[argh(positional)]
+#[derive(clap::Args, PartialEq, Debug)]
+pub struct TitleCmd {
     title: Option<String>,
 }
 
-impl CmdTitle {
+impl TitleCmd {
     pub fn run(&self, art: &mut rs3a::Art) -> Result<()> {
         art.set_title_key(self.title.clone());
         Ok(())
     }
 }
 
-/// Set authors
-#[derive(FromArgs, PartialEq, Debug)]
-#[argh(subcommand, name = "authors")]
-pub struct CmdAuthors {
-    #[argh(positional)]
+#[derive(clap::Args, PartialEq, Debug)]
+pub struct AuthorsCmd {
     authors: Vec<String>,
 }
 
-impl CmdAuthors {
+impl AuthorsCmd {
     pub fn run(&self, art: &mut rs3a::Art) -> Result<()> {
         art.set_authors_key(&self.authors);
         Ok(())
     }
 }
 
-/// Set orig authors
-#[derive(FromArgs, PartialEq, Debug)]
-#[argh(subcommand, name = "origs")]
-pub struct CmdOrigs {
-    #[argh(positional)]
+#[derive(clap::Args, PartialEq, Debug)]
+pub struct OrigsCmd {
     authors: Vec<String>,
 }
 
-impl CmdOrigs {
+impl OrigsCmd {
     pub fn run(&self, art: &mut rs3a::Art) -> Result<()> {
         art.set_orig_authors_key(&self.authors);
         Ok(())
     }
 }
 
-/// Set src
-#[derive(FromArgs, PartialEq, Debug)]
-#[argh(subcommand, name = "src")]
-pub struct CmdSrc {
-    #[argh(positional)]
+#[derive(clap::Args, PartialEq, Debug)]
+pub struct SrcCmd {
     src: Option<String>,
 }
 
-impl CmdSrc {
+impl SrcCmd {
     pub fn run(&self, art: &mut rs3a::Art) -> Result<()> {
         art.set_src_key(self.src.clone());
         Ok(())
     }
 }
 
-/// Set editor
-#[derive(FromArgs, PartialEq, Debug)]
-#[argh(subcommand, name = "editor")]
-pub struct CmdEditor {
-    #[argh(positional)]
+#[derive(clap::Args, PartialEq, Debug)]
+pub struct EditorCmd {
     editor: Option<String>,
 }
 
-impl CmdEditor {
+impl EditorCmd {
     pub fn run(&self, art: &mut rs3a::Art) -> Result<()> {
         art.set_editor_key(self.editor.clone());
         Ok(())
     }
 }
 
-/// Set license
-#[derive(FromArgs, PartialEq, Debug)]
-#[argh(subcommand, name = "license")]
-pub struct CmdLicense {
-    #[argh(positional)]
+#[derive(clap::Args, PartialEq, Debug)]
+pub struct LicenseCmd {
     license: Option<String>,
 }
 
-impl CmdLicense {
+impl LicenseCmd {
     pub fn run(&self, art: &mut rs3a::Art) -> Result<()> {
         art.set_license_key(self.license.clone());
         Ok(())
     }
 }
 
-/// Set loop
-#[derive(FromArgs, PartialEq, Debug)]
-#[argh(subcommand, name = "loop")]
-pub struct CmdLoop {
-    #[argh(positional, long = "loop")]
+#[derive(clap::Args, PartialEq, Debug)]
+pub struct LoopCmd {
+    #[clap(long = "loop")]
     loop_flag: bool,
 }
 
-impl CmdLoop {
+impl LoopCmd {
     pub fn run(&self, art: &mut rs3a::Art) -> Result<()> {
         art.set_loop_key(self.loop_flag);
         Ok(())
     }
 }
 
-/// Set preview frame
-#[derive(FromArgs, PartialEq, Debug)]
-#[argh(subcommand, name = "preview")]
-pub struct CmdPreview {
-    #[argh(positional)]
+#[derive(clap::Args, PartialEq, Debug)]
+pub struct PreviewCmd {
     preview: Option<usize>,
 }
 
-impl CmdPreview {
+impl PreviewCmd {
     pub fn run(&self, art: &mut rs3a::Art) -> Result<()> {
         art.set_preview_key(self.preview);
         Ok(())

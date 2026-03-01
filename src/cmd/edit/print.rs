@@ -15,50 +15,55 @@
     along with aaa.  If not, see <https://www.gnu.org/licenses/>.
 */
 use anyhow::Result;
-use argh::FromArgs;
+use rs3a::chars::Char;
 
-/// Add tag to art
-#[derive(FromArgs, PartialEq, Debug)]
-#[argh(subcommand, name = "tag-add")]
-pub struct CmdTagAdd {
-    #[argh(positional)]
-    tags: Vec<String>,
+#[derive(clap::Args, PartialEq, Debug)]
+pub struct PrintCmd {
+    /// frame number
+    frame: usize,
+
+    /// row number
+    row: usize,
+
+    /// column number
+    column: usize,
+
+    text: String,
+
+    /// text color
+    #[clap(long, short = 'c')]
+    color: Option<char>,
 }
 
-impl CmdTagAdd {
+impl PrintCmd {
     pub fn run(&self, art: &mut rs3a::Art) -> Result<()> {
-        for tag in &self.tags {
-            art.add_tag(tag);
-        }
+        let color = if let Some(color) = self.color {
+            Some(Some(Char::new(color)?))
+        } else {
+            None
+        };
+        art.print(self.frame, self.column, self.row, &self.text, color);
         Ok(())
     }
 }
 
-/// Remove tag from art
-#[derive(FromArgs, PartialEq, Debug)]
-#[argh(subcommand, name = "tag-rm")]
-pub struct CmdTagRm {
-    #[argh(positional)]
-    tags: Vec<String>,
+#[derive(clap::Args, PartialEq, Debug)]
+pub struct PrintANSICmd {
+    /// frame number
+    frame: usize,
+
+    /// row number
+    row: usize,
+
+    /// column number
+    column: usize,
+
+    text: String,
 }
 
-impl CmdTagRm {
+impl PrintANSICmd {
     pub fn run(&self, art: &mut rs3a::Art) -> Result<()> {
-        for tag in &self.tags {
-            art.remove_tag(tag);
-        }
-        Ok(())
-    }
-}
-
-/// Drop all tags
-#[derive(FromArgs, PartialEq, Debug)]
-#[argh(subcommand, name = "tags-drop")]
-pub struct CmdTagsDrop {}
-
-impl CmdTagsDrop {
-    pub fn run(&self, art: &mut rs3a::Art) -> Result<()> {
-        art.remove_all_tags();
+        art.print_ansi(self.frame, self.column, self.row, &self.text);
         Ok(())
     }
 }

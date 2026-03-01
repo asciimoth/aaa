@@ -14,26 +14,19 @@
     You should have received a copy of the GNU General Public License
     along with aaa.  If not, see <https://www.gnu.org/licenses/>.
 */
-use std::io::{Write, stdout};
-
 use anyhow::Result;
-use argh::FromArgs;
+use rs3a::Art;
 
-use crate::loader::load;
-
-/// Convert art to ttyrec format
-#[derive(FromArgs, PartialEq, Debug)]
-#[argh(subcommand, name = "to-ttyrec")]
-pub struct CmdToTtyrec {
+#[derive(clap::Args, PartialEq, Debug)]
+pub struct StripCmd {
     /// art file path (alternatively pipe art to stdin)
-    #[argh(positional)]
     file: Option<String>,
 }
 
-impl CmdToTtyrec {
-    pub fn run(&self) -> Result<()> {
-        let mut out = stdout();
-        out.write(&load(&self.file)?.to_ttyrec())?;
+impl StripCmd {
+    pub fn run(&self, art: &mut Art) -> Result<()> {
+        art.strip_comments();
+        println!("{}", art.to_string());
         Ok(())
     }
 }

@@ -15,33 +15,41 @@
     along with aaa.  If not, see <https://www.gnu.org/licenses/>.
 */
 use anyhow::Result;
-use argh::FromArgs;
 
-use crate::loader::load;
-
-/// Print art as a blank line separated sequence of frames with ANSI colors codes.
-#[derive(FromArgs, PartialEq, Debug)]
-#[argh(subcommand, name = "to-frames")]
-pub struct CmdToFrames {
-    /// art file path (alternatively pipe art to stdin)
-    #[argh(positional)]
-    file: Option<String>,
-
-    /// disable colors
-    #[argh(switch, short = 'n')]
-    no_colors: bool,
+#[derive(clap::Args, PartialEq, Debug)]
+pub struct TagAddCmd {
+    tags: Vec<String>,
 }
 
-impl CmdToFrames {
-    pub fn run(&self) -> Result<()> {
-        let mut art = load(&self.file)?;
-        if self.no_colors {
-            art.set_colors_key(Some(false));
+impl TagAddCmd {
+    pub fn run(&self, art: &mut rs3a::Art) -> Result<()> {
+        for tag in &self.tags {
+            art.add_tag(tag);
         }
+        Ok(())
+    }
+}
 
-        for frame in art.to_ansi_frames() {
-            println!("{}\n", frame)
+#[derive(clap::Args, PartialEq, Debug)]
+pub struct TagRmCmd {
+    tags: Vec<String>,
+}
+
+impl TagRmCmd {
+    pub fn run(&self, art: &mut rs3a::Art) -> Result<()> {
+        for tag in &self.tags {
+            art.remove_tag(tag);
         }
+        Ok(())
+    }
+}
+
+#[derive(clap::Args, PartialEq, Debug)]
+pub struct TagsDropCmd {}
+
+impl TagsDropCmd {
+    pub fn run(&self, art: &mut rs3a::Art) -> Result<()> {
+        art.remove_all_tags();
         Ok(())
     }
 }

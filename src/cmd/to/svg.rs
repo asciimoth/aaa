@@ -17,61 +17,45 @@
 use std::str::FromStr;
 
 use anyhow::Result;
-use argh::FromArgs;
+use rs3a::Art;
 
-use crate::loader::load;
-
-/// Convert art to svg
-#[derive(FromArgs, PartialEq, Debug)]
-#[argh(subcommand, name = "to-svg")]
-pub struct CmdToSvg {
-    /// art file path (alternatively pipe art to stdin)
-    #[argh(positional)]
-    file: Option<String>,
-
-    /// disable colors
-    #[argh(switch, short = 'n')]
-    no_colors: bool,
-
-    /// whether loop aniamtion
-    #[argh(option, long = "loop")]
+#[derive(clap::Args, PartialEq, Debug)]
+pub struct SvgCmd {
+    /// whether loop animation
+    #[clap(short = 'l', long = "loop")]
     loop_flag: Option<bool>,
 
     /// font family like `Courier New`
-    #[argh(option)]
+    #[arg(long, value_name = "FAMILY")]
     font_family: Option<String>,
 
     /// font size in pixels
-    #[argh(option)]
+    #[arg(long, value_name = "SIZE")]
     font_size: Option<usize>,
 
     /// font cell width
-    #[argh(option)]
+    #[arg(long, value_name = "WIDTH")]
     font_width: Option<usize>,
 
     /// font cell height
-    #[argh(option)]
+    #[arg(long, value_name = "HEIGHT")]
     font_height: Option<usize>,
 
     /// font foreground x offset
-    #[argh(option)]
+    #[arg(long, value_name = "X")]
     font_offset_x: Option<usize>,
 
     /// font foreground y offset
-    #[argh(option)]
+    #[arg(long, value_name = "Y")]
     font_offset_y: Option<usize>,
 
     /// define a color mapping like fg:red=ff0000
-    #[argh(option, short = 'm')]
+    #[arg(short = 'm', long, value_name = "MAP")]
     color_map: Vec<String>,
 }
 
-impl CmdToSvg {
-    pub fn run(&self) -> Result<()> {
-        let mut art = load(&self.file)?;
-        if self.no_colors {
-            art.set_colors_key(Some(false));
-        }
+impl SvgCmd {
+    pub fn run(&self, art: &mut Art) -> Result<()> {
         if let Some(loop_flag) = self.loop_flag {
             art.set_loop_key(loop_flag);
         }

@@ -1,3 +1,5 @@
+use std::str::FromStr;
+
 /*
     This file is part of aaa.
 
@@ -14,10 +16,9 @@
     You should have received a copy of the GNU General Public License
     along with aaa.  If not, see <https://www.gnu.org/licenses/>.
 */
-use argh::FromArgValue;
 use rs3a::{Art, Cell};
 
-#[derive(FromArgValue, PartialEq, Debug, Copy, Clone)]
+#[derive(clap::ValueEnum, PartialEq, Debug, Copy, Clone)]
 pub enum Effect {
     None,
     RollerUp,
@@ -34,6 +35,20 @@ impl Effect {
             Effect::RollerDown => apply_roller_down(art, frame),
             Effect::RollerLeft => apply_roller_left(art, frame),
             Effect::RollerRight => apply_roller_right(art, frame),
+        }
+    }
+}
+
+impl FromStr for Effect {
+    type Err = String;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "roller_up" => Ok(Effect::RollerUp),
+            "roller_down" => Ok(Effect::RollerDown),
+            "roller_left" => Ok(Effect::RollerLeft),
+            "roller_right" => Ok(Effect::RollerRight),
+            _ => Err(format!("invalid effect: {}", s)),
         }
     }
 }

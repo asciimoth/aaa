@@ -22,51 +22,46 @@ use std::{
 };
 
 use anyhow::{Result, anyhow};
-use argh::FromArgs;
 use rs3a::Art;
 
 use crate::{
-    edit::effects::Effect,
+    effects::Effect,
     loader::{BuiltIn, load},
     player::play,
 };
 
-/// Show system info side by side with animated logo. (by default requires one
-/// of fetch tools to be installed: neofetch | fastfetch | screenfetch | nitch | profetch | leaf |
-/// fetch-scm)
-#[derive(FromArgs, PartialEq, Debug)]
-#[argh(subcommand, name = "fetch")]
-pub struct CmdFetch {
+#[derive(clap::Args, PartialEq, Debug)]
+pub struct FetchCmd {
     /// art name or file path (alternatively pipe art to stdin and set `--art --`)
-    #[argh(option, short = 'a')]
+    #[arg(short = 'a', long)]
     art: Option<String>,
 
     /// disable colors
-    #[argh(switch, short = 'n')]
+    #[arg(short = 'n', long)]
     no_colors: bool,
 
-    /// whether loop aniamtion
-    #[argh(option, long = "loop", short = 'l')]
+    /// whether loop animation
+    #[arg(short = 'l', long = "loop", value_name = "BOOL")]
     loop_flag: Option<bool>,
 
     /// horizontal art offset
-    #[argh(option, short = 'o', default = "0")]
+    #[arg(short = 'o', long, default_value_t = 0)]
     art_offset: usize,
 
     /// info block horizontal offset
-    #[argh(option, default = "0")]
+    #[arg(long, default_value_t = 0)]
     info_offset: usize,
 
-    /// animation effect: roller_up | roller_down | roller_left | roller_right
-    #[argh(option, default = "Effect::RollerUp")]
+    /// animation effect
+    #[arg(long, value_enum, default_value_t = Effect::RollerUp)]
     effect: Effect,
 
     /// fetch command to run
-    #[argh(positional)]
+    #[arg(value_name = "CMD")]
     cmd: Vec<String>,
 }
 
-impl CmdFetch {
+impl FetchCmd {
     fn get_art(&self) -> Result<Art> {
         if let Some(art) = self.art.clone() {
             if art == "--" {

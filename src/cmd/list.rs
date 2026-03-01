@@ -15,31 +15,18 @@
     along with aaa.  If not, see <https://www.gnu.org/licenses/>.
 */
 use anyhow::Result;
-use argh::FromArgs;
+use clap::Args;
 
-use crate::loader::load;
+use crate::loader::BuiltIn;
 
-/// Convert art to asciicast v2 format
-#[derive(FromArgs, PartialEq, Debug)]
-#[argh(subcommand, name = "to-cast")]
-pub struct CmdToCast {
-    /// art file path (alternatively pipe art to stdin)
-    #[argh(positional)]
-    file: Option<String>,
+#[derive(Debug, Args)]
+pub struct ListCmd {}
 
-    /// disable colors
-    #[argh(switch, short = 'n')]
-    no_colors: bool,
-}
-
-impl CmdToCast {
+impl ListCmd {
     pub fn run(&self) -> Result<()> {
-        let mut art = load(&self.file)?;
-        if self.no_colors {
-            art.set_colors_key(Some(false));
+        for art in BuiltIn::iter() {
+            println!("{}", art);
         }
-
-        println!("{}", art.to_asciicast2());
         Ok(())
     }
 }

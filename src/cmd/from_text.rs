@@ -20,57 +20,55 @@ use std::{
 };
 
 use anyhow::Result;
-use argh::FromArgs;
 use rs3a::Art;
 
-use crate::edit::effects::Effect;
+use crate::effects::Effect;
 
 /// Constructs art from plain text with ANSI color escape codes
-#[derive(FromArgs, PartialEq, Debug)]
-#[argh(subcommand, name = "from-text")]
-pub struct CmdFromText {
+#[derive(clap::Args, PartialEq, Debug)]
+pub struct FromTextCmd {
     /// text file path (alternatively pipe text to stdin)
-    #[argh(positional)]
+    #[arg(value_name = "FILE")]
     file: Option<String>,
 
     /// should art be looped
-    #[argh(option, short = 'l', long = "loop")]
+    #[arg(short = 'l', long = "loop")]
     loop_flag: Option<bool>,
 
-    /// should colors be enabled
-    #[argh(option, short = 'c')]
+    /// should colors be enabled (provide a boolean value, e.g. --color true)
+    #[arg(short = 'c', long, value_name = "BOOL")]
     color: Option<bool>,
 
     /// art title
-    #[argh(option, short = 't')]
+    #[arg(short = 't', long)]
     title: Option<String>,
 
     /// art author
-    #[argh(option, short = 'a')]
+    #[arg(short = 'a', long)]
     author: Option<String>,
 
     /// art original author
-    #[argh(option, short = 'o')]
+    #[arg(short = 'o', long)]
     orig: Option<String>,
 
     /// art source
-    #[argh(option, short = 's')]
+    #[arg(short = 's', long)]
     src: Option<String>,
 
     /// art license
-    #[argh(option)]
+    #[arg(long)]
     license: Option<String>,
 
-    /// art tags
-    #[argh(option)]
+    /// art tags (can be used multiple times)
+    #[arg(long, value_name = "TAG")]
     tag: Vec<String>,
 
-    /// animation effect: roller_up | roller_down | roller_left | roller_right
-    #[argh(option, default = "Effect::None")]
+    /// animation effect
+    #[arg(long, value_enum, default_value_t = Effect::None)]
     effect: Effect,
 }
 
-impl CmdFromText {
+impl FromTextCmd {
     pub fn run(&self) -> Result<()> {
         let txt = match &self.file {
             Some(path) => fs::read_to_string(path)?,

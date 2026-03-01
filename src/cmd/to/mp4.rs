@@ -14,77 +14,73 @@
     You should have received a copy of the GNU General Public License
     along with aaa.  If not, see <https://www.gnu.org/licenses/>.
 */
+
 use anyhow::Result;
-use argh::FromArgs;
+use rs3a::Art;
 
-use crate::{
-    img::{ImgColorMap, ImgFont, render_mp4},
-    loader::load,
-};
+use crate::img::{ImgColorMap, ImgFont, render_mp4};
 
-/// Convert art to mp4 video (ffmpeg cli required)
-#[derive(FromArgs, PartialEq, Debug)]
-#[argh(subcommand, name = "to-mp4")]
-pub struct CmdToMp4 {
-    /// art file path (alternatively pipe art to stdin)
-    #[argh(positional)]
-    file: Option<String>,
+#[derive(clap::Args, PartialEq, Debug)]
+pub struct Mp4Cmd {
+    /// frame to render (preview frame by default)
+    #[arg(long, value_name = "FRAME")]
+    frame: Option<usize>,
 
-    /// disable colors
-    #[argh(switch, short = 'n')]
-    no_colors: bool,
+    /// losless encoding
+    #[arg(long)]
+    losless: bool,
+
+    /// compression quality 0-100
+    #[arg(long, default_value = "50")]
+    quality: usize,
 
     /// encoding preset
-    #[argh(option, default = "String::from(\"medium\")")]
+    #[arg(long, default_value = "medium")]
     preset: String,
 
     /// constant rate factor
-    #[argh(option, default = "18")]
+    #[arg(long, default_value = "18")]
     crf: usize,
 
     /// ttf font file
-    #[argh(option)]
+    #[arg(long, value_name = "FILE")]
     font_file: Option<String>,
 
     /// font size in pixels
-    #[argh(option)]
+    #[arg(long, value_name = "SIZE")]
     font_size: Option<f32>,
 
     /// font cell width
-    #[argh(option)]
+    #[arg(long, value_name = "WIDTH")]
     font_width: Option<i32>,
 
     /// font cell height
-    #[argh(option)]
+    #[arg(long, value_name = "HEIGHT")]
     font_height: Option<i32>,
 
     /// font glyphs x offset
-    #[argh(option)]
+    #[arg(long, value_name = "X")]
     glyph_offset_x: Option<i32>,
 
     /// font glyphs y offset
-    #[argh(option)]
+    #[arg(long, value_name = "Y")]
     glyph_offset_y: Option<i32>,
 
     /// define a color mapping like fg:red=ff0000
-    #[argh(option, short = 'm')]
+    #[arg(short = 'm', long = "color-map", value_name = "MAP")]
     color_map: Vec<String>,
 
     /// default foreground color
-    #[argh(option)]
+    #[arg(long, value_name = "COLOR")]
     fg: Option<String>,
 
     /// default background color
-    #[argh(option)]
+    #[arg(long, value_name = "COLOR")]
     bg: Option<String>,
 }
 
-impl CmdToMp4 {
-    pub fn run(&self) -> Result<()> {
-        let mut art = load(&self.file)?;
-        if self.no_colors {
-            art.set_colors_key(Some(false));
-        }
+impl Mp4Cmd {
+    pub fn run(&self, art: &mut Art) -> Result<()> {
         render_mp4(
             &art,
             &self.to_font()?,

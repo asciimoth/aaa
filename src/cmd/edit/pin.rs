@@ -15,22 +15,31 @@
     along with aaa.  If not, see <https://www.gnu.org/licenses/>.
 */
 use anyhow::Result;
-use argh::FromArgs;
+use clap::Args;
 
-use crate::loader::load;
-
-/// Convert art to durformat (durdraw's ascii art format)
-#[derive(FromArgs, PartialEq, Debug)]
-#[argh(subcommand, name = "to-dur")]
-pub struct CmdToDur {
-    /// art file path (alternatively pipe art to stdin)
-    #[argh(positional)]
-    file: Option<String>,
+#[derive(Args, PartialEq, Debug)]
+pub struct PinTextCmd {
+    /// frame for pin
+    frame: usize,
 }
 
-impl CmdToDur {
-    pub fn run(&self) -> Result<()> {
-        println!("{}", load(&self.file)?.to_dur());
+impl PinTextCmd {
+    pub fn run(&self, art: &mut rs3a::Art) -> Result<()> {
+        art.pin_text(self.frame)?;
+        Ok(())
+    }
+}
+
+/// Pin color channel
+#[derive(Args, PartialEq, Debug)]
+pub struct PinColorCmd {
+    /// frame for pin
+    frame: usize,
+}
+
+impl PinColorCmd {
+    pub fn run(&self, art: &mut rs3a::Art) -> Result<()> {
+        art.pin_color(self.frame)?;
         Ok(())
     }
 }

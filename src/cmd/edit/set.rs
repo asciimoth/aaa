@@ -15,32 +15,38 @@
     along with aaa.  If not, see <https://www.gnu.org/licenses/>.
 */
 use anyhow::Result;
-use argh::FromArgs;
+use rs3a::{Cell, chars::Char};
 
-/// Crop art
-#[derive(FromArgs, PartialEq, Debug)]
-#[argh(subcommand, name = "crop")]
-pub struct CmdCrop {
-    /// from row
-    #[argh(positional)]
-    rf: usize,
+#[derive(clap::Args, PartialEq, Debug)]
+pub struct SetCmd {
+    /// frame number
+    frame: usize,
 
-    /// to row
-    #[argh(positional)]
-    rt: usize,
+    /// row number
+    row: usize,
 
-    /// from column
-    #[argh(positional)]
-    cf: usize,
+    /// column number
+    column: usize,
 
-    /// to columt
-    #[argh(positional)]
-    ct: usize,
+    /// text channel cell
+    #[clap(long, short = 't')]
+    text: Option<char>,
+
+    /// color channel cell
+    #[clap(long, short = 'c')]
+    color: Option<char>,
 }
 
-impl CmdCrop {
+impl SetCmd {
     pub fn run(&self, art: &mut rs3a::Art) -> Result<()> {
-        art.crop(self.rf, self.rt, self.cf, self.ct);
+        let mut cell = art.get(self.frame, self.column, self.row, Cell::default());
+        if let Some(text) = self.text {
+            cell.text = Char::new(text)?;
+        }
+        if let Some(color) = self.color {
+            cell.color = Some(Char::new(color)?);
+        }
+        art.set(self.frame, self.column, self.row, cell);
         Ok(())
     }
 }
