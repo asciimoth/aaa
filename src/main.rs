@@ -28,6 +28,7 @@ use crate::cmd::to::ConvertCmd;
 use crate::cmd::{edit::EditCmd, from_text::FromTextCmd};
 use anyhow::Result;
 use clap::{CommandFactory, Parser, Subcommand};
+use clap_complete_nushell::Nushell;
 use cmd::list::ListCmd;
 
 #[derive(Parser, Debug)]
@@ -73,6 +74,7 @@ enum Shell {
     Fish,
     PowerShell,
     Elvish,
+    Nush,
 }
 
 fn main() -> Result<()> {
@@ -106,5 +108,6 @@ fn generate_completions(shell: Shell) {
         Shell::Fish => generate(shells::Fish, &mut cmd, "aaa", &mut std::io::stdout()),
         Shell::PowerShell => generate(shells::PowerShell, &mut cmd, "aaa", &mut std::io::stdout()),
         Shell::Elvish => generate(shells::Elvish, &mut cmd, "aaa", &mut std::io::stdout()),
+        Shell::Nush => generate(Nushell, &mut cmd, "aaa", &mut std::io::stdout()),
     }
 }

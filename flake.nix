@@ -67,6 +67,8 @@
           $out/bin/aaa completions fish > $out/share/fish/vendor_completions.d/aaa.fish
           mkdir -p $out/share/zsh/site-functions/
           $out/bin/aaa completions zsh > $out/share/zsh/site-functions/_aaa
+          mkdir -p $out/share/nu/completions
+          $out/bin/aaa completions nush > $out/share/nu/completions/aaa.nu
         '';
       };
     in {
