@@ -76,8 +76,5 @@
     - [ ] [carapace](https://github.com/carapace-sh/carapace)?
     - [ ] [fig](https://github.com/withfig/autocomplete)??
 - [X] MIME DB files
-- [ ] Man pages
-- usage examples
-    - [ ] complex jq queries
-    - [ ] editing
+- [X] usage examples
 

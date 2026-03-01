@@ -3,22 +3,7 @@ Swiss Army knife for animated ascii art
 
 [![asciicast](https://asciinema.org/a/ZtzhhTOmVWCAmrfz.svg)](https://asciinema.org/a/ZtzhhTOmVWCAmrfz)
 
-[Here is 3a format specification.](https://github.com/DomesticMoth/3a)  
-[Here is a collection of 3a animations.](https://github.com/DomesticMoth/3a_storage)  
-
-## Installation
-### Download binaries
-You can download binaries from the [github releases page](https://github.com/DomesticMoth/aaa/releases)
-### With "cargo install"
-```
-$ cargo install aaa
-```
-### Manual compilation from sources
-```
-$ git clone https://github.com/DomesticMoth/aaa.git
-$ cd aaa
-$ cargo build --release
-```
+[Collection of animated ascii art](https://github.com/DomesticMoth/3a_storage) [3a format spec](https://github.com/DomesticMoth/3a)  
 
 ## Usage
 ```help
