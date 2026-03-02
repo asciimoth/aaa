@@ -72,6 +72,7 @@ aurs:
     # Publish is skipped if empty.
     git_url: "ssh://aur@aur.archlinux.org/{{ .ProjectName }}-bin.git"
 
+    skip_upload: true
 
     depends:
       - ffmpeg
