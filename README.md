@@ -7,6 +7,33 @@ to other formats (SVG, PNG, GIF, WebP, MP4, asciinema, dur, etc).
 
 You can find more art supported by aaa [here](https://github.com/DomesticMoth/3a_storage).
 
+## Installation
+### Binary
+If none of the options listed below work for you, you can always just download
+an executable for your platform from the [releases page](https://github.com/asciimoth/aaa/releases/latest).
+### Nix
+Nix users can install aaa with flake:
+```sh
+# Install to sys profile
+nix profile add github:asciimoth/aaa
+# Remove from sys profile
+nix profile remove aaa
+
+# Add to temporal shell
+nix shell github:asciimoth/aaa
+```
+### Deb/Rpm
+You can download deb/rmp packages from [releases page](https://github.com/asciimoth/aaa/releases/latest)
+or use my [deb/rpm repo](https://repo.moth.contact/).
+### Arch
+Arch users can install [aaa-bin](https://aur.archlinux.org/packages/aaa-bin)
+from AUR or download `.pkg` files from [releases page](https://github.com/asciimoth/aaa/releases/latest).
+### Cargo
+You can also install it with cargo:
+```sh
+cargo install aaa
+```
+
 ## Usage
 ```help
 Usage: aaa <COMMAND>
