@@ -22,6 +22,8 @@ nix profile remove aaa
 # Add to temporal shell
 nix shell github:asciimoth/aaa
 ```
+
+aaa is also [available in nixpkgs](https://search.nixos.org/packages?channel=unstable&query=aaa&show=aaa) but may be outdated.
 ### Deb/Rpm
 You can download deb/rmp packages from [releases page](https://github.com/asciimoth/aaa/releases/latest)
 or use my [deb/rpm repo](https://repo.moth.contact/).
