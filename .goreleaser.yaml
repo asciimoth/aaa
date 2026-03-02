@@ -1,0 +1,105 @@
+version: 2
+
+before:
+  hooks:
+    - ./build_hooks.sh {{ .ProjectName }}
+
+builds:
+  - # with cargo cross
+    builder: rust
+    tool: cross
+    command: build
+    targets:
+      - x86_64-unknown-linux-gnu
+      - i686-unknown-linux-gnu
+      - aarch64-unknown-linux-gnu
+      - riscv64gc-unknown-linux-gnu
+      - x86_64-unknown-freebsd
+
+archives:
+  - formats: [tar.gz]
+    format_overrides:
+      - goos: windows
+        formats: [zip]
+    files:
+      - README.md
+      - LICENSE*
+
+nfpms:
+  - maintainer: "ASCII Moth <ascii@moth.contact>"
+    homepage: 'https://github.com/asciimoth/{{ .ProjectName }}'
+    description: Swiss Army knife for animated ascii art
+    license: "GPL-3.0"
+    formats:
+      - deb
+      - rpm
+      - archlinux
+    section: utils
+    contents:
+      # Shell completions
+      - src: ./target/completions/bash/{{ .ProjectName }}
+        dst: /usr/share/bash-completion/completions/{{ .ProjectName }}
+      - src: ./target/completions/fish/{{ .ProjectName }}.fish
+        dst: /usr/share/fish/vendor_completions.d/{{ .ProjectName }}.fish
+      - src: ./target/completions/zsh/_{{ .ProjectName }}
+        dst: /usr/share/zsh/site-functions/_{{ .ProjectName }}
+    dependencies:
+      - ffmpeg
+
+signs:
+  - artifacts: all
+    args: [ "-u", "C5C84658CCFD7E8E71DEE933AF3AE54FC3A35C9F", "--output", "${signature}", "--detach-sign", "${artifact}" ]
+
+release:
+  mode: replace
+
+aurs:
+  - # aur -bin
+    homepage: "https://github.com/asciimoth/{{ .ProjectName }}"
+
+    description: Swiss Army knife for animated ascii art
+
+    maintainers:
+      - "ASCII Moth <ascii@moth.contact>"
+
+    license: "GPL-3.0"
+
+    # The SSH private key that should be used to commit to the Git repository.
+    # This can either be a path or the key contents.
+    # private_key: "{{ .Env.AUR_KEY }}"
+
+    # The AUR Git URL for this package.
+    # Publish is skipped if empty.
+    git_url: "ssh://aur@aur.archlinux.org/{{ .ProjectName }}-bin.git"
+
+
+    depends:
+      - ffmpeg
+
+    # List of packages that are not needed for the software to function,
+    # but provide additional features.
+    #
+    # Must be in the format `package: short description of the extra functionality`.
+    # optdepends:
+    #   - "wget: for downloading things"
+
+    # List of files that can contain user-made changes and should be preserved
+    # during package upgrades and removals.
+    # backup:
+    #   - /etc/foo.conf
+
+    # The value to be passed to `GIT_SSH_COMMAND`.
+    # This is mainly used to specify the SSH private key used to pull/push to
+    # the Git URL.
+    # Default: 'ssh -i {{ .KeyPath }} -o StrictHostKeyChecking=accept-new -F /dev/null'.
+    git_ssh_command: "ssh -o StrictHostKeyChecking=accept-new -F /dev/null"
+
+    commit_author:
+      name: AsciiMoth
+      email: ascii@moth.contact
+      signing:
+        enabled: true
+        key: "C5C84658CCFD7E8E71DEE933AF3AE54FC3A35C9F"
+        program: gpg2
+        format: openpgp
+

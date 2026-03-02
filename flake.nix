@@ -79,6 +79,10 @@
 
           cargo
           # clippy
+          cargo-cross
+          cargo-zigbuild
+          zig
+          goreleaser
 
           typos
           commitizen
