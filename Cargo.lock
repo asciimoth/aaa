@@ -1440,9 +1440,9 @@ checksum = "0c6a884d2998352bb4daf0183589aec883f16a6da1f4dde84d8e2e9a5409a1ce"
 
 [[package]]
 name = "rs3a"
-version = "2.4.8"
+version = "2.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "51233c1b6e2349f22f94c35d7743525f731d21620e33a919bd1238b3c5dc3e3c"
+checksum = "26d77b21b706f15652e19956bb5b1cf50f84f024ed57d7b01d22368920828470"
 dependencies = [
  "ordermap",
 ]

@@ -14,6 +14,7 @@
     You should have received a copy of the GNU General Public License
     along with aaa.  If not, see <https://www.gnu.org/licenses/>.
 */
+pub mod cast;
 pub mod gif;
 pub mod mp4;
 pub mod png;
@@ -22,7 +23,7 @@ pub mod webp;
 use std::io::{Write, stdout};
 
 use crate::{
-    cmd::to::{gif::GifCmd, mp4::Mp4Cmd, png::PngCmd, svg::SvgCmd, webp::WebpCmd},
+    cmd::to::{cast::ToCastCmd, gif::GifCmd, mp4::Mp4Cmd, png::PngCmd, svg::SvgCmd, webp::WebpCmd},
     loader::load,
 };
 use clap::{Args, Subcommand};
@@ -45,7 +46,7 @@ enum ConvertSubcommands {
     /// Print art as a blank line separated sequence of frames with ANSI colors codes.
     ToFrames,
     /// Convert art to asciicast v2 format
-    ToCast,
+    ToCast(ToCastCmd),
     /// Convert art to durformat (durdraw's ascii art format)
     ToDur,
     /// Convert art to json document
@@ -79,6 +80,7 @@ impl ConvertCmd {
             ConvertSubcommands::ToWebp(cmd) => cmd.run(&mut art),
             ConvertSubcommands::ToMp4(cmd) => cmd.run(&mut art),
             ConvertSubcommands::ToSvg(cmd) => cmd.run(&mut art),
+            ConvertSubcommands::ToCast(cmd) => cmd.run(&mut art),
             ConvertSubcommands::To3a => {
                 println!("{}", art.to_string());
                 Ok(())
@@ -87,10 +89,6 @@ impl ConvertCmd {
                 for frame in art.to_ansi_frames() {
                     println!("{}\n", frame)
                 }
-                Ok(())
-            }
-            ConvertSubcommands::ToCast => {
-                println!("{}", art.to_asciicast2());
                 Ok(())
             }
             ConvertSubcommands::ToDur => {
