@@ -138,8 +138,8 @@ Options:
 ```
 
 ## Related links
-- [3a format spec](https://github.com/DomesticMoth/3a)
-- [rs3a](https://github.com/DomesticMoth/rs3a) - 3a library on which aaa is based
-- [py3a](https://github.com/DomesticMoth/py3a) (outdated)
-- [go3a](https://github.com/DomesticMoth/go3a)
+- [3a format spec](https://github.com/asciimoth/3a)
+- [rs3a](https://github.com/asciimoth/rs3a) - 3a library on which aaa is based
+- [py3a](https://github.com/asciimoth/py3a)
+- [go3a](https://github.com/asciimoth/go3a)
 
