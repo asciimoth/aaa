@@ -5,7 +5,7 @@ to other formats (SVG, PNG, GIF, WebP, MP4, asciinema, dur, etc).
 
 [![asciicast](https://asciinema.org/a/ZtzhhTOmVWCAmrfz.svg)](https://asciinema.org/a/ZtzhhTOmVWCAmrfz)
 
-You can find more art supported by aaa [here](https://github.com/DomesticMoth/3a_storage).
+You can find more art supported by aaa [here](https://openascii.moth.contact).
 
 ## Installation
 ### Binary
