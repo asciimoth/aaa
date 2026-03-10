@@ -56,6 +56,7 @@
         - [X] set license
         - [X] set loop
         - [X] set preview
+    - [ ] merge text from one 3a file with colors from other
 - [X] art generation
     - [X] from text
 - animation effects
