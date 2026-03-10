@@ -2,6 +2,7 @@
 - [X] playing
     - [X] setting terminal title to art's title line
     - [X] two arts side by side
+    - [ ] live preview for file during editing
 - conversion
     - [X] ansi frames
     - [X] svg
