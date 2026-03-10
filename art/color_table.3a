@@ -4,6 +4,7 @@
 title ANSI colors table
 license CC0-1.0
 colors yes
+loop no
 ;; 4-bit
 col 0 fg:black bg:white
 col 1 bg:black fg:white
