@@ -1,0 +1,148 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+usage() {
+	cat >&2 <<'EOF'
+Usage:
+  ./catppuccin raster <latte|frappe|macchiato|mocha>
+  ./catppuccin svg    <latte|frappe|macchiato|mocha>
+
+Examples:
+  aaa convert apple.3a to-png $(./catppuccin raster mocha)
+  aaa convert apple.3a to-gif $(./catppuccin raster latte)
+  aaa convert apple.3a to-svg $(./catppuccin svg macchiato)
+EOF
+	exit 1
+}
+
+[[ $# -eq 2 ]] || usage
+
+mode="$1"
+flavor="$2"
+
+case "$mode" in
+	raster|svg) ;;
+	*) usage ;;
+esac
+
+case "$flavor" in
+	latte)
+		fg=4c4f69
+		bg=eff1f5
+		black=bcc0cc
+		bright_black=acb0be
+		red=d20f39
+		bright_red=e64553
+		green=40a02b
+		bright_green=179299
+		yellow=df8e1d
+		bright_yellow=fe640b
+		blue=1e66f5
+		bright_blue=7287fd
+		magenta=8839ef
+		bright_magenta=ea76cb
+		cyan=04a5e5
+		bright_cyan=209fb5
+		white=6c6f85
+		bright_white=5c5f77
+		;;
+	frappe)
+		fg=c6d0f5
+		bg=303446
+		black=51576d
+		bright_black=626880
+		red=e78284
+		bright_red=ea999c
+		green=a6d189
+		bright_green=81c8be
+		yellow=e5c890
+		bright_yellow=ef9f76
+		blue=8caaee
+		bright_blue=babbf1
+		magenta=ca9ee6
+		bright_magenta=f4b8e4
+		cyan=99d1db
+		bright_cyan=85c1dc
+		white=a5adce
+		bright_white=b5bfe2
+		;;
+	macchiato)
+		fg=cad3f5
+		bg=24273a
+		black=494d64
+		bright_black=5b6078
+		red=ed8796
+		bright_red=ee99a0
+		green=a6da95
+		bright_green=8bd5ca
+		yellow=eed49f
+		bright_yellow=f5a97f
+		blue=8aadf4
+		bright_blue=b7bdf8
+		magenta=c6a0f6
+		bright_magenta=f5bde6
+		cyan=91d7e3
+		bright_cyan=7dc4e4
+		white=a5adcb
+		bright_white=b8c0e0
+		;;
+	mocha)
+		fg=cdd6f4
+		bg=1e1e2e
+		black=45475a
+		bright_black=585b70
+		red=f38ba8
+		bright_red=eba0ac
+		green=a6e3a1
+		bright_green=94e2d5
+		yellow=f9e2af
+		bright_yellow=fab387
+		blue=89b4fa
+		bright_blue=b4befe
+		magenta=cba6f7
+		bright_magenta=f5c2e7
+		cyan=89dceb
+		bright_cyan=74c7ec
+		white=a6adc8
+		bright_white=bac2de
+		;;
+	*)
+		usage
+		;;
+esac
+
+args=()
+
+# Raster backends support default fg/bg directly.
+# SVG currently only gets themed via color-map.
+if [[ "$mode" == "raster" ]]; then
+	args+=(--fg "$fg" --bg "$bg")
+fi
+
+add_color() {
+	local name="$1"
+	local value="$2"
+
+	args+=(--color-map "fg:${name}=${value}")
+	args+=(--color-map "bg:${name}=${value}")
+}
+
+add_color black "$black"
+add_color bright-black "$bright_black"
+add_color red "$red"
+add_color bright-red "$bright_red"
+add_color green "$green"
+add_color bright-green "$bright_green"
+add_color yellow "$yellow"
+add_color bright-yellow "$bright_yellow"
+add_color blue "$blue"
+add_color bright-blue "$bright_blue"
+add_color magenta "$magenta"
+add_color bright-magenta "$bright_magenta"
+add_color cyan "$cyan"
+add_color bright-cyan "$bright_cyan"
+add_color white "$white"
+add_color bright-white "$bright_white"
+
+printf '%s ' "${args[@]}"
+printf '\n'
