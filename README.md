@@ -41,16 +41,17 @@ cargo install aaa
 Usage: aaa <COMMAND>
 
 Commands:
-  list         List builtin art
-  gen          Generate new art
-  play         Play art (or two side by side) in terminal
-  fetch        Show system info side by side with animated logo. (by default requires one of fetch tools to be installed: neofetch | fastfetch | screenfetch | nitch | profetch | leaf | fetch-scm)
-  preview      Show art preview
-  edit         Editing subcommands
-  convert      Format conversion subcommands
-  from-text    Constructs art from plain text with ANSI color escape codes
-  completions  Generate shell completions to stdout (shell: bash|zsh|fish|powershell|elvish)
-  help         Print this message or the help of the given subcommand(s)
+  list             List builtin art
+  gen              Generate new art
+  play             Play art (or two side by side) in terminal
+  fetch            Show system info side by side with animated logo. (by default requires one of fetch tools to be installed: neofetch | fastfetch | screenfetch | nitch | profetch | leaf | fetch-scm)
+  preview          Show art preview
+  edit             Editing subcommands
+  convert          Format conversion subcommands
+  from-text        Constructs art from plain text with ANSI color escape codes
+  from-tiled-text  Construct art from colorless plain-text frames arranged in a grid
+  completions      Generate shell completions to stdout (shell: bash|zsh|fish|powershell|elvish)
+  help             Print this message or the help of the given subcommand(s)
 
 Options:
   -h, --help     Print help
@@ -142,4 +143,3 @@ Options:
 - [rs3a](https://github.com/asciimoth/rs3a) - 3a library on which aaa is based
 - [py3a](https://github.com/asciimoth/py3a)
 - [go3a](https://github.com/asciimoth/go3a)
-
