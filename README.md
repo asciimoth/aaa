@@ -57,6 +57,14 @@ You can also install it with cargo:
 cargo install aaa
 ```
 
+## Releasing
+
+In `nix develop`, run `just release-check VERSION` to check the artifacts.
+After you commit the version change, run `just release VERSION` to sign and
+publish to GitHub and crates.io. Cargo uses credentials saved by `cargo login`
+or a Cargo registry token environment variable. Set `GHREPO_REPO_DIR` to also
+publish DEB and RPM packages through ghrepo.
+
 ## Usage
 ```help
 Usage: aaa <COMMAND>

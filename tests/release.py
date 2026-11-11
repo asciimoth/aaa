@@ -27,7 +27,8 @@ elif name == "gh":
     if args[0] == "api": print("true")
     elif args[:2] == ["release", "view"]: sys.exit(1)
 elif name == "curl":
-    print("200" if os.environ.get("EXISTING_CRATE") else "404", end="")
+    version = "1.2.3" if os.environ.get("EXISTING_CRATE") else "1.2.2"
+    print(json.dumps({"vers": version}))
 elif name == "goreleaser" and args == ["--version"]:
     print("GitVersion: 2.19.0")
 elif name == "gpg" and "--verify" in args and os.environ.get("FAIL_SIGNATURE"):
@@ -161,9 +162,13 @@ class ReleaseTests(unittest.TestCase):
             self.assertTrue(url.endswith((".deb", ".rpm")))
 
     def test_release_without_repository(self):
+        self.env.pop("CARGO_REGISTRY_TOKEN", None)
+        self.env.pop("CARGO_REGISTRIES_CRATES_IO_TOKEN", None)
         result = self.run_release()
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertFalse(any(c[0] == "ghrepo" for c in self.calls()))
+        self.assertTrue(any(c[:2] == ["cargo", "publish"] and "--dry-run" not in c
+                            for c in self.calls()))
 
 
 if __name__ == "__main__":

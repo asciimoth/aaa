@@ -76,15 +76,13 @@ if [[ $mode == publish ]]; then
     fi
     export GPG_KEY_ID=${GPG_KEY_ID:-C5C84658CCFD7E8E71DEE933AF3AE54FC3A35C9F}
     gpg --list-secret-keys "$GPG_KEY_ID" >/dev/null
-    [[ -n ${CARGO_REGISTRY_TOKEN:-${CARGO_REGISTRIES_CRATES_IO_TOKEN:-}} ]] ||
-        fail 'Set CARGO_REGISTRY_TOKEN or CARGO_REGISTRIES_CRATES_IO_TOKEN for crates.io.'
-    crate_status=$(curl --silent --show-error --output /dev/null --write-out '%{http_code}' \
-        "https://crates.io/api/v1/crates/aaa/$version")
-    case $crate_status in
-        404) ;;
-        200) fail "aaa $version already exists on crates.io. Set a new version before releasing." ;;
-        *) fail "Cannot check crates.io version (HTTP $crate_status)." ;;
-    esac
+    curl --fail --silent --show-error --max-time 30 https://index.crates.io/3/a/aaa |
+        python3 -c '
+import json, sys
+version = sys.argv[1]
+if any(json.loads(line)["vers"] == version for line in sys.stdin):
+    raise SystemExit(f"release: aaa {version} already exists on crates.io. Set a new version before releasing.")
+' "$version"
     if [[ -n ${GHREPO_REPO_DIR:-} ]]; then
         command -v ghrepo >/dev/null || fail 'ghrepo is required when GHREPO_REPO_DIR is set.'
         [[ -d $GHREPO_REPO_DIR && -w $GHREPO_REPO_DIR && -r $GHREPO_REPO_DIR/ghrepo.yaml ]] ||
