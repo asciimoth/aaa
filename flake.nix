@@ -10,6 +10,7 @@
     flake-utils.url = "github:numtide/flake-utils";
     pre-commit-hooks.url = "github:cachix/pre-commit-hooks.nix";
     zpg.url = "github:asciimoth/zpg";
+    ghrepo.url = "github:asciimoth/ghrepo";
     naersk = {
       url = "github:nix-community/naersk";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -22,6 +23,7 @@
       pre-commit-hooks,
       naersk,
       zpg,
+      ghrepo,
       ...
     }:
     flake-utils.lib.eachDefaultSystem (
@@ -154,10 +156,13 @@
               ffmpeg
 
               vhs
+
+              gh
             ])
             ++ pkgs.lib.optionals (builtins.hasAttr system zpg.packages) [
               zpg.packages.${system}.default
             ]
+            ++ [ ghrepo.packages.${system}.default ]
             ++ checks.pre-commit-check.enabledPackages;
         };
 
