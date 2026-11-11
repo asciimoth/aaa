@@ -17,6 +17,7 @@
 pub mod edit;
 pub mod fetch;
 pub mod from_text;
+pub mod from_tiled_text;
 pub mod generate;
 pub mod list;
 pub mod play;

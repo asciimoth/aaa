@@ -21,6 +21,7 @@ mod loader;
 mod player;
 
 use crate::cmd::fetch::FetchCmd;
+use crate::cmd::from_tiled_text::FromTiledTextCmd;
 use crate::cmd::generate::GenCmd;
 use crate::cmd::play::PlayCmd;
 use crate::cmd::preview::PreviewCmd;
@@ -58,6 +59,8 @@ enum Commands {
     Convert(ConvertCmd),
     /// Constructs art from plain text with ANSI color escape codes
     FromText(FromTextCmd),
+    /// Construct art from colorless plain-text frames arranged in a grid
+    FromTiledText(FromTiledTextCmd),
 
     /// Generate shell completions to stdout (shell: bash|zsh|fish|powershell|elvish)
     Completions {
@@ -89,6 +92,7 @@ fn main() -> Result<()> {
         Commands::Edit(cmd) => cmd.run(),
         Commands::Convert(cmd) => cmd.run(),
         Commands::FromText(cmd) => cmd.run(),
+        Commands::FromTiledText(cmd) => cmd.run(),
         Commands::Completions { shell } => {
             generate_completions(shell);
             Ok(())
