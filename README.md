@@ -25,8 +25,29 @@ nix shell github:asciimoth/aaa
 
 aaa is also [available in nixpkgs](https://search.nixos.org/packages?channel=unstable&query=aaa&show=aaa) but may be outdated.
 ### Deb/Rpm
-You can download deb/rmp packages from [releases page](https://github.com/asciimoth/aaa/releases/latest)
+You can download deb/rpm packages from [releases page](https://github.com/asciimoth/aaa/releases/latest)
 or use my [deb/rpm repo](https://repo.moth.contact/).
+
+#### Fedora
+
+The RPM requires FFmpeg with the `libx264` encoder for MP4 output and the
+`libwebp` encoder for WebP output. Fedora's `ffmpeg-free` package does not
+include `libx264`. Enable [RPM Fusion Free](https://rpmfusion.org/Configuration)
+before you install `aaa`:
+
+```sh
+sudo dnf install \
+  "https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm"
+sudo curl -fsSLo /etc/yum.repos.d/ghrepo.repo \
+  https://repo.moth.contact/rpm.repo
+sudo dnf install --allowerasing aaa
+```
+
+The `--allowerasing` option lets DNF replace conflicting Fedora FFmpeg
+packages. Check the proposed changes before you confirm the transaction.
+For a downloaded RPM, replace `aaa` in the last command with its path,
+such as `./aaa_2.1.0_linux_amd64.rpm`.
+
 ### Arch
 Arch users can install [aaa-bin](https://aur.archlinux.org/packages/aaa-bin)
 from AUR or download `.pkg` files from [releases page](https://github.com/asciimoth/aaa/releases/latest).
@@ -136,6 +157,24 @@ Arguments:
 Options:
   -h, --help  Print help
 ```
+
+## Package tests
+
+Run the installation and conversion test in a disposable Fedora 44
+container. The test needs Docker and network access. ARM64 tests need an
+ARM64 host or AArch64 emulation.
+
+```sh
+tests/fedora-install.sh
+PLATFORM=linux/arm64 tests/fedora-install.sh
+
+# Test a local RPM before publication.
+tests/fedora-install.sh ./dist/aaa_2.1.0_linux_amd64.rpm
+```
+
+The test checks package dependency resolution, `aaa --help`, MP4 decoding,
+and WebP frame decoding. It uses RPM Fusion Free and the package repository
+above.
 
 ## Related links
 - [3a format spec](https://github.com/asciimoth/3a)

@@ -44,6 +44,8 @@ nfpms:
       - src: ./target/completions/zsh/_{{ .ProjectName }}
         dst: /usr/share/zsh/site-functions/_{{ .ProjectName }}
     dependencies:
+      # MP4 conversion requires libx264. Fedora's ffmpeg-free does not include it.
+      # Fedora users must enable RPM Fusion Free; see README.md.
       - ffmpeg
 
 signs:

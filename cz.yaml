@@ -8,7 +8,7 @@ commitizen:
   name: cz_customize
   customize:
     schema: "<type>(<scope>)?: <message>"
-    schema_pattern: "^(?:bump|feat|fix|perf|refactor|docs|style|test|chore|build|ci|revert|other)(?:\\([A-Za-z0-9_\\-\\/\\.]+\\))?(!)?:\\s.+$"
+    schema_pattern: "\\A(?:bump|feat|fix|perf|refactor|docs|style|test|chore|build|ci|revert|other)(?:\\([A-Za-z0-9_\\-\\/\\.]+\\))?(!)?:[ \\t]+[^\\r\\n]+(?:\\r?\\n[\\s\\S]*)?\\Z"
     message_template: >
       {{ change_type }}{% if scope %}({{ scope }}){% endif %}{% if is_breaking %}!{% endif %}: {{ message }}
       {% if body %}
