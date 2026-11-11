@@ -3,7 +3,7 @@ aaa is a cli tool to read, write, edit, generate, play, and convert
 [animated ASCII art](https://github.com/DomesticMoth/3a)
 to other formats (SVG, PNG, GIF, WebP, MP4, asciinema, dur, etc).
 
-[![asciicast](https://asciinema.org/a/ZtzhhTOmVWCAmrfz.svg)](https://asciinema.org/a/ZtzhhTOmVWCAmrfz)
+[![Made with VHS](https://vhs.charm.sh/vhs-4GyOGbY0ZfwJSCgBOOyNZr.gif)](https://asciinema.org/a/ZtzhhTOmVWCAmrfz)
 
 You can find more art supported by aaa [here](https://openascii.moth.contact).
 
@@ -225,8 +225,9 @@ and disables reporting inside its pipeline.
 
 Enter `nix develop` first. On Linux, it includes the pinned `zpg` package and
 FFmpeg. The upstream `zpg` flake currently supplies Linux packages only.
-Each demo builds the local CLI, then runs it through `zpg`. Filter scripts also
-use the local CLI from `target/debug`.
+Each demo builds the local CLI. Processing commands run through `zpg`;
+terminal playback runs directly. Filter scripts also use the local CLI from
+`target/debug`.
 
 | Command | Result |
 | --- | --- |
@@ -242,6 +243,11 @@ For filter and animation demos, the first argument selects the worker count.
 For demos that save a file, the final argument selects its path. Existing output
 files are replaced. The progress-filter script has short delays so its stages
 remain visible; set `AAA_DEMO_DELAY` to change the delay in seconds.
+
+Run `just vhs` to build the local CLI and render `demo.tape` to `target/vhs.gif`.
+The tape follows the old asciinema demo and adds parallel filter and GIF progress.
+It requires VHS, `zpg`, `lolcat`, `nitch`, and the Fira Code font. VHS also needs
+`ttyd` and FFmpeg. Generated art and exports are saved in `target/vhs/`.
 
 Run `just test-progress` to validate reports, nested child processes, failure
 cleanup, and output bytes with `zpg --test`. These integration tests require

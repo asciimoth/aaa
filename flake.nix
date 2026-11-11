@@ -152,6 +152,8 @@
 
               just
               ffmpeg
+
+              vhs
             ])
             ++ pkgs.lib.optionals (builtins.hasAttr system zpg.packages) [
               zpg.packages.${system}.default

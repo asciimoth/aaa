@@ -14,6 +14,10 @@ build *args:
 run *args:
     cargo run --locked -- "$@"
 
+# Record the CLI demo as target/vhs.gif.
+vhs: build
+    PATH="$PWD/target/debug:$PATH" vhs demo.tape
+
 # Filter and play the NixOS animation with progress on stderr.
 [positional-arguments]
 demo-edit jobs="4": build
