@@ -55,29 +55,37 @@ impl FromStr for Effect {
 }
 
 fn apply_roller_up(art: &mut Art, frame: usize) {
+    let task = crate::progress::start("roller up", art.height());
     for _ in 0..art.height() {
         art.dup_frame(frame);
         art.shift_up_frame(frame, 1, Cell::default());
+        task.complete_one();
     }
 }
 
 fn apply_roller_down(art: &mut Art, frame: usize) {
+    let task = crate::progress::start("roller down", art.height());
     for _ in 0..art.height() {
         art.dup_frame(frame);
         art.shift_down_frame(frame, 1, Cell::default());
+        task.complete_one();
     }
 }
 
 fn apply_roller_left(art: &mut Art, frame: usize) {
+    let task = crate::progress::start("roller left", art.width());
     for _ in 0..art.width() {
         art.dup_frame(frame);
         art.shift_left_frame(frame, 1, Cell::default());
+        task.complete_one();
     }
 }
 
 fn apply_roller_right(art: &mut Art, frame: usize) {
+    let task = crate::progress::start("roller right", art.width());
     for _ in 0..art.width() {
         art.dup_frame(frame);
         art.shift_right_frame(frame, 1, Cell::default());
+        task.complete_one();
     }
 }

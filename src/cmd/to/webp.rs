@@ -15,6 +15,7 @@
     along with aaa.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+use crate::parallel::FrameJobs;
 use anyhow::Result;
 use rs3a::Art;
 
@@ -22,6 +23,9 @@ use crate::img::{ImgColorMap, ImgFont, render_webp};
 
 #[derive(clap::Args, PartialEq, Debug)]
 pub struct WebpCmd {
+    #[command(flatten)]
+    jobs: FrameJobs,
+
     /// frame to render (preview frame by default)
     #[arg(long, value_name = "FRAME")]
     frame: Option<usize>,
@@ -87,6 +91,7 @@ impl WebpCmd {
             &self.to_color_map(),
             self.losless,
             self.quality,
+            &self.jobs,
         )?;
         Ok(())
     }

@@ -40,7 +40,7 @@ impl PreviewCmd {
             art.set_colors_key(Some(false));
         }
 
-        let frames = art.to_ansi_frames();
+        let frames = crate::progress::during("prepare preview", || art.to_ansi_frames());
 
         if !frames.is_empty() {
             println!(

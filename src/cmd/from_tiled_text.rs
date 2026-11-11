@@ -54,14 +54,16 @@ pub struct FromTiledTextCmd {
 
 impl FromTiledTextCmd {
     pub fn run(&self) -> Result<()> {
-        let text = match &self.file {
-            Some(path) => fs::read_to_string(path)?,
-            None => {
-                let mut text = String::new();
-                io::stdin().read_to_string(&mut text)?;
-                text
-            }
-        };
+        let text = crate::progress::during("read tiled text", || -> Result<String> {
+            Ok(match &self.file {
+                Some(path) => fs::read_to_string(path)?,
+                None => {
+                    let mut text = String::new();
+                    io::stdin().read_to_string(&mut text)?;
+                    text
+                }
+            })
+        })?;
         let options = TiledTextOptions {
             columns: self.columns,
             rows: self.rows,
@@ -70,7 +72,9 @@ impl FromTiledTextCmd {
             horizontal_gap: self.horizontal_gap,
             vertical_gap: self.vertical_gap,
         };
-        let art = Art::from_tiled_text(&text, options)?;
+        let art =
+            crate::progress::during("parse tiled text", || Art::from_tiled_text(&text, options))?;
+        let _writing = crate::progress::start("write art", 0);
         print!("{}", art);
         Ok(())
     }

@@ -46,6 +46,7 @@ fn looks_like_path(name: &str) -> bool {
 }
 
 pub fn load(file: &Option<String>) -> Result<rs3a::Art> {
+    let _loading = crate::progress::start("load art", 0);
     if let Some(file) = file {
         if !looks_like_path(file)
             && let Some(text) = get_embed(file)
@@ -64,6 +65,7 @@ pub fn load(file: &Option<String>) -> Result<rs3a::Art> {
 }
 
 pub fn load_with_fallback(file: &Option<String>, fallback: &Option<String>) -> Result<rs3a::Art> {
+    let _loading = crate::progress::start("load art with fallback", 0);
     match load(file) {
         Ok(art) => Ok(art),
         Err(err) => match fallback {

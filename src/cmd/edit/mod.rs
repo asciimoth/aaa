@@ -147,6 +147,7 @@ enum EditSubcommands {
 impl EditCmd {
     pub fn run(&self) -> anyhow::Result<()> {
         let mut art = load(&self.file)?;
+        let editing = crate::progress::start("edit art", 0);
         match &self.command {
             EditSubcommands::Set(cmd) => cmd.run(&mut art),
             EditSubcommands::Strip(cmd) => cmd.run(&mut art),
@@ -186,6 +187,8 @@ impl EditCmd {
             EditSubcommands::Loop(cmd) => cmd.run(&mut art),
             EditSubcommands::Preview(cmd) => cmd.run(&mut art),
         }?;
+        drop(editing);
+        let _writing = crate::progress::start("write art", 0);
         println!("{}", art);
         Ok(())
     }

@@ -43,6 +43,7 @@ pub struct Player {
 
 impl Player {
     pub fn new(art: &Art, rx: Option<Receiver<()>>, y_offset: usize) -> Self {
+        let _preparing = crate::progress::start("prepare playback", 0);
         let mut frames = Vec::with_capacity(art.frames());
         let mut height = 0;
         for (i, frame) in art.to_ansi_frames().iter().enumerate() {

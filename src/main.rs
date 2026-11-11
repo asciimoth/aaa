@@ -18,7 +18,9 @@ mod cmd;
 mod effects;
 mod img;
 mod loader;
+mod parallel;
 mod player;
+mod progress;
 
 use crate::cmd::fetch::FetchCmd;
 use crate::cmd::from_tiled_text::FromTiledTextCmd;
@@ -84,6 +86,19 @@ enum Shell {
 
 fn main() -> Result<()> {
     let cli = Cli::parse();
+    let name = match &cli.command {
+        Commands::List(_) => "aaa list",
+        Commands::Gen(_) => "aaa gen",
+        Commands::Play(_) => "aaa play",
+        Commands::Fetch(_) => "aaa fetch",
+        Commands::Preview(_) => "aaa preview",
+        Commands::Edit(_) => "aaa edit",
+        Commands::Convert(_) => "aaa convert",
+        Commands::FromText(_) => "aaa from-text",
+        Commands::FromTiledText(_) => "aaa from-tiled-text",
+        Commands::Completions { .. } => "aaa completions",
+    };
+    let _reporter = progress::init(name);
 
     match cli.command {
         Commands::List(cmd) => cmd.run(),

@@ -74,7 +74,9 @@ impl GenCmd {
         } else {
             None
         };
-        let mut art = rs3a::Art::new(self.frames, self.width, self.height, Cell { text, color });
+        let mut art = crate::progress::during("generate frames", || {
+            rs3a::Art::new(self.frames, self.width, self.height, Cell { text, color })
+        });
         art.set_title_key(self.title.clone());
         if let Some(author) = &self.author {
             art.set_authors_key(std::slice::from_ref(author));
@@ -92,6 +94,7 @@ impl GenCmd {
         for tag in &self.tag {
             art.add_tag(tag);
         }
+        let _writing = crate::progress::start("write art", 0);
         print!("{}", art);
         Ok(())
     }

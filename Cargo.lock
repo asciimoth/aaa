@@ -15,9 +15,11 @@ dependencies = [
  "ctrlc",
  "image",
  "imageproc",
+ "rayon",
  "rs3a",
  "rust-embed",
  "tempfile",
+ "zprs",
 ]
 
 [[package]]
@@ -2061,6 +2063,15 @@ name = "zmij"
 version = "1.0.21"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b8848ee67ecc8aedbaf3e4122217aff892639231befc6a1b58d29fff4c2cabaa"
+
+[[package]]
+name = "zprs"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "dce3db07905802fa2cbbcdd9a3c242ccbe107369a6583c4e28b725570f39185a"
+dependencies = [
+ "libc",
+]
 
 [[package]]
 name = "zune-core"

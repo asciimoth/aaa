@@ -26,11 +26,15 @@ pub struct ToCastCmd {
 
 impl ToCastCmd {
     pub fn run(&self, art: &mut Art) -> Result<()> {
-        if self.no_cursor {
-            println!("{}", art.to_asciicast2_no_cursor());
-        } else {
-            println!("{}", art.to_asciicast2());
-        }
+        let text = crate::progress::during("encode asciicast", || {
+            if self.no_cursor {
+                art.to_asciicast2_no_cursor()
+            } else {
+                art.to_asciicast2()
+            }
+        });
+        let _writing = crate::progress::start("write asciicast", 0);
+        println!("{}", text);
         Ok(())
     }
 }

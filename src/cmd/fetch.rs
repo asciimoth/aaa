@@ -18,7 +18,7 @@ use std::{
     env,
     fs::File,
     io::{BufRead, BufReader},
-    process::Command,
+    process::{Command, Stdio},
 };
 
 use anyhow::{Result, anyhow};
@@ -120,8 +120,21 @@ impl FetchCmd {
 
 fn run_cmd(cmd: &[String]) -> Result<String> {
     let mut command = Command::new(&cmd[0]);
-    command.args(&cmd[1..]);
-    Ok(String::from_utf8(command.output()?.stdout)?)
+    command
+        .args(&cmd[1..])
+        .stdin(Stdio::null())
+        .stdout(Stdio::piped())
+        .stderr(Stdio::piped());
+    let task = crate::progress::start(&format!("fetch: {}", cmd[0]), 0);
+    let output = task.spawn(command)?.wait_with_output()?;
+    if !output.status.success() {
+        return Err(anyhow!(
+            "fetch command failed ({}): {}",
+            output.status,
+            String::from_utf8_lossy(&output.stderr)
+        ));
+    }
+    Ok(String::from_utf8(output.stdout)?)
 }
 
 fn run_fetches() -> Result<String> {

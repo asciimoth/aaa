@@ -70,18 +70,24 @@ impl PngCmd {
             art.set_preview_key(Some(frame));
         }
 
+        let task = crate::progress::start("render PNG", 0);
         let frame = render_frame(
             art,
             art.get_preview_key().unwrap_or(0),
             &self.to_font()?,
             &self.to_color_map(),
+            &task,
         );
+        drop(task);
 
         let mut buf: Vec<u8> = Vec::new();
         let mut cursor = Cursor::new(&mut buf);
 
-        frame.write_to(&mut cursor, image::ImageFormat::Png)?;
+        crate::progress::during("encode PNG", || {
+            frame.write_to(&mut cursor, image::ImageFormat::Png)
+        })?;
 
+        let _writing = crate::progress::start("write PNG", 0);
         let stdout = io::stdout();
         let mut handle = stdout.lock();
         handle.write_all(&buf)?;

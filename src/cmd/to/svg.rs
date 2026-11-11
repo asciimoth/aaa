@@ -59,10 +59,11 @@ impl SvgCmd {
         if let Some(loop_flag) = self.loop_flag {
             art.set_loop_key(loop_flag);
         }
-        println!(
-            "{}",
+        let text = crate::progress::during("encode SVG", || {
             art.to_svg_frames(&self.to_color_map(), &self.to_font())
-        );
+        });
+        let _writing = crate::progress::start("write SVG", 0);
+        println!("{}", text);
         Ok(())
     }
     fn to_color_map(&self) -> rs3a::CSSColorMap {

@@ -15,6 +15,7 @@
     along with aaa.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+use crate::parallel::FrameJobs;
 use anyhow::Result;
 use rs3a::Art;
 
@@ -22,6 +23,9 @@ use crate::img::{ImgColorMap, ImgFont, render_mp4};
 
 #[derive(clap::Args, PartialEq, Debug)]
 pub struct Mp4Cmd {
+    #[command(flatten)]
+    jobs: FrameJobs,
+
     /// frame to render (preview frame by default)
     #[arg(long, value_name = "FRAME")]
     frame: Option<usize>,
@@ -87,6 +91,7 @@ impl Mp4Cmd {
             &self.to_color_map(),
             &self.preset,
             self.crf,
+            &self.jobs,
         )?;
         Ok(())
     }

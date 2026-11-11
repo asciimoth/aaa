@@ -81,6 +81,12 @@ pub struct FillAreaCmd {
 
 impl FillAreaCmd {
     pub fn run(&self, art: &mut rs3a::Art) -> Result<()> {
+        let task = crate::progress::start(
+            "fill rows",
+            self.rt
+                .checked_sub(self.rf)
+                .map_or(0, |n| n.saturating_add(1)),
+        );
         for row in self.rf..=self.rt {
             for col in self.cf..=self.ct {
                 if let Some(frame) = self.frame {
@@ -105,6 +111,7 @@ impl FillAreaCmd {
                     }
                 }
             }
+            task.complete_one();
         }
         Ok(())
     }

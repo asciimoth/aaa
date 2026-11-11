@@ -159,6 +159,99 @@ Options:
   -h, --help  Print help
 ```
 
+## Parallel frame processing
+
+`edit ... filter`, `convert ... to-gif`, `convert ... to-mp4`, and
+`convert ... to-webp` process frames in parallel. By default, they use the
+available CPU threads. Use `--jobs N` (or `-j N`) to set the number of workers;
+`--jobs 0` selects the default and `--jobs 1` processes frames sequentially.
+
+```sh
+aaa edit distro_nixos_big filter --jobs 4 ansi ./examples/overlay_filter.sh | aaa play
+aaa convert distro_nixos_big to-gif --jobs 4 > animation.gif
+```
+
+Frames can finish processing in any order. Output frames, delays, and palette
+updates stay in their original order. Progress shows the number of completed
+frames. Processing uses batches of at most one frame per worker to limit the
+number of results held in memory. Filter input is prepared before processing.
+
+Use `--jobs 1` for filter scripts that depend on execution order or share mutable
+state, such as a file that each invocation updates. Each process receives its
+own `AAA_FRAME` and `AAA_DELAY` values. Filter stderr is shared, so messages from
+different processes can appear together. On failure, active work finishes before
+the command returns an error; no new batch starts.
+
+GIF encoding and final MP4/WebP encoding stay in sequence. Other edit commands
+continue to use the existing `rs3a` operations.
+
+## Progress reports
+
+`aaa` uses [zprs](https://github.com/asciimoth/zprs) to report work through the
+Zig progress protocol. Run commands with [zpg](https://github.com/asciimoth/zpg)
+to see the task tree. Progress does not change the art or binary data on stdout:
+
+```sh
+zpg aaa edit distro_nixos_big filter --jobs 4 ansi ./examples/overlay_filter.sh | aaa play
+zpg aaa convert distro_nixos_big to-gif --jobs 4 > animation.gif
+```
+
+The reports cover both parallel and sequential work:
+
+| Work | Report |
+| --- | --- |
+| Filters | Completed frames, active workers, and each child process's reports |
+| GIF, MP4, WebP | Completed rendered frames, rows in each active frame, and encoding |
+| PNG | Rows rendered, encoding, and output |
+| Roller effects and area fills | Completed steps or rows |
+| Loading, parsing, generation, other edits and conversions, output, playback preparation | Named activities with unknown totals |
+| Fetch commands and FFmpeg | Child activity, plus nested reports if the child supports the protocol |
+
+Unknown totals show activity rather than an estimated percentage. Short tasks
+can finish between reports. Playback itself supplies its own visual feedback.
+Without a usable progress channel, reports are disabled and frame processing
+keeps the existing single-line stderr counter. Under `zpg`, that counter is
+suppressed when reporting is active. On platforms without pipe reporting, the
+commands still work.
+
+Each external command is started with `Node::spawn`, gets a private progress
+pipe, and is waited for before its task ends. Threads share task handles. A
+script must also keep concurrent reporters on separate pipes. The overlay
+example lets only the last process in its pipeline report; the other processes
+receive an empty `ZIG_PROGRESS`. The progress-filter demo reports its own stages
+and disables reporting inside its pipeline.
+
+### Demos
+
+Enter `nix develop` first. On Linux, it includes the pinned `zpg` package and
+FFmpeg. The upstream `zpg` flake currently supplies Linux packages only.
+Each demo builds the local CLI, then runs it through `zpg`. Filter scripts also
+use the local CLI from `target/debug`.
+
+| Command | Result |
+| --- | --- |
+| `just demo-edit` | Filter with four workers, then play once |
+| `just demo-filter` | Show four reporting scripts; save `target/demo-filter.3a` |
+| `just demo-filter 1` | Show the same filter work sequentially |
+| `just demo-gif` | Render with four workers; save `target/demo.gif` |
+| `just demo-mp4` | Render with four workers and run FFmpeg; save `target/demo.mp4` |
+| `just demo-webp` | Render with four workers and run FFmpeg; save `target/demo.webp` |
+| `just demo-png` | Render one PNG on one thread; save `target/demo.png` |
+
+For filter and animation demos, the first argument selects the worker count.
+For demos that save a file, the final argument selects its path. Existing output
+files are replaced. The progress-filter script has short delays so its stages
+remain visible; set `AAA_DEMO_DELAY` to change the delay in seconds.
+
+Run `just test-progress` to validate reports, nested child processes, failure
+cleanup, and output bytes with `zpg --test`. These integration tests require
+`zpg` and are separate from `just test`. To inspect reports directly:
+
+```sh
+zpg --test --test-output target/progress.log target/debug/aaa \
+  edit distro_nixos_big filter --jobs 4 text cat > target/filtered.3a
+```
+
 ## Related links
 - [3a format spec](https://github.com/asciimoth/3a)
 - [rs3a](https://github.com/asciimoth/rs3a) - 3a library on which aaa is based

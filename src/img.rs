@@ -21,6 +21,7 @@ use std::process::{Command, Stdio};
 use std::str::FromStr;
 use std::time::Duration;
 
+use crate::parallel::FrameJobs;
 use ab_glyph::{FontArc, PxScale};
 use anyhow::{Result, anyhow};
 use image::{Frame, Rgba, RgbaImage, codecs::gif::GifEncoder};
@@ -212,27 +213,34 @@ fn render_with_ffmpeg(
     col: &ImgColorMap,
     mut cmd: Vec<String>,
     tmpout: Option<&str>,
+    jobs: &FrameJobs,
 ) -> Result<()> {
     let tmp = TempDir::new()?;
     let tmp_path = tmp.path();
     let list_path = tmp_path.join("list.txt");
     let mut out_path = tmp_path.join("tmp.tmp");
 
-    eprintln!("rendering frames:");
     {
         let mut contents = String::new();
         let mut last_name = String::new();
-        for f in 0..art.frames() {
-            eprintln!("  {}/{}", f + 1, art.frames());
-            let frame = render_frame(art, f, font, col);
-            let delay = art.get_frame_delay(f) as f64 / 1000.0;
-            let name = format!("frame_{:010}.png", f);
-            let dst = tmp_path.join(&name);
-            frame.save(dst)?;
-            contents.push_str(&format!("file '{}'\n", name));
-            contents.push_str(&format!("duration {:.3}\n", delay));
-            last_name = name;
-        }
+        jobs.run(
+            art.frames(),
+            "rendering frames",
+            |f, task| {
+                let frame = render_frame(art, f, font, col, task);
+                let name = format!("frame_{:010}.png", f);
+                let _saving = task.start("write PNG", 0);
+                frame.save(tmp_path.join(&name))?;
+                Ok(name)
+            },
+            |f, name| {
+                let delay = art.get_frame_delay(f) as f64 / 1000.0;
+                contents.push_str(&format!("file '{}'\n", name));
+                contents.push_str(&format!("duration {:.3}\n", delay));
+                last_name = name;
+                Ok(())
+            },
+        )?;
         contents.push_str(&format!("file '{}'\n", last_name));
         fs::write(&list_path, contents)?;
     }
@@ -252,20 +260,26 @@ fn render_with_ffmpeg(
 
     // eprintln!("{:?}", cmd);
 
-    eprintln!("encoding animation:");
+    let encoding = crate::progress::start("encode animation (ffmpeg)", 0);
+    if !encoding.enabled() {
+        eprintln!("encoding animation:");
+    }
     // run ffmpeg to write the file (not to pipe)
-    let status = Command::new("ffmpeg")
+    let mut command = Command::new("ffmpeg");
+    command
         .current_dir(tmp_path)
         .args(cmd)
         .stdout(Stdio::inherit())
-        .stderr(Stdio::inherit())
-        .status()?;
+        .stderr(Stdio::inherit());
+    let status = encoding.spawn(command)?.wait()?;
+    drop(encoding);
 
     if !status.success() {
         anyhow::bail!("ffmpeg failed (exit {})", status);
     }
 
     if tmpout.is_some() {
+        let _writing = crate::progress::start("write animation", 0);
         let mut f = File::open(&out_path)?;
         copy(&mut f, &mut stdout())?;
     }
@@ -279,6 +293,7 @@ pub fn render_mp4(
     col: &ImgColorMap,
     preset: &str,
     crf: usize,
+    jobs: &FrameJobs,
 ) -> Result<()> {
     let crf = crf.to_string();
     let cmd = [
@@ -303,7 +318,7 @@ pub fn render_mp4(
     .iter()
     .map(|s| String::from(*s))
     .collect();
-    render_with_ffmpeg(art, font, col, cmd, None)
+    render_with_ffmpeg(art, font, col, cmd, None, jobs)
 }
 
 pub fn render_webp(
@@ -312,6 +327,7 @@ pub fn render_webp(
     col: &ImgColorMap,
     losless: bool,
     quality: usize,
+    jobs: &FrameJobs,
 ) -> Result<()> {
     let mut cmd: Vec<String> = [
         "-vf",
@@ -334,34 +350,44 @@ pub fn render_webp(
         cmd.push(String::from("-loop"));
         cmd.push(String::from("0"));
     }
-    render_with_ffmpeg(art, font, col, cmd, Some("art.webp"))
+    render_with_ffmpeg(art, font, col, cmd, Some("art.webp"), jobs)
 }
 
-pub fn render_gif(art: &Art, font: &ImgFont, col: &ImgColorMap) -> image::ImageResult<()> {
-    // let file = File::create(path)?;
-
+pub fn render_gif(art: &Art, font: &ImgFont, col: &ImgColorMap, jobs: &FrameJobs) -> Result<()> {
     let mut encoder = GifEncoder::new(stdout());
     if art.get_loop_key() {
         encoder.set_repeat(image::codecs::gif::Repeat::Infinite)?;
     }
-
-    eprintln!("rendering frames:");
-    for frame in 0..art.frames() {
-        eprintln!(" {}/{}", frame + 1, art.frames());
-        let frame = Frame::from_parts(
-            render_frame(art, frame, font, col),
-            0,
-            0,
-            image::Delay::from_saturating_duration(Duration::from_millis(
-                art.get_frame_delay(frame) as u64,
-            )),
-        );
-        encoder.encode_frame(frame)?;
-    }
-    Ok(())
+    let encoding = crate::progress::start("encode GIF frames", art.frames());
+    jobs.run(
+        art.frames(),
+        "rendering frames",
+        |frame, task| {
+            Ok(Frame::from_parts(
+                render_frame(art, frame, font, col, task),
+                0,
+                0,
+                image::Delay::from_saturating_duration(Duration::from_millis(
+                    art.get_frame_delay(frame) as u64,
+                )),
+            ))
+        },
+        |_, frame| {
+            encoder.encode_frame(frame)?;
+            encoding.complete_one();
+            Ok(())
+        },
+    )
 }
 
-pub fn render_frame(art: &Art, frame: usize, font: &ImgFont, col: &ImgColorMap) -> RgbaImage {
+pub fn render_frame(
+    art: &Art,
+    frame: usize,
+    font: &ImgFont,
+    col: &ImgColorMap,
+    task: &zprs::Node,
+) -> RgbaImage {
+    let rows = task.start("render rows", art.height() as u64);
     // compute final image size
     let width = (art.width() as u32).saturating_mul(font.cell_w as u32);
     let height = (art.height() as u32).saturating_mul(font.cell_h as u32);
@@ -405,6 +431,7 @@ pub fn render_frame(art: &Art, frame: usize, font: &ImgFont, col: &ImgColorMap) 
                 );
             }
         }
+        rows.complete_one();
     }
 
     img

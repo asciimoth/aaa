@@ -74,6 +74,7 @@ impl ConvertCmd {
             art.set_colors_key(Some(false));
         }
 
+        let _converting = crate::progress::start("convert art", 0);
         match &self.command {
             ConvertSubcommands::ToPng(cmd) => cmd.run(&mut art),
             ConvertSubcommands::ToGif(cmd) => cmd.run(&mut art),
@@ -82,26 +83,37 @@ impl ConvertCmd {
             ConvertSubcommands::ToSvg(cmd) => cmd.run(&mut art),
             ConvertSubcommands::ToCast(cmd) => cmd.run(&mut art),
             ConvertSubcommands::To3a => {
+                let _writing = crate::progress::start("write art", 0);
                 println!("{}", art);
                 Ok(())
             }
             ConvertSubcommands::ToFrames => {
-                for frame in art.to_ansi_frames() {
-                    println!("{}\n", frame)
+                let frames =
+                    crate::progress::during("prepare ANSI frames", || art.to_ansi_frames());
+                let writing = crate::progress::start("write ANSI frames", frames.len());
+                for frame in frames {
+                    println!("{}\n", frame);
+                    writing.complete_one();
                 }
                 Ok(())
             }
             ConvertSubcommands::ToDur => {
-                println!("{}", art.to_dur());
+                let text = crate::progress::during("encode durdraw", || art.to_dur());
+                let _writing = crate::progress::start("write durdraw", 0);
+                println!("{}", text);
                 Ok(())
             }
             ConvertSubcommands::ToJson => {
-                println!("{}", art.to_json());
+                let text = crate::progress::during("encode JSON", || art.to_json());
+                let _writing = crate::progress::start("write JSON", 0);
+                println!("{}", text);
                 Ok(())
             }
             ConvertSubcommands::ToTtyrec => {
+                let data = crate::progress::during("encode ttyrec", || art.to_ttyrec());
+                let _writing = crate::progress::start("write ttyrec", 0);
                 let mut out = stdout();
-                out.write_all(&art.to_ttyrec())?;
+                out.write_all(&data)?;
                 Ok(())
             }
         }

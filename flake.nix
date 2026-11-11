@@ -9,6 +9,7 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
     flake-utils.url = "github:numtide/flake-utils";
     pre-commit-hooks.url = "github:cachix/pre-commit-hooks.nix";
+    zpg.url = "github:asciimoth/zpg";
     naersk = {
       url = "github:nix-community/naersk";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -20,6 +21,7 @@
       flake-utils,
       pre-commit-hooks,
       naersk,
+      zpg,
       ...
     }:
     flake-utils.lib.eachDefaultSystem (
@@ -149,7 +151,11 @@
               fetch-scm
 
               just
+              ffmpeg
             ])
+            ++ pkgs.lib.optionals (builtins.hasAttr system zpg.packages) [
+              zpg.packages.${system}.default
+            ]
             ++ checks.pre-commit-check.enabledPackages;
         };
 

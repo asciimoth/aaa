@@ -70,15 +70,17 @@ pub struct FromTextCmd {
 
 impl FromTextCmd {
     pub fn run(&self) -> Result<()> {
-        let txt = match &self.file {
-            Some(path) => fs::read_to_string(path)?,
-            None => {
-                let mut txt = String::new();
-                io::stdin().read_to_string(&mut txt)?;
-                txt
-            }
-        };
-        let mut art = Art::from_ansi_text(&txt);
+        let txt = crate::progress::during("read text", || -> Result<String> {
+            Ok(match &self.file {
+                Some(path) => fs::read_to_string(path)?,
+                None => {
+                    let mut txt = String::new();
+                    io::stdin().read_to_string(&mut txt)?;
+                    txt
+                }
+            })
+        })?;
+        let mut art = crate::progress::during("parse ANSI text", || Art::from_ansi_text(&txt));
         self.effect.apply(&mut art, 0);
         if let Some(flag) = self.loop_flag {
             art.set_loop_key(flag);
@@ -100,6 +102,7 @@ impl FromTextCmd {
         for tag in &self.tag {
             art.add_tag(tag);
         }
+        let _writing = crate::progress::start("write art", 0);
         println!("{}", art);
         Ok(())
     }
