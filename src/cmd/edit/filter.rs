@@ -60,7 +60,8 @@ impl FilterCmd {
                 String::from("AAA_DELAY"),
                 format!("{}", art.get_frame_delay(f)),
             );
-            eprintln!("  {}/{}", f, art.frames());
+            eprint!("\r  {}/{}", f + 1, art.frames());
+            std::io::stderr().flush()?;
             let frame = art.frame(f).unwrap();
             let input = format!("{}", ColorlessFramePrinter { frame });
             let filtered = run_cmd_with_input(&self.cmd, &input, &env)?;
@@ -80,7 +81,8 @@ impl FilterCmd {
                 String::from("AAA_DELAY"),
                 format!("{}", art.get_frame_delay(f)),
             );
-            eprintln!("  {}/{}", f, art.frames());
+            eprint!("\r  {}/{}", f + 1, art.frames());
+            std::io::stderr().flush()?;
             let frame = art.frame(f).unwrap();
             let input = format!("{}", frame);
             let filtered = run_cmd_with_input(&self.cmd, &input, &env)?;
@@ -100,7 +102,8 @@ impl FilterCmd {
                 String::from("AAA_DELAY"),
                 format!("{}", art.get_frame_delay(f)),
             );
-            eprintln!("  {}/{}", f, art.frames());
+            eprint!("\r  {}/{}", f + 1, art.frames());
+            std::io::stderr().flush()?;
             let filtered = run_cmd_with_input(&self.cmd, input, &env)?;
             let lines: Vec<_> = filtered.lines().collect();
             for (r, line) in lines[..art.height()].iter().enumerate() {
@@ -111,11 +114,13 @@ impl FilterCmd {
     }
     pub fn run(&self, art: &mut rs3a::Art) -> Result<()> {
         eprintln!("filtering:");
-        match self.input {
+        let result = match self.input {
             FilterInput::Text => self.run_text(art),
             FilterInput::Ansi => self.run_ansi(art),
             FilterInput::Frame => self.run_frame(art),
-        }
+        };
+        eprintln!();
+        result
     }
 }
 

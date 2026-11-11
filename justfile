@@ -14,6 +14,10 @@ build *args:
 run *args:
     cargo run --locked -- "$@"
 
+# Filter and play the NixOS animation.
+demo-edit:
+    cargo run --locked --  edit distro_nixos_big filter ansi ./examples/overlay_filter.sh | cargo run --locked --  play
+
 # Run unit, integration, and documentation tests.
 [positional-arguments]
 test *args:
