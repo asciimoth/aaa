@@ -72,7 +72,7 @@ fn converts_trimmed_colorless_tiled_versions_of_builtin_art() {
 
     for path in paths {
         let source_art: Art = fs::read_to_string(&path).unwrap().parse().unwrap();
-        let columns = source_art.frames().min(3).max(1);
+        let columns = source_art.frames().clamp(1, 3);
         let rows = source_art.frames().div_ceil(columns).max(1);
         let options = TiledTextOptions::new(columns, rows)
             .with_cell_size(source_art.width(), source_art.height())
@@ -107,7 +107,12 @@ fn converts_trimmed_colorless_tiled_versions_of_builtin_art() {
             .stdout(Stdio::piped())
             .spawn()
             .unwrap();
-        child.stdin.as_mut().unwrap().write_all(input.as_bytes()).unwrap();
+        child
+            .stdin
+            .as_mut()
+            .unwrap()
+            .write_all(input.as_bytes())
+            .unwrap();
         let output = child.wait_with_output().unwrap();
         assert!(
             output.status.success(),

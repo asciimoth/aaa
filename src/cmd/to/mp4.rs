@@ -82,7 +82,7 @@ pub struct Mp4Cmd {
 impl Mp4Cmd {
     pub fn run(&self, art: &mut Art) -> Result<()> {
         render_mp4(
-            &art,
+            art,
             &self.to_font()?,
             &self.to_color_map(),
             &self.preset,
@@ -114,7 +114,7 @@ impl Mp4Cmd {
     }
     fn to_color_map(&self) -> ImgColorMap {
         let mut map = ImgColorMap::default();
-        if self.color_map.len() > 0 {
+        if !self.color_map.is_empty() {
             map.set_map(&self.color_map);
         }
         if let Some(fg) = &self.fg {

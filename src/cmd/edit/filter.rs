@@ -65,8 +65,8 @@ impl FilterCmd {
             let input = format!("{}", ColorlessFramePrinter { frame });
             let filtered = run_cmd_with_input(&self.cmd, &input, &env)?;
             let lines: Vec<_> = filtered.lines().collect();
-            for r in 0..art.height() {
-                art.print_ansi(f, 0, r, lines[r]);
+            for (r, line) in lines[..art.height()].iter().enumerate() {
+                art.print_ansi(f, 0, r, line);
             }
         }
         Ok(())
@@ -85,8 +85,8 @@ impl FilterCmd {
             let input = format!("{}", frame);
             let filtered = run_cmd_with_input(&self.cmd, &input, &env)?;
             let lines: Vec<_> = filtered.lines().collect();
-            for r in 0..art.height() {
-                art.print_ansi(f, 0, r, lines[r]);
+            for (r, line) in lines[..art.height()].iter().enumerate() {
+                art.print_ansi(f, 0, r, line);
             }
         }
         Ok(())
@@ -101,10 +101,10 @@ impl FilterCmd {
                 format!("{}", art.get_frame_delay(f)),
             );
             eprintln!("  {}/{}", f, art.frames());
-            let filtered = run_cmd_with_input(&self.cmd, &input, &env)?;
+            let filtered = run_cmd_with_input(&self.cmd, input, &env)?;
             let lines: Vec<_> = filtered.lines().collect();
-            for r in 0..art.height() {
-                art.print_ansi(f, 0, r, lines[r]);
+            for (r, line) in lines[..art.height()].iter().enumerate() {
+                art.print_ansi(f, 0, r, line);
             }
         }
         Ok(())
@@ -125,7 +125,7 @@ fn run_cmd_with_input(
     env_vars: &HashMap<String, String>,
 ) -> Result<String> {
     // Split the command into program and arguments
-    let mut iter = cmd.into_iter();
+    let mut iter = cmd.iter();
     let program = iter.next().ok_or(anyhow!("Empty command"))?;
     let args: Vec<_> = iter.collect();
 

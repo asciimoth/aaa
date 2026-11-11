@@ -33,12 +33,12 @@ pub struct ColorMapCmd {
 impl ColorMapCmd {
     pub fn run(&self, art: &mut rs3a::Art) -> Result<()> {
         let fg = if let Some(fg_str) = &self.fg {
-            Color::from_str(&fg_str)?
+            Color::from_str(fg_str)?
         } else {
             Color::None
         };
         let bg = if let Some(bg_str) = &self.bg {
-            Color::from_str(&bg_str)?
+            Color::from_str(bg_str)?
         } else {
             Color::None
         };

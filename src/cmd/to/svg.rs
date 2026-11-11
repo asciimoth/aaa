@@ -68,14 +68,14 @@ impl SvgCmd {
     fn to_color_map(&self) -> rs3a::CSSColorMap {
         let mut map = rs3a::CSSColorMap::default();
         for pair in &self.color_map {
-            if let Some((key, rgb)) = pair.split_once('=') {
-                if let Some((g, color)) = key.split_once(':') {
-                    let fg = g == "fg";
-                    if let Ok(color) = rs3a::Color::from_str(color) {
-                        let rgb = format!("#{}", rgb);
-                        map.map.insert((color, fg), rgb);
-                        continue;
-                    }
+            if let Some((key, rgb)) = pair.split_once('=')
+                && let Some((g, color)) = key.split_once(':')
+            {
+                let fg = g == "fg";
+                if let Ok(color) = rs3a::Color::from_str(color) {
+                    let rgb = format!("#{}", rgb);
+                    map.map.insert((color, fg), rgb);
+                    continue;
                 }
             }
             eprintln!("Warning: ignoring color mapping '{}'", pair);
@@ -87,19 +87,19 @@ impl SvgCmd {
         if let Some(family) = self.font_family.clone() {
             font.family = family
         }
-        if let Some(size) = self.font_size.clone() {
+        if let Some(size) = self.font_size {
             font.size = size
         }
-        if let Some(width) = self.font_width.clone() {
+        if let Some(width) = self.font_width {
             font.width = width
         }
-        if let Some(height) = self.font_height.clone() {
+        if let Some(height) = self.font_height {
             font.height = height
         }
-        if let Some(x) = self.font_offset_x.clone() {
+        if let Some(x) = self.font_offset_x {
             font.fg_offset_x = x
         }
-        if let Some(y) = self.font_offset_y.clone() {
+        if let Some(y) = self.font_offset_y {
             font.fg_offset_y = y
         }
         font

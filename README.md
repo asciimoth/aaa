@@ -159,24 +159,6 @@ Options:
   -h, --help  Print help
 ```
 
-## Package tests
-
-Run the installation and conversion test in a disposable Fedora 44
-container. The test needs Docker and network access. ARM64 tests need an
-ARM64 host or AArch64 emulation.
-
-```sh
-tests/fedora-install.sh
-PLATFORM=linux/arm64 tests/fedora-install.sh
-
-# Test a local RPM before publication.
-tests/fedora-install.sh ./dist/aaa_2.1.0_linux_amd64.rpm
-```
-
-The test checks package dependency resolution, `aaa --help`, MP4 decoding,
-and WebP frame decoding. It uses RPM Fusion Free and the package repository
-above.
-
 ## Related links
 - [3a format spec](https://github.com/asciimoth/3a)
 - [rs3a](https://github.com/asciimoth/rs3a) - 3a library on which aaa is based

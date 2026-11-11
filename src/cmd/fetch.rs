@@ -89,7 +89,7 @@ impl FetchCmd {
         }
     }
     pub fn run(&self) -> Result<()> {
-        let text = if self.cmd.len() > 0 {
+        let text = if !self.cmd.is_empty() {
             run_cmd(&self.cmd)?
         } else {
             run_fetches()?
@@ -157,12 +157,12 @@ fn load_os_release() -> String {
     let mut info = String::new();
     if let Ok(file) = File::open("/etc/os-release") {
         let reader = BufReader::new(file);
-        for line in reader.lines().flatten() {
-            if let Some((key, value)) = line.split_once('=') {
-                if key == "NAME" || key == "PRETTY_NAME" || key == "ID" {
-                    info += value;
-                    info += " ";
-                }
+        for line in reader.lines().map_while(Result::ok) {
+            if let Some((key, value)) = line.split_once('=')
+                && (key == "NAME" || key == "PRETTY_NAME" || key == "ID")
+            {
+                info += value;
+                info += " ";
             }
         }
     }
@@ -173,12 +173,12 @@ fn load_lsb_release() -> String {
     let mut info = String::new();
     if let Ok(file) = File::open("/etc/lsb-release") {
         let reader = BufReader::new(file);
-        for line in reader.lines().flatten() {
-            if let Some((key, value)) = line.split_once('=') {
-                if key == "DISTRIB_ID" {
-                    info += value;
-                    info += " ";
-                }
+        for line in reader.lines().map_while(Result::ok) {
+            if let Some((key, value)) = line.split_once('=')
+                && key == "DISTRIB_ID"
+            {
+                info += value;
+                info += " ";
             }
         }
     }

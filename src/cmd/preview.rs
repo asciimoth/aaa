@@ -42,7 +42,7 @@ impl PreviewCmd {
 
         let frames = art.to_ansi_frames();
 
-        if frames.len() > 0 {
+        if !frames.is_empty() {
             println!(
                 "{}",
                 frames[art

@@ -77,10 +77,10 @@ impl GenCmd {
         let mut art = rs3a::Art::new(self.frames, self.width, self.height, Cell { text, color });
         art.set_title_key(self.title.clone());
         if let Some(author) = &self.author {
-            art.set_authors_key(&vec![author.clone()]);
+            art.set_authors_key(std::slice::from_ref(author));
         }
         if let Some(orig) = &self.orig {
-            art.set_orig_authors_key(&vec![orig.clone()]);
+            art.set_orig_authors_key(std::slice::from_ref(orig));
         }
         art.set_src_key(self.src.clone());
         art.set_editor_key(self.edit.clone());

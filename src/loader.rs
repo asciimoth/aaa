@@ -16,7 +16,6 @@
 */
 use anyhow::Result;
 use atty::Stream;
-use rs3a;
 use rust_embed::Embed;
 use std::{io, str::FromStr};
 
@@ -48,10 +47,10 @@ fn looks_like_path(name: &str) -> bool {
 
 pub fn load(file: &Option<String>) -> Result<rs3a::Art> {
     if let Some(file) = file {
-        if !looks_like_path(&file) {
-            if let Some(text) = get_embed(&file) {
-                return Ok(rs3a::Art::from_str(&text)?);
-            }
+        if !looks_like_path(file)
+            && let Some(text) = get_embed(file)
+        {
+            return Ok(rs3a::Art::from_str(&text)?);
         }
         return Ok(rs3a::Art::from_file(file)?);
     }
@@ -69,12 +68,12 @@ pub fn load_with_fallback(file: &Option<String>, fallback: &Option<String>) -> R
         Ok(art) => Ok(art),
         Err(err) => match fallback {
             Some(file) => {
-                if !looks_like_path(&file) {
-                    if let Some(text) = get_embed(&file) {
-                        return Ok(rs3a::Art::from_str(&text)?);
-                    }
+                if !looks_like_path(file)
+                    && let Some(text) = get_embed(file)
+                {
+                    return Ok(rs3a::Art::from_str(&text)?);
                 }
-                return Ok(rs3a::Art::from_file(file)?);
+                Ok(rs3a::Art::from_file(file)?)
             }
             None => Err(err),
         },

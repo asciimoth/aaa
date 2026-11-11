@@ -186,7 +186,7 @@ impl EditCmd {
             EditSubcommands::Loop(cmd) => cmd.run(&mut art),
             EditSubcommands::Preview(cmd) => cmd.run(&mut art),
         }?;
-        println!("{}", art.to_string());
+        println!("{}", art);
         Ok(())
     }
 }

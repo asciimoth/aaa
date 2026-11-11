@@ -75,6 +75,8 @@ enum Shell {
     Bash,
     Zsh,
     Fish,
+    // Use the shell's standard name in the CLI.
+    #[allow(clippy::enum_variant_names)]
     PowerShell,
     Elvish,
     Nush,

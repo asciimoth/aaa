@@ -18,8 +18,9 @@ use std::str::FromStr;
 */
 use rs3a::{Art, Cell};
 
-#[derive(clap::ValueEnum, PartialEq, Debug, Copy, Clone)]
+#[derive(clap::ValueEnum, PartialEq, Debug, Copy, Clone, Default)]
 pub enum Effect {
+    #[default]
     None,
     RollerUp,
     RollerDown,
@@ -50,12 +51,6 @@ impl FromStr for Effect {
             "roller_right" => Ok(Effect::RollerRight),
             _ => Err(format!("invalid effect: {}", s)),
         }
-    }
-}
-
-impl Default for Effect {
-    fn default() -> Self {
-        Self::None
     }
 }
 

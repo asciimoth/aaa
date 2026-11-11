@@ -46,10 +46,10 @@ impl Player {
         let mut frames = Vec::with_capacity(art.frames());
         let mut height = 0;
         for (i, frame) in art.to_ansi_frames().iter().enumerate() {
-            let rows: Vec<String> = frame.lines().map(|s| String::from(s)).collect();
+            let rows: Vec<String> = frame.lines().map(String::from).collect();
             height = height.max(rows.len());
             frames.push(FrameWithDelay {
-                rows: rows,
+                rows,
                 delay: time::Duration::from_millis(art.get_frame_delay(i) as u64),
             });
         }
@@ -73,7 +73,7 @@ impl Player {
                     let stdout = io::stdout();
                     let mut handle = stdout.lock();
                     for row in &frame.rows {
-                        write!(handle, "\x1b[{}C{}\x1b[0m\n", self.y_offset, row).unwrap();
+                        writeln!(handle, "\x1b[{}C{}\x1b[0m", self.y_offset, row).unwrap();
                     }
                     self.frame_cleanup(&mut handle);
                     handle.flush().unwrap();
@@ -92,11 +92,7 @@ impl Player {
     }
     fn wait(&self, delay: Duration) -> bool {
         if let Some(rx) = &self.rx {
-            if let Ok(_) = rx.recv_timeout(delay) {
-                true
-            } else {
-                false
-            }
+            rx.recv_timeout(delay).is_ok()
         } else {
             thread::sleep(delay);
             false
@@ -107,14 +103,14 @@ impl Player {
 pub fn term_pre(title: &str, height: usize) {
     print!("\x1b]0;{}\x07\x1B[?25l", title);
     for _ in 0..height {
-        println!("");
+        println!();
     }
     print!("\x1b[{}A", height);
 }
 
 pub fn term_post(height: usize) {
     for _ in 0..height {
-        println!("");
+        println!();
     }
     print!("\x1B[?25h\r");
 }

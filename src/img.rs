@@ -53,15 +53,15 @@ impl ImgColorMap {
     pub fn set_map(&mut self, args: &[String]) {
         let mut map = HashMap::new();
         for pair in args {
-            if let Some((key, rgb)) = pair.split_once('=') {
-                if let Some((g, color)) = key.split_once(':') {
-                    let fg = g == "fg";
-                    if let Ok(color) = rs3a::Color::from_str(color) {
-                        if let Ok(rgb) = rgba_from_hex(rgb) {
-                            map.insert((color, fg), rgb);
-                        }
-                        continue;
+            if let Some((key, rgb)) = pair.split_once('=')
+                && let Some((g, color)) = key.split_once(':')
+            {
+                let fg = g == "fg";
+                if let Ok(color) = rs3a::Color::from_str(color) {
+                    if let Ok(rgb) = rgba_from_hex(rgb) {
+                        map.insert((color, fg), rgb);
                     }
+                    continue;
                 }
             }
             eprintln!("Warning: ignoring invalid color mapping '{}'", pair);
@@ -199,7 +199,7 @@ impl Default for ImgFont {
             glyph_y_offset: 0,
             glyph_x_offset: 0,
             font: FontArc::try_from_vec(font_bytes).unwrap(),
-            scale: scale,
+            scale,
             cell_w: (scale.x * 0.5).ceil() as i32,
             cell_h: (scale.y * 1.1).ceil() as i32,
         }
@@ -224,7 +224,7 @@ fn render_with_ffmpeg(
         let mut last_name = String::new();
         for f in 0..art.frames() {
             eprintln!("  {}/{}", f + 1, art.frames());
-            let frame = render_frame(&art, f, font, col);
+            let frame = render_frame(art, f, font, col);
             let delay = art.get_frame_delay(f) as f64 / 1000.0;
             let name = format!("frame_{:010}.png", f);
             let dst = tmp_path.join(&name);
@@ -265,7 +265,7 @@ fn render_with_ffmpeg(
         anyhow::bail!("ffmpeg failed (exit {})", status);
     }
 
-    if tmpout != None {
+    if tmpout.is_some() {
         let mut f = File::open(&out_path)?;
         copy(&mut f, &mut stdout())?;
     }
@@ -349,7 +349,7 @@ pub fn render_gif(art: &Art, font: &ImgFont, col: &ImgColorMap) -> image::ImageR
     for frame in 0..art.frames() {
         eprintln!(" {}/{}", frame + 1, art.frames());
         let frame = Frame::from_parts(
-            render_frame(&art, frame, font, col),
+            render_frame(art, frame, font, col),
             0,
             0,
             image::Delay::from_saturating_duration(Duration::from_millis(

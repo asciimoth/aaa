@@ -73,7 +73,7 @@ impl GifCmd {
             art.set_loop_key(loop_flag);
         }
 
-        render_gif(&art, &self.to_font()?, &self.to_color_map())?;
+        render_gif(art, &self.to_font()?, &self.to_color_map())?;
         Ok(())
     }
     fn to_font(&self) -> Result<ImgFont> {
@@ -100,7 +100,7 @@ impl GifCmd {
     }
     fn to_color_map(&self) -> ImgColorMap {
         let mut map = ImgColorMap::default();
-        if self.color_map.len() > 0 {
+        if !self.color_map.is_empty() {
             map.set_map(&self.color_map);
         }
         if let Some(fg) = &self.fg {

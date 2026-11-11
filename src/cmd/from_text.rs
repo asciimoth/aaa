@@ -90,10 +90,10 @@ impl FromTextCmd {
             art.set_title_key(Some(title));
         }
         if let Some(author) = &self.author {
-            art.set_authors_key(&vec![author.clone()]);
+            art.set_authors_key(std::slice::from_ref(author));
         }
         if let Some(orig) = &self.orig {
-            art.set_orig_authors_key(&vec![orig.clone()]);
+            art.set_orig_authors_key(std::slice::from_ref(orig));
         }
         art.set_src_key(self.src.clone());
         art.set_license_key(self.license.clone());

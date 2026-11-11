@@ -82,7 +82,7 @@ impl ConvertCmd {
             ConvertSubcommands::ToSvg(cmd) => cmd.run(&mut art),
             ConvertSubcommands::ToCast(cmd) => cmd.run(&mut art),
             ConvertSubcommands::To3a => {
-                println!("{}", art.to_string());
+                println!("{}", art);
                 Ok(())
             }
             ConvertSubcommands::ToFrames => {
@@ -101,7 +101,7 @@ impl ConvertCmd {
             }
             ConvertSubcommands::ToTtyrec => {
                 let mut out = stdout();
-                out.write(&art.to_ttyrec())?;
+                out.write_all(&art.to_ttyrec())?;
                 Ok(())
             }
         }

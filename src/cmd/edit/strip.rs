@@ -26,7 +26,7 @@ pub struct StripCmd {
 impl StripCmd {
     pub fn run(&self, art: &mut Art) -> Result<()> {
         art.strip_comments();
-        println!("{}", art.to_string());
+        println!("{}", art);
         Ok(())
     }
 }
