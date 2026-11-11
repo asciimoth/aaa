@@ -1,14 +1,18 @@
 version: 2
+project_name: aaa
 
 before:
   hooks:
     - ./build_hooks.sh {{ .ProjectName }}
 
 builds:
-  - # with cargo cross
+  - id: aaa
     builder: rust
-    tool: cross
+    tool: ./scripts/cross.sh
     command: build
+    flags:
+      - --release
+      - --locked
     targets:
       - x86_64-unknown-linux-gnu
       - i686-unknown-linux-gnu
@@ -18,12 +22,11 @@ builds:
 
 archives:
   - formats: [tar.gz]
-    format_overrides:
-      - goos: windows
-        formats: [zip]
     files:
       - README.md
       - LICENSE*
+      - src: target/completions/**/*
+        dst: completions
 
 nfpms:
   - maintainer: "ASCII Moth <ascii@moth.contact>"
@@ -33,6 +36,8 @@ nfpms:
     formats:
       - deb
       - rpm
+      # GoReleaser supports Arch packages for amd64, 386, and arm64.
+      # RISC-V gets DEB/RPM packages and a tarball.
       - archlinux
     section: utils
     contents:
@@ -43,17 +48,36 @@ nfpms:
         dst: /usr/share/fish/vendor_completions.d/{{ .ProjectName }}.fish
       - src: ./target/completions/zsh/_{{ .ProjectName }}
         dst: /usr/share/zsh/site-functions/_{{ .ProjectName }}
+      - src: ./target/completions/nu/{{ .ProjectName }}.nu
+        dst: /usr/share/nu/completions/{{ .ProjectName }}.nu
+      - src: aaa.desktop
+        dst: /usr/share/applications/aaa.desktop
+      - src: mime.xml
+        dst: /usr/share/mime/packages/3a-mime.xml
+      - src: LICENSE
+        dst: /usr/share/licenses/aaa/LICENSE
     dependencies:
       # MP4 conversion requires libx264. Fedora's ffmpeg-free does not include it.
       # Fedora users must enable RPM Fusion Free; see README.md.
       - ffmpeg
 
+checksum:
+  name_template: checksums.txt
+
 signs:
   - artifacts: all
-    args: [ "-u", "C5C84658CCFD7E8E71DEE933AF3AE54FC3A35C9F", "--output", "${signature}", "--detach-sign", "${artifact}" ]
+    cmd: gpg
+    args:
+      - --batch
+      - --local-user
+      - '{{ if .Env.GPG_KEY_ID }}{{ .Env.GPG_KEY_ID }}{{ else }}C5C84658CCFD7E8E71DEE933AF3AE54FC3A35C9F{{ end }}'
+      - --output
+      - '${signature}'
+      - --detach-sign
+      - '${artifact}'
 
 release:
-  mode: replace
+  mode: keep-existing
 
 aurs:
   - # aur -bin

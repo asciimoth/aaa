@@ -64,7 +64,29 @@ test *args:
     cargo test --workspace --all-features --locked "$@"
 
 # Run all local checks without changing files.
-check: fmt-check lint test
+check: fmt-check lint test test-release
+
+# Check release control flow without network access or publication.
+test-release:
+    python3 tests/release.py
+
+# Build the default Nix package for this host.
+check-nix:
+    nix build .#default --no-link
+
+# Check source, crate, all release packages, and Nix. Do not sign or publish.
+[positional-arguments]
+release-check tag="":
+    bash scripts/release.sh check "$1"
+
+alias release-dry-run := release-check
+
+# Build, sign, and publish a tag that matches Cargo.toml. See README.md.
+[positional-arguments]
+release tag:
+    bash scripts/release.sh publish "$1"
+
+alias publish := release
 
 # Check Rust, Nix, and spelling.
 lint: typos

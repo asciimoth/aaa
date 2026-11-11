@@ -7,6 +7,8 @@
   description = "aaa";
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
+    # GoReleaser 2.19 maps Rust riscv64gc targets to the package architecture.
+    nixpkgs-goreleaser.url = "github:NixOS/nixpkgs/f4a03c008967841f2a0b3cb7c436fc6fc31671f6";
     flake-utils.url = "github:numtide/flake-utils";
     pre-commit-hooks.url = "github:cachix/pre-commit-hooks.nix";
     zpg.url = "github:asciimoth/zpg";
@@ -19,6 +21,7 @@
   outputs =
     {
       nixpkgs,
+      nixpkgs-goreleaser,
       flake-utils,
       pre-commit-hooks,
       naersk,
@@ -133,11 +136,14 @@
               rustc
               rustfmt
               clippy
+              rustup
               nixfmt-rfc-style
               cargo-cross
               cargo-zigbuild
               zig
-              goreleaser
+              gnupg
+              python3
+              curl
 
               typos
               commitizen
@@ -162,7 +168,10 @@
             ++ pkgs.lib.optionals (builtins.hasAttr system zpg.packages) [
               zpg.packages.${system}.default
             ]
-            ++ [ ghrepo.packages.${system}.default ]
+            ++ [
+              ghrepo.packages.${system}.default
+              nixpkgs-goreleaser.legacyPackages.${system}.goreleaser
+            ]
             ++ checks.pre-commit-check.enabledPackages;
         };
 

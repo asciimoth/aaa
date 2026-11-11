@@ -1,11 +1,17 @@
 #!/bin/sh
+set -eu
+
+name=${1:-aaa}
 
 mkdir -p ./target/completions/bash
-cargo run -- completions bash > "./target/completions/bash/$1"
+cargo run --locked -- completions bash > "./target/completions/bash/$name"
 
 mkdir -p ./target/completions/fish
-cargo run -- completions fish > "./target/completions/fish/$1.fish"
+cargo run --locked -- completions fish > "./target/completions/fish/$name.fish"
 
 mkdir -p ./target/completions/zsh
-cargo run -- completions zsh > "./target/completions/zsh/_$1"
+cargo run --locked -- completions zsh > "./target/completions/zsh/_$name"
+
+mkdir -p ./target/completions/nu
+cargo run --locked -- completions nush > "./target/completions/nu/$name.nu"
 
